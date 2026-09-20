@@ -547,6 +547,238 @@ body.paused .chip{color:var(--bone-35)}
 @media (max-width:640px){.p-vinyl{width:64px;height:64px;margin-left:-32px;bottom:12px}.p-recstage{flex-direction:column}.p-scene{width:100%;height:200px}.p-stage,.p-cab{height:min(330px,44vh)}.p-lens{flex-wrap:wrap}}
 @media (prefers-reduced-motion:reduce){.p-tile,.p-glass .p-tile{animation:none}.p-vinyl.spin,.p-disc.spin{animation:none}.p-view.out,.p-view.enter{transform:none}}
 
+/* ---------- chat: a second way to live in the same garden ---------- */
+#chatRoot{--putty:#dfe1d3;--card:#d0d3c2;--board:#eceee4;--yellow:#f0f3a6;--black:#151713;--ink:#1f241d;--ink-60:rgba(31,36,29,.6);--ink-42:rgba(31,36,29,.42);--ink-14:rgba(31,36,29,.12);--spore:#e4e64a;--bloom:#e9b7c9;--ember:#e8a04a;--mush:#b6432f;--moss:#7a9a5a;
+  position:fixed;inset:0;z-index:1;overflow:hidden;color:var(--ink);
+  background:radial-gradient(1100px 760px at 12% -8%,rgba(122,154,90,.14),transparent 58%),radial-gradient(900px 680px at 102% 108%,rgba(233,183,201,.16),transparent 55%),radial-gradient(700px 500px at 50% 0%,rgba(228,230,74,.08),transparent 60%),var(--putty);
+  opacity:0;transform:scale(.965);pointer-events:none;transition:opacity .68s var(--ease),transform .74s var(--ease);}
+body.mode-chat #chatRoot{opacity:1;transform:scale(1);pointer-events:auto}
+body.mode-chat #world{opacity:0;transform:scale(1.035);pointer-events:none}
+body.mode-chat #welcome{opacity:0;pointer-events:none;transition:opacity .5s var(--ease)}
+#world{transition:opacity .68s var(--ease),transform .74s var(--ease)}
+body.sheet-open.mode-chat #chatRoot{filter:blur(14px) brightness(.94) saturate(.92)}
+#cFx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+/* chrome recolors for the light chat canvas: same elements, reread on a putty ground */
+body.mode-chat .hdr .cap{color:rgba(31,36,29,.5)}
+body.mode-chat #chrome::before,body.mode-chat #chrome::after{opacity:0}
+body.mode-chat .legend,body.mode-chat .ruler{opacity:0;pointer-events:none}
+body.mode-chat .chip{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
+body.mode-chat .chip .track{border-color:rgba(31,36,29,.28)}
+body.mode-chat.paused .chip{color:rgba(31,36,29,.34)}
+body.mode-chat #toast{background:rgba(255,255,255,.86);border-color:rgba(31,36,29,.10);color:var(--ink,#1f241d)}
+.pills{transition:background .5s var(--ease),border-color .5s var(--ease)}
+body.mode-chat .pills{background:rgba(255,255,255,.6);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
+body.mode-chat .pills button{color:rgba(31,36,29,.42)}
+body.mode-chat .pills button:hover,body.mode-chat .pills button.on{color:#1f241d;background:rgba(31,36,29,.07)}
+
+.c-shell{position:absolute;inset:0;z-index:1;display:flex;padding:86px 24px 98px;gap:18px}
+.c-glass{background:rgba(255,255,255,.42);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:26px;box-shadow:0 22px 46px rgba(31,36,29,.12),inset 0 1px 0 rgba(255,255,255,.6)}
+
+/* -- left: threads -- */
+.c-side{width:264px;flex:none;display:flex;flex-direction:column;padding:16px 12px 12px;overflow:hidden;transition:transform .4s var(--ease)}
+.c-side-head{display:flex;align-items:center;justify-content:space-between;padding:2px 8px 12px}
+.c-side-head h2{font:400 15px/1 var(--sans);letter-spacing:-.01em}
+.c-new{width:28px;height:28px;border-radius:50%;background:var(--black);color:#fff;font-size:16px;line-height:1;display:grid;place-items:center;transition:transform .12s ease-out}
+.c-new:active{transform:scale(.88)}
+.c-thread-list{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;display:flex;flex-direction:column;gap:3px;padding:0 2px}
+.c-thread{position:relative;display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:10px 10px;border-radius:16px;transition:background .25s var(--ease)}
+.c-thread:hover{background:rgba(31,36,29,.05)}
+.c-thread.on{background:var(--yellow)}
+.c-thread-ic{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--c,var(--moss));box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.c-thread-ic svg{width:15px;height:15px}
+.c-thread-ic svg path{fill:#fff}
+.c-thread-body{flex:1;min-width:0}
+.c-thread-body b{display:block;font:500 12.5px/1.3 var(--sans);color:var(--ink)}
+.c-thread-body p{margin-top:2px;font-size:11.5px;line-height:1.35;color:var(--ink-42);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-thread-t{flex:none;font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-42);margin-top:1px}
+.c-thread-unread{position:absolute;right:9px;top:13px;width:7px;height:7px;border-radius:50%;background:var(--spore);box-shadow:0 0 0 3px rgba(228,230,74,.28)}
+
+/* -- center: the conversation -- */
+.c-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.c-topbar{flex:none;display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid rgba(31,36,29,.09)}
+.c-icon{display:none;width:34px;height:34px;border-radius:50%;background:rgba(31,36,29,.06);align-items:center;justify-content:center;flex:none;transition:background .2s,transform .12s ease-out}
+.c-icon:active{transform:scale(.9)}
+.c-icon svg{width:15px;height:15px}
+.c-top-meta{flex:1;min-width:0}
+.c-top-meta h3{font:400 15.5px/1.2 var(--sans);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-top-meta span{display:block;margin-top:2px;font:400 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-42)}
+
+.c-msgs{flex:1;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth;padding:20px 22px 10px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin}
+.c-empty{margin:auto;text-align:center;max-width:280px;color:var(--ink-42)}
+.c-empty svg{width:96px;height:96px;margin:0 auto 12px;opacity:.7;animation:cSpin 26s linear infinite}
+.c-empty p{font-size:13px;line-height:1.5}
+@keyframes cSpin{to{transform:rotate(360deg)}}
+
+.c-row{display:flex;flex-direction:column;gap:5px;max-width:min(560px,86%);animation:cBloom .46s var(--ease) both}
+.c-row.you{align-self:flex-end;align-items:flex-end}
+.c-row.opal{align-self:flex-start;align-items:flex-start}
+.c-row.wide{max-width:min(560px,96%)}
+@keyframes cBloom{from{opacity:0;transform:scale(.9) translateY(10px) rotate(-1deg)}to{opacity:1;transform:none}}
+.c-who{display:flex;align-items:center;gap:7px}
+.c-avatar{flex:none;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f4d783,var(--ember) 55%,#c97b2c);box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.c-who span{font:400 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-42)}
+.c-bub{padding:11px 14px;border-radius:18px;font-size:13.5px;line-height:1.5}
+.c-row.you .c-bub{background:var(--yellow);border-radius:18px 18px 4px 18px;color:var(--ink)}
+.c-row.opal .c-bub{background:#fff;border-radius:18px 18px 18px 4px;box-shadow:0 1px 0 rgba(31,36,29,.04),0 10px 20px rgba(31,36,29,.06)}
+.c-bub b{font-weight:600}
+.c-typing{display:flex;gap:4px;padding:13px 15px;background:#fff;border-radius:18px 18px 18px 4px;box-shadow:0 10px 20px rgba(31,36,29,.06);width:fit-content}
+.c-typing i{width:5px;height:5px;border-radius:50%;background:var(--ink-42);animation:cPetal 1.1s ease-in-out infinite}
+.c-typing i:nth-child(1){background:var(--spore);animation-delay:0ms}
+.c-typing i:nth-child(2){background:var(--bloom);animation-delay:140ms}
+.c-typing i:nth-child(3){background:var(--ember);animation-delay:280ms}
+@keyframes cPetal{0%,80%,100%{transform:scale(.6);opacity:.5}40%{transform:scale(1.15);opacity:1}}
+
+/* -- artifact cards: the point of the whole thing -- */
+.c-card{align-self:stretch;width:100%;background:var(--board);border-radius:20px;padding:15px 16px 16px;box-shadow:0 16px 32px rgba(31,36,29,.10),inset 0 1px 0 rgba(255,255,255,.55);position:relative;overflow:hidden;animation:cBloomCard .52s var(--ease) both}
+@keyframes cBloomCard{from{opacity:0;transform:scale(.92) rotate(-1.3deg)}60%{opacity:1}to{opacity:1;transform:none}}
+.c-card::before,.c-card::after{content:'';position:absolute;width:9px;height:9px;border:0 solid var(--spore);opacity:0;transition:opacity .3s var(--ease)}
+.c-card::before{left:8px;top:8px;border-width:1.6px 0 0 1.6px}
+.c-card::after{right:8px;bottom:8px;border-width:0 1.6px 1.6px 0}
+.c-card:hover::before,.c-card:hover::after{opacity:.55}
+.c-card-cap{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.c-card-cap span{font:400 9.5px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-42)}
+.c-card-cap a,.c-card-cap button.link{font:400 9.5px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60);transition:color .2s}
+.c-card-cap a:hover,.c-card-cap button.link:hover{color:var(--ink)}
+
+/* timeline card */
+.c-tl{display:flex;flex-direction:column;gap:10px}
+.c-tl li{display:flex;gap:10px;align-items:flex-start}
+.c-tl i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--ink-42);margin-top:5px}
+.c-tl li.live i{background:var(--spore);box-shadow:0 0 0 3px rgba(228,230,74,.28)}
+.c-tl .c-tl-t{font:400 9px/1.6 var(--mono);letter-spacing:.1em;color:var(--ink-42);flex:none;width:40px}
+.c-tl p{font-size:12.5px;line-height:1.42}
+.c-tl small{display:block;color:var(--ink-42);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+
+/* weekly chart card */
+.c-chart{display:flex;gap:7px;height:88px;padding:0 2px 4px}
+.c-chart b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.c-chart em{display:block;width:100%;border-radius:5px 5px 3px 3px;background:linear-gradient(#e9ec7a,var(--spore));min-height:4px;animation:cGrow .6s var(--ease) both;transform-origin:bottom}
+@keyframes cGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.c-chart span{font:400 8.5px/1 var(--mono);letter-spacing:.08em;color:var(--ink-42)}
+.c-toptrack{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(31,36,29,.09)}
+.c-toptrack .cv{flex:none;width:42px;height:42px;border-radius:9px;background:#5a6156 center/cover;box-shadow:0 6px 14px rgba(31,36,29,.18)}
+.c-toptrack div{flex:1;min-width:0}
+.c-toptrack b{display:block;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-toptrack small{color:var(--ink-42);font-size:11px}
+
+/* people / collage card */
+.c-people{display:flex;padding:6px 10px 2px}
+.c-face{flex:none;width:52px;height:52px;border-radius:50%;background:#5a6156 center/cover;box-shadow:0 0 0 3px var(--board),0 8px 16px rgba(31,36,29,.18);margin-left:-16px;transform:rotate(var(--rot,0deg));transition:transform .25s var(--ease),z-index 0s;cursor:default}
+.c-face:first-child{margin-left:0}
+.c-face:hover{transform:translateY(-6px) rotate(0deg) scale(1.08);z-index:2}
+.c-people-note{margin-top:10px;font-size:12px;line-height:1.5;color:var(--ink-60)}
+
+/* tasks / promise card */
+.c-tasks-list{display:flex;flex-direction:column;gap:8px}
+.c-task{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:999px;padding:9px 9px 9px 15px;transition:opacity .3s,transform .3s}
+.c-task.done{opacity:0;transform:translateX(30%) scale(.9)}
+.c-task-body{flex:1;min-width:0}
+.c-task-body b{display:block;font-size:12.5px;font-weight:500}
+.c-task-body small{display:block;color:var(--ink-42);font-size:10.5px;margin-top:1px}
+.c-task-go{flex:none;width:32px;height:32px;border-radius:50%;background:var(--black);color:#fff;display:grid;place-items:center;transition:transform .12s ease-out}
+.c-task-go:active{transform:scale(.88)}
+.c-task-go svg{width:12px;height:12px}
+.c-quote{background:var(--yellow);border-radius:14px;padding:11px 13px;font-size:12.5px;line-height:1.5;margin-bottom:12px}
+.c-quote b{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-60);margin-bottom:3px;font-weight:400}
+
+/* books card */
+.c-books{display:flex;gap:14px;padding:4px 6px 2px}
+.c-book{flex:1;min-width:0}
+.c-book i{display:block;width:100%;aspect-ratio:3/4;border-radius:7px;background:#5a6156 center/cover;box-shadow:0 10px 20px rgba(31,36,29,.16);transform:rotate(var(--rot,0deg));transition:transform .2s var(--ease)}
+.c-book:hover i{transform:rotate(0) translateY(-4px)}
+.c-book b{display:block;margin-top:8px;font-size:11.5px;font-weight:500;line-height:1.3}
+.c-book small{color:var(--ink-42);font-size:10px}
+
+/* mail card */
+.c-mail-list{display:flex;flex-direction:column;gap:9px}
+.c-mail{display:flex;flex-direction:column;gap:2px;padding:9px 11px;background:var(--card);border-radius:13px}
+.c-mail b{font-size:12px;font-weight:500}
+.c-mail p{font-size:11.5px;color:var(--ink-60);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* -- suggestion chips + composer -- */
+.c-suggest{flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:10px 22px 0}
+.c-chip{flex:none;font:400 11.5px/1 var(--sans);color:var(--ink-60);background:var(--card);padding:9px 14px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s,transform .12s ease-out}
+.c-chip:hover{background:var(--yellow);color:var(--ink)}
+.c-chip:active{transform:scale(.96)}
+.c-composer{flex:none;display:flex;align-items:center;gap:10px;padding:14px 22px 18px}
+.c-input-pill{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:8px 8px 8px 6px;box-shadow:inset 0 0 0 1px rgba(31,36,29,.08)}
+.c-round{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink-42);transition:background .2s,color .2s,transform .12s ease-out}
+.c-round:hover{background:rgba(31,36,29,.06);color:var(--ink)}
+.c-round:active{transform:scale(.9)}
+.c-round svg{width:15px;height:15px}
+#cInput{flex:1;border:0;background:none;resize:none;font:400 13.5px/1.4 var(--sans);color:var(--ink);max-height:96px;padding:6px 2px}
+#cInput::placeholder{color:var(--ink-42)}
+.c-send{flex:none;width:44px;height:44px;border-radius:50%;background:var(--black);color:#fff;display:grid;place-items:center;transition:transform .12s ease-out;box-shadow:0 8px 16px rgba(21,23,19,.28)}
+.c-send:active{transform:scale(.9)}
+.c-send svg{width:16px;height:16px}
+
+/* -- right: today -- */
+.c-right{width:280px;flex:none;display:flex;flex-direction:column;gap:12px;padding:14px;overflow-y:auto;scrollbar-width:thin}
+.c-widget{border-radius:18px;padding:13px 14px}
+.c-wcap{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.c-wcap span{font:400 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.c-listen{background:linear-gradient(155deg,#2a2118,#151713 60%);color:#eee7d6}
+.c-listen .c-wcap span{color:rgba(238,231,214,.5)}
+.c-listen button.c-lbtn{font:400 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(238,231,214,.6);transition:color .2s}
+.c-listen button.c-lbtn:hover{color:#fff}
+.c-wave{display:flex;align-items:center;gap:2.5px;height:34px;margin:6px 0 4px}
+.c-wave i{flex:1;min-width:2px;border-radius:2px;background:var(--spore);height:18%;animation:cWave 1.2s ease-in-out infinite;transform-origin:bottom}
+body.paused .c-wave i{animation-play-state:paused;height:10%!important;background:rgba(238,231,214,.28)}
+@keyframes cWave{0%,100%{height:14%}50%{height:var(--h,72%)}}
+.c-listen p{font-size:11.5px;color:rgba(238,231,214,.72);margin-top:2px}
+
+.c-next{background:var(--board);text-align:center}
+.c-ring{position:relative;width:88px;height:88px;margin:2px auto 6px}
+.c-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.c-ring circle{fill:none;stroke-width:4}
+.c-ring .bg{stroke:rgba(31,36,29,.10)}
+.c-ring .fg{stroke:var(--ember);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.c-ring b{position:absolute;inset:0;display:grid;place-items:center;font:400 15px/1 var(--sans);letter-spacing:-.01em}
+.c-next p{font-size:12px;font-weight:500;margin-top:2px}
+.c-next small{display:block;color:var(--ink-42);font-size:10.5px;margin-top:2px}
+.c-next.empty small{color:var(--ink-60)}
+
+.c-tasks-w{background:var(--board)}
+.c-tasks-w .c-task{background:#fff}
+.c-tasks-w .c-more{display:block;text-align:center;margin-top:8px;font:400 9.5px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-42)}
+
+.c-connect{background:var(--board)}
+.c-cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.c-ctile{position:relative;aspect-ratio:1;border-radius:13px;background:var(--c,var(--moss));display:grid;place-items:center;transition:transform .15s var(--ease)}
+.c-ctile:hover{transform:translateY(-3px)}
+.c-ctile svg{width:16px;height:16px}
+.c-ctile svg path{fill:#fff}
+.c-ctile b{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--black);color:#fff;font:400 8px/15px var(--mono);text-align:center}
+
+.c-foot{display:flex;justify-content:space-between;padding:2px 6px}
+.c-foot button{font:400 9.5px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-42);transition:color .2s}
+.c-foot button:hover{color:var(--ink)}
+
+/* drawers for narrow widths */
+#cDrawerScrim{position:absolute;inset:0;z-index:5;background:rgba(31,36,29,.28);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+#cDrawerScrim.show{opacity:1;pointer-events:auto}
+@media (max-width:980px){
+  .c-icon{display:grid}
+  .c-shell{padding:82px 14px 94px;gap:0}
+  .c-side,.c-right{position:absolute;top:0;bottom:0;z-index:6;box-shadow:0 24px 48px rgba(31,36,29,.24);transition:transform .4s var(--ease)}
+  .c-side{left:14px;width:min(78vw,300px);transform:translateX(-120%)}
+  .c-right{right:14px;width:min(78vw,300px);transform:translateX(120%)}
+  .c-side.show,.c-right.show{transform:translateX(0)}
+}
+@media (max-width:640px){
+  .c-shell{padding:78px 10px 128px}
+  .c-msgs{padding:16px 14px 6px}
+  .c-suggest{padding:8px 14px 0}
+  .c-composer{padding:12px 14px 14px}
+  .c-row{max-width:94%}
+  .c-books{gap:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  .c-empty svg{animation:none}
+  .c-wave i{animation:none;height:24%!important}
+  .c-typing i{animation:none}
+  .c-card,.c-row{animation:none}
+}
 /* ---------- welcome widget ---------- */
 #welcome{--putty:#dfe1d3;--card:#d0d3c2;--ink:#1f241d;--ink-60:rgba(31,36,29,.60);--ink-42:rgba(31,36,29,.42);--spore:#e4e64a;--band-ok:#6c8a3a;
   position:fixed;z-index:1;left:50%;top:53%;width:min(340px,calc(100% - 32px));transform:translate(-50%,-50%);padding:20px 18px 14px;border-radius:28px;color:var(--ink);
@@ -752,9 +984,50 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <div id="toast" class="mono" role="status" aria-live="polite"></div>
   <nav class="pills" aria-label="Sections">
     <button data-nav="garden" class="on">Garden</button>
-    <button data-nav="memory">Memory</button>
-    <button data-nav="settings">Settings</button>
+    <button data-nav="chat">Chat</button>
   </nav>
+</div>
+
+<div id="chatRoot" aria-hidden="true">
+  <canvas id="cFx" aria-hidden="true"></canvas>
+  <div class="c-shell">
+    <aside class="c-side c-glass" id="cSide">
+      <div class="c-side-head"><h2>Threads</h2><button type="button" class="c-new" id="cNewThread" aria-label="New thread">+</button></div>
+      <div class="c-thread-list" id="cThreadList"></div>
+    </aside>
+    <main class="c-main c-glass">
+      <div class="c-topbar">
+        <button type="button" class="c-icon" id="cThreadsToggle" aria-label="Threads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+        <div class="c-top-meta"><h3 id="cThreadTitle">Opal</h3><span id="cThreadMeta"></span></div>
+        <button type="button" class="c-icon" id="cWidgetsToggle" aria-label="Today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.9L18.7 9l-4.9 1.8L12 15.7l-1.8-4.9L5.3 9l4.9-1.8z"/><path d="M19 15.5l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7z"/></svg></button>
+      </div>
+      <div class="c-msgs" id="cMsgs"></div>
+      <div class="c-suggest" id="cSuggest"></div>
+      <form class="c-composer" id="cComposer">
+        <div class="c-input-pill">
+          <button type="button" class="c-round" id="cAttach" aria-label="Attach a file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5l-7.8 7.8a3 3 0 004.24 4.25l8-8a5 5 0 00-7.07-7.07L5 11.34"/></svg></button>
+          <textarea id="cInput" rows="1" placeholder="Ask Opal anything…" aria-label="Message Opal"></textarea>
+          <button type="button" class="c-round" id="cMic" aria-label="Voice message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+        </div>
+        <button type="submit" class="c-send" id="cSend" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+      </form>
+    </main>
+    <aside class="c-right" id="cRight">
+      <div class="c-widget c-listen" id="cListen">
+        <div class="c-wcap"><span>Opal</span><button type="button" class="c-lbtn" id="cListenBtn">Pause</button></div>
+        <div class="c-wave" id="cWave"></div>
+        <p id="cListenText">Listening · 14h 22m today</p>
+      </div>
+      <button type="button" class="c-widget c-next" id="cNext" style="width:100%"></button>
+      <div class="c-widget c-tasks-w" id="cTasksWidget"></div>
+      <div class="c-widget c-connect" id="cConnectWidget">
+        <div class="c-wcap"><span>Connected</span></div>
+        <div class="c-cgrid" id="cGrid"></div>
+      </div>
+      <div class="c-foot"><button type="button" data-cf="memory">Memory</button><button type="button" data-cf="settings">Settings</button></div>
+    </aside>
+    <div id="cDrawerScrim"></div>
+  </div>
 </div>
 
 <div id="scrim"></div>
@@ -2330,7 +2603,6 @@ function openSheet(kind, o, origin, fixed) {
   sheet.style.transform = `translate(${dx}px,${dy}px) scale(${s})`;
   sheet.getBoundingClientRect();
   sheet.style.transition = ''; sheet.style.transform = 'none'; sheet.style.opacity = '1';
-  $$nav(kind === 'opal' ? 'memory' : kind === 'settings' ? 'settings' : 'garden');
   setTimeout(() => { const f = sheet.querySelector('.close'); if (f) f.focus({ preventScroll: true }); }, 60);
 }
 function closeSheet() {
@@ -2339,7 +2611,7 @@ function closeSheet() {
   const rect = sheet.getBoundingClientRect();
   const dx = origin.x - (rect.left + rect.width / 2), dy = origin.y - (rect.top + rect.height / 2), s = Math.max(.04, (2 * origin.r) / rect.width);
   sheet.classList.remove('dragY'); sheet.style.transform = `translate(${dx}px,${dy}px) scale(${s})`; sheet.style.opacity = '0';
-  document.body.classList.remove('sheet-open'); sheetOpen = false; hideUndo(true); $$nav('garden');
+  document.body.classList.remove('sheet-open'); sheetOpen = false; hideUndo(true);
   closeTimer = setTimeout(() => { sheetWrap.hidden = true; closeTimer = null; }, REDUCED ? 20 : 720);
   if (!current.fixed && o && o.el && document.body.contains(o.el)) o.el.focus({ preventScroll: true }); else if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   setAnnot(null);
@@ -2462,15 +2734,356 @@ sheet.addEventListener('click', e => {
 sheet.addEventListener('change', e => { const s = e.target.closest('[data-role=retention]'); if (s) { state.retention = s.value; save(); } });
 
 window.__opal = { view, ORBS, get recenter() { return recenter; }, get drag() { return drag; }, bounds };
-/* ---------- nav ---------- */
-$('.pills').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return; const nav = b.dataset.nav;
-  if (nav === 'garden') { if (sheetOpen) closeSheet(); else recenter = { z: baseZ() }; return; }
-  if (sheetOpen) { closeSheet(); setTimeout(() => go(), 260); } else go();
-  function go() {
-    if (nav === 'memory') { const o = ORBS.find(o => o.center), r = b.getBoundingClientRect(); openSheet('opal', o, { x: r.left + r.width / 2, y: r.top + r.height / 2, r: 14 }, true); }
-    else { const r = b.getBoundingClientRect(); openSheet('settings', null, { x: r.left + r.width / 2, y: r.top + r.height / 2, r: 14 }); }
+/* ================================================================
+   Chat: a second way to live in the garden. Same Opal, same mock
+   memory (PROMISES/TIMELINE/MAILS/SB_PIECES/LI_MOCK/SP_TRACKS),
+   read fresh on every render so it never drifts from the orbs.
+   ================================================================ */
+const chatRoot = $('#chatRoot');
+let mode = 'garden', chatInited = false;
+function chatS() { state.chat = state.chat || { active: null, read: {}, extra: {}, custom: {} }; return state.chat; }
+
+/* ---------- answers: the same generator powers a seed thread, a quick chip, and typed text ---------- */
+function chatPromiseAnswer(id) {
+  const p = PROMISES.find(x => x.id === id); if (!p) return chatFallbackAnswer();
+  const done = !!state.cal[id];
+  const text = done ? `Already on your calendar — ${p.date}, ${p.time}.` : `You said "${p.evidence}." I held ${p.date} at ${p.time} for it — want it on the calendar?`;
+  return { text, card: { type: 'promise', id: p.id } };
+}
+function chatTodayAnswer() {
+  const next = PROMISES[1];
+  return { text: `Seven things today, across five places. ${next.act} still needs a yes from you — you said "${next.evidence}."`, card: { type: 'timeline', rows: TIMELINE.slice(0, 5) } };
+}
+function chatWeekAnswer() {
+  const now = new Date(), t0 = new Date(now); t0.setHours(0, 0, 0, 0); t0.setDate(t0.getDate() - ((t0.getDay() + 6) % 7));
+  const end = new Date(t0); end.setDate(t0.getDate() + 7);
+  const wk = spEvents().filter(e => e.at >= t0 && e.at < end);
+  const saved = wk.filter(e => e.saved).length;
+  const freq = {}; wk.forEach(e => { freq[e.track.id] = (freq[e.track.id] || 0) + 1; });
+  const topId = Object.keys(freq).sort((a, b) => freq[b] - freq[a])[0];
+  const top = topId ? SP_TRACKS.find(t => t.id === topId) : null;
+  const artist = top ? top.artist.replace(/,.*$/, '') : '';
+  return { text: `${saved} saved out of ${wk.length} the band heard this week.${top ? ` ${artist} is who you keep going back to.` : ''}`, card: { type: 'chart' } };
+}
+function chatMailAnswer() {
+  const open = MAILS.filter(m => !state.gmail[m.id]); const list = (open.length ? open : MAILS).slice(0, 4);
+  return { text: `${list.length} draft${list.length === 1 ? '' : 's'} sitting there, already in your words. ${list[0].to.split(' ')[0]}'s has the nearest deadline.`, card: { type: 'mail', ids: list.map(m => m.id) } };
+}
+function chatTasksAnswer() {
+  const open = calWaiting();
+  if (!open.length) return { text: `Nothing open. Every promise made it to the calendar.`, card: { type: 'tasks', ids: [] } };
+  return { text: `${open.length} promise${open.length === 1 ? '' : 's'} still open. ${open[0].act} is the nearest.`, card: { type: 'tasks', ids: open.map(p => p.id) } };
+}
+function chatBooksAnswer() {
+  return { text: `Three, close to what you're building. The titanium hinge piece is the one to read first — it's the exact cost breakdown you were guessing at.`, card: { type: 'books', ids: ['c1', 'b2', 'r2'] } };
+}
+function chatPeopleAnswer() {
+  return { text: `Five people surfaced from your network this week. Maya Chen's worth a proper hello — she's led two wearable rounds, and Calvin already knows her.`, card: { type: 'people', ids: ['mc', 'jr', 'ak', 'ev', 'lw'] } };
+}
+function chatFallbackAnswer() { return { text: `Not something Opal's heard yet. Try one of these, or open an orb in the garden.`, card: null }; }
+function chatIntent(raw) {
+  const q = raw.toLowerCase();
+  if (/calvin|birthday|dinner/.test(q)) return chatPromiseAnswer(2);
+  if (/maya|coffee/.test(q)) return chatPromiseAnswer(1);
+  if (/owe|reply|email|gmail|mail|draft/.test(q)) return chatMailAnswer();
+  if (/week|music|spotify|sound|listen|song/.test(q)) return chatWeekAnswer();
+  if (/task|plate|todo|open|promise|calendar/.test(q)) return chatTasksAnswer();
+  if (/substack|read|book|article|piece/.test(q)) return chatBooksAnswer();
+  if (/who|new|network|linkedin|people|met/.test(q)) return chatPeopleAnswer();
+  if (/miss|today|happen/.test(q)) return chatTodayAnswer();
+  return chatFallbackAnswer();
+}
+
+/* ---------- cards: Opal's answers, made visible ---------- */
+function chatSpiralPath() {
+  let d = '', cx = 48, cy = 48, turns = 3.1, steps = 70, tip = { x: cx, y: cy };
+  for (let i = 0; i <= steps; i++) { const t = i / steps, ang = t * turns * Math.PI * 2, r = 2 + t * 40; const x = cx + Math.cos(ang) * r, y = cy + Math.sin(ang) * r; d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' '; tip = { x, y }; }
+  return `<path d="${d}" fill="none" stroke="var(--moss)" stroke-width="1.6" stroke-linecap="round"/><circle cx="${tip.x.toFixed(1)}" cy="${tip.y.toFixed(1)}" r="3.2" fill="var(--spore)"/>`;
+}
+function chatCardTimeline(rows) {
+  return `<div class="c-card"><div class="c-card-cap"><span>Timeline</span><button type="button" class="link" data-copen="opal">Open Memory →</button></div>
+    <ul class="c-tl">${rows.map(e => `<li class="${e.live ? 'live' : ''}"><i></i><span class="c-tl-t">${e.time}</span><div><p>${esc(e.text)}</p><small>${esc(e.place)} · ${esc(e.who)}</small></div></li>`).join('')}</ul></div>`;
+}
+function chatCardChart() {
+  const now = new Date(), t0 = new Date(now); t0.setHours(0, 0, 0, 0); t0.setDate(t0.getDate() - ((t0.getDay() + 6) % 7));
+  const counts = []; let max = 1;
+  for (let i = 0; i < 7; i++) { const d = new Date(t0); d.setDate(t0.getDate() + i); const n = spEvents().filter(e => e.at.toDateString() === d.toDateString()).length; counts.push(n); if (n > max) max = n; }
+  const wk = spEvents().filter((e, i) => true); const t0b = t0, end = new Date(t0); end.setDate(t0.getDate() + 7);
+  const inWeek = spEvents().filter(e => e.at >= t0b && e.at < end);
+  const freq = {}; inWeek.forEach(e => { freq[e.track.id] = (freq[e.track.id] || 0) + 1; });
+  const topId = Object.keys(freq).sort((a, b) => freq[b] - freq[a])[0];
+  const top = topId ? SP_TRACKS.find(t => t.id === topId) : null;
+  const q = top ? `${top.artist} ${top.title}` : '', url = top ? (spS().art[q] || '') : '';
+  return `<div class="c-card"><div class="c-card-cap"><span>This week · Spotify</span><button type="button" class="link" data-copen="spotify">Open →</button></div>
+    <div class="c-chart">${counts.map((n, i) => `<b><em style="height:${Math.max(6, n / max * 100)}%;animation-delay:${i * 40}ms"></em><span>${DAYS[(t0.getDay() + i) % 7].slice(0, 2)}</span></b>`).join('')}</div>
+    ${top ? `<div class="c-toptrack"><div class="cv" data-q="${esc(q)}" style="${url ? `background-image:url('${url}')` : `background:${top.c}`}"></div><div><b>${esc(top.title)}</b><small>${esc(top.artist)} · played ${freq[topId]}×</small></div></div>` : ''}</div>`;
+}
+function chatCardMail(ids) {
+  const rows = ids.map(id => MAILS.find(m => m.id === id)).filter(Boolean);
+  return `<div class="c-card"><div class="c-card-cap"><span>Drafts, in your words</span><button type="button" class="link" data-copen="gmail">Open Gmail →</button></div>
+    <div class="c-mail-list">${rows.map(m => `<div class="c-mail"><b>${esc(m.to)}</b><p>${esc(m.subj)}</p></div>`).join('')}</div></div>`;
+}
+function chatTaskRow(p) {
+  return `<div class="c-task" data-task="${p.id}"><div class="c-task-body"><b>${esc(p.act)}</b><small>${esc(p.date)} · ${p.time}</small></div><button type="button" class="c-task-go" data-accept="${p.id}" aria-label="Add to calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button></div>`;
+}
+function chatCardTasks(ids) {
+  const rows = ids.map(id => PROMISES.find(p => p.id === id)).filter(Boolean);
+  if (!rows.length) return `<div class="c-card"><div class="c-card-cap"><span>Tasks</span></div><p style="font-size:12.5px;color:var(--ink-60)">Nothing open. Every promise made it to the calendar.</p></div>`;
+  return `<div class="c-card"><div class="c-card-cap"><span>Still open · ${rows.length}</span><button type="button" class="link" data-copen="calendar">Open Calendar →</button></div>
+    <div class="c-tasks-list">${rows.map(chatTaskRow).join('')}</div></div>`;
+}
+function chatCardBooks(ids) {
+  const rows = ids.map(id => SB_PIECES.find(p => p.id === id)).filter(Boolean);
+  return `<div class="c-card"><div class="c-card-cap"><span>Picked for you · Substack</span><button type="button" class="link" data-copen="substack">Open →</button></div>
+    <div class="c-books">${rows.map((p, i) => `<div class="c-book" style="--rot:${(i - 1) * 2.4}deg"><i style="${p.img ? `background-image:url('assets/covers/${p.img}.jpg')` : `background:var(--card)`}"></i><b>${esc(p.title)}</b><small>${esc(p.author)} · ${p.min} min</small></div>`).join('')}</div></div>`;
+}
+function chatCardPeople(ids) {
+  const rows = ids.map(id => LI_MOCK.find(p => p.id === id)).filter(Boolean);
+  return `<div class="c-card"><div class="c-card-cap"><span>New in your network</span><button type="button" class="link" data-copen="linkedin">Open LinkedIn →</button></div>
+    <div class="c-people">${rows.map((p, i) => `<div class="c-face" title="${esc(p.name)}" style="--rot:${(i % 2 ? 1 : -1) * (3 + i)}deg;background-image:url('${p.photo}')"></div>`).join('')}</div>
+    <p class="c-people-note">${esc(rows.map(p => p.name.split(' ')[0]).join(', '))}</p></div>`;
+}
+function chatCardPromise(id) {
+  const p = PROMISES.find(x => x.id === id); if (!p) return '';
+  const done = !!state.cal[id];
+  return `<div class="c-card" data-promise="${id}"><div class="c-card-cap"><span>${done ? 'On your calendar' : 'Proposed'}</span><button type="button" class="link" data-copen="calendar">Open Calendar →</button></div>
+    <div class="c-quote"><b>You said</b>"${esc(p.evidence)}"</div>
+    <div class="c-task"><div class="c-task-body"><b>${esc(p.act)}</b><small>${esc(p.date)} · ${p.time} · ${esc(p.dur)}</small></div>${done ? `<span class="mono" style="color:var(--moss)">ADDED</span>` : `<button type="button" class="c-task-go" data-accept="${p.id}" aria-label="Add to calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>`}</div></div>`;
+}
+function chatCard(spec) {
+  if (!spec) return '';
+  if (spec.type === 'timeline') return chatCardTimeline(spec.rows);
+  if (spec.type === 'chart') return chatCardChart();
+  if (spec.type === 'mail') return chatCardMail(spec.ids);
+  if (spec.type === 'tasks') return chatCardTasks(spec.ids);
+  if (spec.type === 'books') return chatCardBooks(spec.ids);
+  if (spec.type === 'people') return chatCardPeople(spec.ids);
+  if (spec.type === 'promise') return chatCardPromise(spec.id);
+  return '';
+}
+
+/* ---------- threads ---------- */
+const CHAT_THREADS = [
+  { id: 'today', title: 'Today, so far', logo: 'opal', color: '#e8a04a', updated: 'JUST NOW', unread: false, messages: (() => { const a = chatTodayAnswer(); return [{ role: 'you', text: 'What did I miss today?' }, { role: 'opal', text: a.text, card: a.card }]; })() },
+  { id: 'calvin', title: "Calvin's birthday dinner", logo: 'googlecalendar', color: '#4285F4', updated: '3H AGO', unread: true, messages: (() => { const a = chatPromiseAnswer(2); return [{ role: 'opal', text: a.text, card: a.card }]; })() },
+  { id: 'week-music', title: 'This week in sound', logo: 'spotify', color: '#1DB954', updated: 'YESTERDAY', unread: false, messages: (() => { const a = chatWeekAnswer(); return [{ role: 'you', text: "How's my week sounding?" }, { role: 'opal', text: a.text, card: a.card }]; })() },
+  { id: 'reply', title: 'Who I owe a reply', logo: 'gmail', color: '#EA4335', updated: '2 DAYS AGO', unread: true, messages: (() => { const a = chatMailAnswer(); return [{ role: 'you', text: 'Who do I owe a reply?' }, { role: 'opal', text: a.text, card: a.card }]; })() },
+  { id: 'substack', title: 'What Substack picked', logo: 'substack', color: '#FF6719', updated: '4 DAYS AGO', unread: false, messages: (() => { const a = chatBooksAnswer(); return [{ role: 'you', text: 'What did Substack pick for me?' }, { role: 'opal', text: a.text, card: a.card }]; })() },
+  { id: 'network', title: 'New in your network', logo: 'linkedin', color: '#0A66C2', updated: '5 DAYS AGO', unread: false, messages: (() => { const a = chatPeopleAnswer(); return [{ role: 'you', text: "Who's new this week?" }, { role: 'opal', text: a.text, card: a.card }]; })() },
+];
+function chatAllThreads() { return CHAT_THREADS.concat(Object.values(chatS().custom)); }
+function chatMsgsFor(t) { return (t.messages || []).concat(chatS().extra[t.id] || []); }
+function chatThreadIcon(t) { return t.logo === 'notes' ? '<svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2l2.6 6.6L21 10l-5 4.4L17.4 21 12 17.3 6.6 21 8 14.4 3 10l6.4-1.4z"/></svg>' : markSvg(t.logo, '#fff'); }
+function chatRenderThreadList() {
+  const list = $('#cThreadList'), active = chatS().active;
+  list.innerHTML = chatAllThreads().map(t => {
+    const unread = t.unread && !chatS().read[t.id]; const msgs = chatMsgsFor(t); const last = msgs[msgs.length - 1];
+    const preview = last ? (last.text.length > 44 ? last.text.slice(0, 44) + '…' : last.text) : 'New thread';
+    return `<button type="button" class="c-thread${t.id === active ? ' on' : ''}" data-thread="${t.id}" style="--c:${t.color}">
+      <span class="c-thread-ic">${chatThreadIcon(t)}</span>
+      <span class="c-thread-body"><b>${esc(t.title)}</b><p>${esc(preview)}</p></span>
+      <span class="c-thread-t">${esc(t.updated)}</span>${unread ? '<i class="c-thread-unread"></i>' : ''}</button>`;
+  }).join('');
+}
+function chatSelectThread(id, silent) {
+  const t = chatAllThreads().find(x => x.id === id); if (!t) return;
+  const cs = chatS(); cs.active = id; cs.read[id] = true; save();
+  $('#cThreadTitle').textContent = t.title; $('#cThreadMeta').textContent = t.updated;
+  chatRenderThreadList(); chatRenderMsgs();
+  if (!silent) chatCloseDrawers();
+}
+function chatRenderMsgs() {
+  const t = chatAllThreads().find(x => x.id === chatS().active); const wrap = $('#cMsgs'); if (!t) { wrap.innerHTML = ''; return; }
+  const msgs = chatMsgsFor(t);
+  if (!msgs.length) wrap.innerHTML = `<div class="c-empty"><svg viewBox="0 0 96 96" aria-hidden="true">${chatSpiralPath()}</svg><p>Ask Opal anything about today, your people, or what you've been hearing.</p></div>`;
+  else {
+    wrap.innerHTML = msgs.map(m => `<div class="c-row ${m.role}${m.card ? ' wide' : ''}">
+      <div class="c-who"><span class="c-avatar" style="${m.role === 'opal' ? '' : 'background:var(--card)'}"></span><span>${m.role === 'opal' ? 'Opal' : 'You'}</span></div>
+      <div class="c-bub">${esc(m.text)}</div>${m.card ? chatCard(m.card) : ''}</div>`).join('');
+    wrap.querySelectorAll('[data-q]').forEach(el => { const t2 = SP_TRACKS.find(x => `${x.artist} ${x.title}` === el.dataset.q); if (t2) spArt(t2, url => spPaint(el, url)); });
   }
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function chatAppend(role, text, card) {
+  const cs = chatS(), id = cs.active; cs.extra[id] = cs.extra[id] || []; cs.extra[id].push({ role, text, card: card || null }); save();
+  chatRenderMsgs(); chatRenderThreadList();
+}
+function chatTypingShow() {
+  const wrap = $('#cMsgs'), row = document.createElement('div'); row.className = 'c-row opal'; row.id = 'cTypingRow';
+  row.innerHTML = `<div class="c-who"><span class="c-avatar"></span><span>Opal</span></div><div class="c-typing"><i></i><i></i><i></i></div>`;
+  wrap.appendChild(row); wrap.scrollTop = wrap.scrollHeight;
+}
+function chatTypingHide() { const r = $('#cTypingRow'); if (r) r.remove(); }
+function chatSend(raw) {
+  const text = String(raw).trim(); if (!text) return;
+  chatAppend('you', text);
+  const btn = $('#cSend'), r = btn.getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 14 });
+  chatTypingShow();
+  setTimeout(() => { chatTypingHide(); const ans = chatIntent(text); chatAppend('opal', ans.text, ans.card); }, REDUCED ? 80 : 620 + Math.random() * 340);
+}
+function chatAutoGrow() { const el = $('#cInput'); el.style.height = 'auto'; el.style.height = Math.min(96, el.scrollHeight) + 'px'; }
+const CHAT_CHIPS = ['What did I miss today?', "How's my week sounding?", 'Who do I owe?', "What's still open?", 'What did Substack pick?', "Who's new?"];
+function chatRenderSuggest() { $('#cSuggest').innerHTML = CHAT_CHIPS.map(l => `<button type="button" class="c-chip">${esc(l)}</button>`).join(''); }
+
+/* ---------- accept a promise from inside chat: the same state the Calendar sheet reads ---------- */
+function chatAcceptPromise(p) {
+  if (state.cal[p.id]) return false;
+  const start = new Date(p.slot.day); start.setMinutes(p.slot.min);
+  state.cal[p.id] = { state: 'accepted', start: start.toISOString(), minutes: p.dur }; save(); refreshOrb('calendar'); return true;
+}
+function chatHandleAccept(btn) {
+  const id = +btn.dataset.accept, p = PROMISES.find(x => x.id === id); if (!p || state.cal[id]) return;
+  const r = btn.getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 20 });
+  const card = btn.closest('.c-card'), isSingle = card && card.dataset.promise, row = btn.closest('.c-task');
+  if (!isSingle && row) row.classList.add('done');
+  chatAcceptPromise(p);
+  if (isSingle) card.outerHTML = chatCardPromise(id);
+  chatAppend('opal', `Added — ${p.act}, ${p.date} ${p.time}. Told the Calendar orb too.`);
+  chatRenderTasksWidget(); chatRenderNext();
+}
+
+/* ---------- open the real sheet behind a card, a connector tile, or a footer link ---------- */
+function chatOpenFrom(el, key) {
+  const r = el.getBoundingClientRect(), origin = { x: r.left + r.width / 2, y: r.top + r.height / 2, r: 14 };
+  openSheet(key, ORBS.find(o => o.id === key) || null, origin, true);
+}
+
+/* ---------- right panel: today ---------- */
+function chatRenderListen() {
+  const wave = $('#cWave'); if (!wave.children.length) wave.innerHTML = Array.from({ length: 26 }, (_, i) => `<i style="--h:${28 + Math.round(Math.sin(i * 1.3) * 20 + Math.random() * 24)}%;animation-delay:${-((i * 70) % 1200)}ms"></i>`).join('');
+  $('#cListenBtn').textContent = state.listening ? 'Pause' : 'Resume';
+  $('#cListenText').textContent = state.listening ? $('#chipText').textContent.replace(/^Listening/, 'Listening') || 'Listening' : 'Paused';
+}
+function chatRenderNext() {
+  const el = $('#cNext'), open = calWaiting();
+  if (!open.length) { el.className = 'c-widget c-next empty'; el.innerHTML = `<div class="c-wcap"><span>Next up</span></div><p>You're clear.</p><small>Nothing waiting on you.</small>`; return; }
+  const p = open[0], frac = clamp(p.slot.min / 1440, 0, 1), C = 2 * Math.PI * 40, off = C * (1 - frac);
+  el.className = 'c-widget c-next';
+  el.innerHTML = `<div class="c-wcap"><span>Next up</span></div><div class="c-ring"><svg viewBox="0 0 96 96"><circle class="bg" cx="48" cy="48" r="40"/><circle class="fg" cx="48" cy="48" r="40" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><b>${p.time}</b></div><p>${esc(p.act)}</p><small>${esc(p.date)}</small>`;
+}
+function chatRenderTasksWidget() {
+  const el = $('#cTasksWidget'), open = calWaiting(), shown = open.slice(0, 4);
+  el.innerHTML = `<div class="c-wcap"><span>Tasks · ${open.length}</span></div><div class="c-tasks-list">${shown.map(chatTaskRow).join('') || `<p style="font-size:12px;color:var(--ink-60)">Nothing open.</p>`}</div>${open.length > 4 ? `<span class="c-more" role="button" tabindex="0">+${open.length - 4} more · open Calendar</span>` : ''}`;
+}
+const CHAT_CONNECT = ['calendar', 'gmail', 'notion', 'linkedin', 'notes', 'substack', 'spotify', 'contacts'];
+function chatRenderConnect() {
+  $('#cGrid').innerHTML = CHAT_CONNECT.map(id => {
+    const o = ORB_DEFS.find(d => d.id === id); if (!o) return ''; const n = pendingOf(id);
+    const icon = id === 'notes' ? '<svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2l2.6 6.6L21 10l-5 4.4L17.4 21 12 17.3 6.6 21 8 14.4 3 10l6.4-1.4z"/></svg>' : markSvg(o.logo, '#fff');
+    return `<button type="button" class="c-ctile" data-conn="${id}" style="--c:${o.brand}" aria-label="${esc(o.name)}">${icon}${n > 0 ? `<b>${n}</b>` : ''}</button>`;
+  }).join('');
+}
+
+/* ---------- floral fx: an ambient drift, a cursor trail, and a burst on every real action ---------- */
+const CHAT_PAL = ['228,230,74', '233,183,201', '232,160,74', '122,154,90'];
+let cCtx = null, cW = 0, cH = 0, cParts = [], cRaf = 0, cRootEl = null, cCanvasEl = null;
+function chatResize() {
+  if (!cRootEl) return; cW = cRootEl.clientWidth; cH = cRootEl.clientHeight;
+  cCanvasEl.width = Math.max(1, cW * DPR); cCanvasEl.height = Math.max(1, cH * DPR); cCanvasEl.style.width = cW + 'px'; cCanvasEl.style.height = cH + 'px';
+  if (!cCtx) cCtx = cCanvasEl.getContext('2d'); cCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function chatSpawnAmbient() {
+  if (cParts.filter(p => p.amb).length >= 11) return;
+  cParts.push({ amb: true, x: Math.random() * cW, y: Math.random() * cH, vx: (Math.random() - .5) * 10, vy: -6 - Math.random() * 8, r: 34 + Math.random() * 44, a: .06 + Math.random() * .08, rgb: CHAT_PAL[(Math.random() * CHAT_PAL.length) | 0], life: 0, ttl: 22 + Math.random() * 16, seed: Math.random() * 90 });
+}
+function chatSpawnTrail(x, y) {
+  if (Math.random() < .16) cParts.push({ x, y, vx: 0, vy: 14, r: 3 + Math.random() * 3, a: .85, rgb: Math.random() < .5 ? '228,230,74' : '31,36,29', life: 0, ttl: 1.3 + Math.random() * .6, glitch: true, ang: Math.random() * Math.PI });
+  else cParts.push({ x, y, vx: (Math.random() - .5) * 24, vy: -16 - Math.random() * 16, r: 3 + Math.random() * 3.2, a: .82, rgb: CHAT_PAL[(Math.random() * 3) | 0], life: 0, ttl: 2.4 + Math.random() * 1.2, petal: true, ang: Math.random() * Math.PI * 2, spin: (Math.random() - .5) * 3.2 });
+}
+function chatBurst(x, y, opts) {
+  const n = (opts && opts.n) || 16;
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, sp = 70 + Math.random() * 150;
+    if (Math.random() < .18) cParts.push({ x, y, vx: Math.cos(a) * sp * .5, vy: Math.sin(a) * sp * .5 - 24, r: 3 + Math.random() * 3, a: .92, rgb: Math.random() < .5 ? '228,230,74' : '31,36,29', life: 0, ttl: 1.5 + Math.random() * .7, glitch: true, ang: Math.random() * Math.PI });
+    else cParts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 34, r: 3.6 + Math.random() * 4.2, a: .95, rgb: CHAT_PAL[(Math.random() * CHAT_PAL.length) | 0], life: 0, ttl: 2.8 + Math.random() * 1.4, petal: true, ang: a, spin: (Math.random() - .5) * 4.4 });
+  }
+}
+let cLastTrail = { x: 0, y: 0, t: 0 };
+function chatPointerMove(e) {
+  if (mode !== 'chat' || REDUCED) return; const now = performance.now(); if (now - cLastTrail.t < 26) return;
+  if (Math.hypot(e.clientX - cLastTrail.x, e.clientY - cLastTrail.y) < 16) return;
+  cLastTrail = { x: e.clientX, y: e.clientY, t: now }; chatSpawnTrail(e.clientX, e.clientY);
+}
+function cTick() {
+  cRaf = requestAnimationFrame(cTick); if (!cCtx) return; cCtx.clearRect(0, 0, cW, cH);
+  if (Math.random() < .035) chatSpawnAmbient();
+  const dt = 1 / 60; cParts = cParts.filter(p => { p.life += dt; return p.life < p.ttl; });
+  for (const p of cParts) {
+    const k = p.life / p.ttl;
+    if (p.amb) {
+      const x = p.x + Math.sin(p.seed + p.life * .3) * 20 + p.vx * p.life * .35, y = p.y + p.vy * p.life * .35;
+      const fade = Math.min(1, k * 3.2) * Math.min(1, (1 - k) * 2.6), al = Math.max(0, p.a * fade);
+      const g = cCtx.createRadialGradient(x, y, 0, x, y, p.r); g.addColorStop(0, `rgba(${p.rgb},${al})`); g.addColorStop(1, `rgba(${p.rgb},0)`);
+      cCtx.fillStyle = g; cCtx.beginPath(); cCtx.arc(x, y, p.r, 0, Math.PI * 2); cCtx.fill();
+    } else if (p.glitch) {
+      const x = p.x + p.vx * p.life, y = p.y + p.vy * p.life + 42 * p.life * p.life;
+      cCtx.globalAlpha = Math.max(0, p.a * (1 - k)); cCtx.fillStyle = `rgb(${p.rgb})`;
+      cCtx.save(); cCtx.translate(x, y); cCtx.rotate(p.ang); cCtx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r); cCtx.restore(); cCtx.globalAlpha = 1;
+    } else if (p.petal) {
+      const x = p.x + p.vx * p.life + Math.sin(p.life * 3 + p.ang) * 9, y = p.y + p.vy * p.life + 80 * p.life * p.life, rot = p.ang + p.spin * p.life;
+      cCtx.globalAlpha = Math.max(0, p.a * (1 - k)); cCtx.fillStyle = `rgb(${p.rgb})`;
+      cCtx.save(); cCtx.translate(x, y); cCtx.rotate(rot); cCtx.scale(1, .6); cCtx.beginPath(); cCtx.arc(0, 0, p.r, 0, Math.PI * 2); cCtx.fill(); cCtx.restore(); cCtx.globalAlpha = 1;
+    }
+  }
+}
+function chatStartFx() { if (!cRaf) cRaf = requestAnimationFrame(cTick); }
+function chatStopFx() { if (cRaf) { cancelAnimationFrame(cRaf); cRaf = 0; } cParts = []; if (cCtx) cCtx.clearRect(0, 0, cW, cH); }
+
+/* ---------- drawers (narrow widths) ---------- */
+function chatToggleDrawer(which) {
+  const side = $('#cSide'), right = $('#cRight'), scrim = $('#cDrawerScrim'), el = which === 'side' ? side : right, other = which === 'side' ? right : side;
+  const show = !el.classList.contains('show'); el.classList.toggle('show', show); other.classList.remove('show'); scrim.classList.toggle('show', show);
+}
+function chatCloseDrawers() { $('#cSide').classList.remove('show'); $('#cRight').classList.remove('show'); $('#cDrawerScrim').classList.remove('show'); }
+
+/* ---------- boot: wire once, the first time chat opens ---------- */
+function chatInit() {
+  if (chatInited) return; chatInited = true;
+  const cs = chatS(); if (!cs.active) cs.active = 'today';
+  cRootEl = chatRoot; cCanvasEl = $('#cFx');
+  chatSelectThread(cs.active, true);
+  chatRenderSuggest(); chatRenderListen(); chatRenderNext(); chatRenderTasksWidget(); chatRenderConnect();
+  $('#cComposer').addEventListener('submit', e => { e.preventDefault(); const v = $('#cInput').value; if (!v.trim()) return; $('#cInput').value = ''; chatAutoGrow(); chatSend(v); });
+  $('#cInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cComposer').requestSubmit(); } });
+  $('#cInput').addEventListener('input', chatAutoGrow);
+  $('#cSuggest').addEventListener('click', e => { const b = e.target.closest('.c-chip'); if (!b) return; const r = b.getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 12 }); chatSend(b.textContent); });
+  $('#cThreadList').addEventListener('click', e => { const b = e.target.closest('[data-thread]'); if (b) chatSelectThread(b.dataset.thread); });
+  $('#cNewThread').addEventListener('click', () => {
+    const id = 't' + Date.now().toString(36); chatS().custom[id] = { id, title: 'New thread', logo: 'opal', color: '#e8a04a', updated: 'NOW' }; save();
+    chatRenderThreadList(); chatSelectThread(id); const r = $('#cNewThread').getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 18 });
+  });
+  $('#cMsgs').addEventListener('click', e => {
+    const o = e.target.closest('[data-copen]'); if (o) return chatOpenFrom(o, o.dataset.copen);
+    const a = e.target.closest('[data-accept]'); if (a) return chatHandleAccept(a);
+  });
+  $('#cListenBtn').addEventListener('click', () => { toggleListening(); chatRenderListen(); });
+  $('#cNext').addEventListener('click', e => chatOpenFrom(e.currentTarget, 'calendar'));
+  $('#cRight').addEventListener('click', e => {
+    const more = e.target.closest('.c-more'); if (more) return chatOpenFrom(more, 'calendar');
+    const a = e.target.closest('[data-accept]'); if (a) return chatHandleAccept(a);
+    const tile = e.target.closest('[data-conn]'); if (tile) { chatOpenFrom(tile, tile.dataset.conn); const r = tile.getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 14 }); return; }
+    const foot = e.target.closest('[data-cf]'); if (foot) return chatOpenFrom(foot, foot.dataset.cf === 'memory' ? 'opal' : 'settings');
+  });
+  $('#cThreadsToggle').addEventListener('click', () => chatToggleDrawer('side'));
+  $('#cWidgetsToggle').addEventListener('click', () => chatToggleDrawer('right'));
+  $('#cDrawerScrim').addEventListener('click', chatCloseDrawers);
+  addEventListener('pointermove', chatPointerMove);
+  addEventListener('resize', () => { if (mode === 'chat') chatResize(); });
+}
+
+/* ---------- switching between Garden and Chat ---------- */
+function chatGo(next, rect) {
+  if (next === mode) { if (next === 'garden' && !sheetOpen) recenter = { z: baseZ() }; return; }
+  const after = () => {
+    mode = next; $$nav(mode); document.body.classList.toggle('mode-chat', mode === 'chat'); chatRoot.setAttribute('aria-hidden', String(mode !== 'chat'));
+    if (mode === 'chat') { chatInit(); chatResize(); chatStartFx(); if (rect && !REDUCED) setTimeout(() => chatBurst(rect.x, rect.y, { n: 22 }), 30); }
+    else chatStopFx();
+  };
+  if (sheetOpen) { closeSheet(); setTimeout(after, 260); } else after();
+}
+$('.pills').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const r = b.getBoundingClientRect();
+  chatGo(b.dataset.nav, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
 });
 })();
 </script>
