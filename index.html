@@ -999,6 +999,18 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-pop-conf small{font:400 9px/1.6 var(--mono);color:var(--wg-ink-42)}
 .wg-pop-jump{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:4px;padding:8px 2px 2px;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
 
+/* citations: every summary line, decision and talking point can name the exact transcript line it came from */
+.wg-cite-row{display:inline-flex;gap:3px;margin-left:5px;vertical-align:middle}
+.wg-cite-chip{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:5px;background:var(--wg-yellow-soft);color:var(--wg-accent-ink);font:400 9px/1 var(--mono);transition:background .15s,color .15s,transform .15s}
+.wg-cite-chip:hover{background:var(--wg-yellow);color:var(--wg-ink);transform:translateY(-1px)}
+.wg-cite-summary-row{display:flex;align-items:center;gap:7px;margin-top:10px}
+.wg-cite-summary-row .wg-cite-label{font:400 9px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+#wgCitePop{width:288px}
+.wg-cite-pop-label{font:400 9px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-cite-pop-quote{margin-top:7px;padding:10px 12px;background:var(--wg-yellow-soft);border-left:2px solid var(--wg-accent);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.5;color:var(--wg-ink);font-style:italic}
+.wg-cite-pop-jump{display:block;width:100%;text-align:left;margin-top:10px;padding-top:8px;border-top:1px solid var(--wg-border);font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink);transition:color .15s}
+.wg-cite-pop-jump:hover{color:var(--wg-ink)}
+
 /* people, as specimen tags */
 .wg-people-wrap{display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 12px}
 .wg-ptag-col{display:flex;flex-direction:column;align-items:center;gap:5px}
@@ -1956,6 +1968,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <aside class="wg-person-panel" id="wgDebriefPanel" role="dialog" aria-modal="true" aria-label="Result"></aside>
   <div class="wg-toast" id="wgToast"></div>
   <div class="wg-pop" id="wgPop" role="dialog" aria-label="Action detail"></div>
+  <div class="wg-pop" id="wgCitePop" role="dialog" aria-label="Source"></div>
   <svg id="wgLeader" aria-hidden="true"><path id="wgLeaderPath" fill="none" stroke="#6f8f4e" stroke-width="1.5" stroke-dasharray="3 5"/></svg>
 </div>
 
@@ -4430,12 +4443,14 @@ function wgPersonLabel(p) { return (state.wgNames && state.wgNames[p.id]) || (p.
 /* ---------- widgets: conversations + folders ---------- */
 function wgConvAt(day, hour, min) { return new Date(`${day}T${pad(hour)}:${pad(min || 0)}:00`); }
 function wgSent(id, text, secFromStart, actionClusterId) { return { id, text, startAt: secFromStart, isActionable: !!actionClusterId, actionClusterId: actionClusterId || null }; }
+function wgD(text, cites) { return { text, cites: cites || [] }; }
 
 const WG_CONVERSATIONS = [
   { id: 'wcv1', title: 'Spring break with Sage', isEstimatedTitle: false, day: WG_TODAY_KEY, startAt: wgConvAt(WG_TODAY_KEY, 15, 2), endAt: wgConvAt(WG_TODAY_KEY, 15, 28), tag: 'personal',
     summary: "You and Sage started planning spring break — she wants to go somewhere neither of you has been, and it may land the same week as your studio crit.",
-    decisions: ["Ruled out anywhere you've both already been.", "Neither of you wants to fly more than six hours."],
-    talkingPoints: ["Sage wants somewhere new to both of you.", "Jordan suggested Tulum after his trip last spring.", "Need to check NYU's spring break dates before locking anything in."],
+    summaryCites: ['s1', 's2', 's4'],
+    decisions: [wgD("Ruled out anywhere you've both already been.", ['s2']), wgD("Neither of you wants to fly more than six hours.", ['s5'])],
+    talkingPoints: [wgD("Sage wants somewhere new to both of you.", ['s2']), wgD("Jordan suggested Tulum after his trip last spring.", ['s3']), wgD("Need to check NYU's spring break dates before locking anything in.", ['s4'])],
     actionClusterIds: ['wc1'], personIds: ['wp-sage', 'wp-prof', 'wp-jordan'],
     transcriptSentences: [
       wgSent('s1', 'We should figure out spring break.', 0),
@@ -4447,8 +4462,9 @@ const WG_CONVERSATIONS = [
     isStarred: true, isArchived: false, folderId: null, relatedConversationIds: ['wcv-sb0'] },
   { id: 'wcv-sb0', title: 'Maybe spring break?', isEstimatedTitle: true, day: wgKey(wgDateAt(-8)), startAt: wgConvAt(wgKey(wgDateAt(-8)), 20, 10), endAt: wgConvAt(wgKey(wgDateAt(-8)), 20, 16), tag: 'personal',
     summary: "A first, loose mention of spring break — nothing decided, no destination yet.",
+    summaryCites: ['s1', 's2'],
     decisions: [],
-    talkingPoints: ["Sage floated the idea of going somewhere for spring break.", "No dates, no budget, no destination yet."],
+    talkingPoints: [wgD("Sage floated the idea of going somewhere for spring break.", ['s1']), wgD("No dates, no budget, no destination yet.", ['s2'])],
     actionClusterIds: [], personIds: ['wp-sage'],
     transcriptSentences: [
       wgSent('s1', 'Sage: we should do something for spring break this year.', 0),
@@ -4457,8 +4473,9 @@ const WG_CONVERSATIONS = [
     isStarred: false, isArchived: false, folderId: 'wf-tripideas', relatedConversationIds: ['wcv1'] },
   { id: 'wcv2', title: "Calvin's birthday dinner", isEstimatedTitle: false, day: WG_TODAY_KEY, startAt: wgConvAt(WG_TODAY_KEY, 16, 0), endAt: wgConvAt(WG_TODAY_KEY, 16, 14), tag: 'family',
     summary: "Dinner is set for a week from Saturday — Calvin wants Bestia, and you still need a gift.",
-    decisions: ["Bestia, a week from Saturday."],
-    talkingPoints: ["Calvin picked the restaurant himself.", "Still no gift idea."],
+    summaryCites: ['s1', 's2', 's3'],
+    decisions: [wgD("Bestia, a week from Saturday.", ['s1', 's2'])],
+    talkingPoints: [wgD("Calvin picked the restaurant himself.", ['s2']), wgD("Still no gift idea.", ['s3'])],
     actionClusterIds: ['wc2'], personIds: ['wp-calvin'],
     transcriptSentences: [
       wgSent('s1', "We're doing dinner a week from Saturday.", 0),
@@ -4468,8 +4485,9 @@ const WG_CONVERSATIONS = [
     isStarred: false, isArchived: false, folderId: 'wf-calvin', relatedConversationIds: [] },
   { id: 'wcv3', title: 'Brand deck for Ellie', isEstimatedTitle: false, day: WG_TODAY_KEY, startAt: wgConvAt(WG_TODAY_KEY, 13, 0), endAt: wgConvAt(WG_TODAY_KEY, 13, 19), tag: 'work',
     summary: "Ellie needs the brand deck before her Friday review, and Sam sat in without saying much.",
-    decisions: ['Send the deck as a PDF, not a Notion link.'],
-    talkingPoints: ["Ellie's review is Friday morning.", 'Sam Okafor is looped in but has no notes yet.'],
+    summaryCites: ['s1', 's3'],
+    decisions: [wgD('Send the deck as a PDF, not a Notion link.')],
+    talkingPoints: [wgD("Ellie's review is Friday morning.", ['s1']), wgD('Sam Okafor is looped in but has no notes yet.', ['s3'])],
     actionClusterIds: ['wc3'], personIds: ['wp-ellie', 'wp-sam'],
     transcriptSentences: [
       wgSent('s1', 'Ellie needs the brand deck before her review Friday.', 0),
@@ -4479,8 +4497,9 @@ const WG_CONVERSATIONS = [
     isStarred: false, isArchived: false, folderId: 'wf-opalware', relatedConversationIds: [] },
   { id: 'wcv6', title: 'Nine-week lead time confirmed', isEstimatedTitle: false, day: WG_D6_KEY, startAt: wgConvAt(WG_D6_KEY, 9, 0), endAt: wgConvAt(WG_D6_KEY, 9, 22), tag: 'supplier',
     summary: "Rylan and Tomas confirmed nine weeks if the titanium alloy is locked by the 23rd.",
-    decisions: ['Lock the titanium alloy by the 23rd.'],
-    talkingPoints: ['Monterrey shop can do three hundred units.', 'Nine weeks once the alloy is locked.'],
+    summaryCites: ['s1', 's2'],
+    decisions: [wgD('Lock the titanium alloy by the 23rd.', ['s2'])],
+    talkingPoints: [wgD('Monterrey shop can do three hundred units.', ['s3']), wgD('Nine weeks once the alloy is locked.', ['s2'])],
     actionClusterIds: ['wc5'], personIds: ['wp-tomas'],
     transcriptSentences: [
       wgSent('s1', 'Rylan and Tomas Reyes on the call.', 0),
@@ -4490,43 +4509,50 @@ const WG_CONVERSATIONS = [
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv7', title: 'RFQ draft for Monterrey shop', isEstimatedTitle: false, day: wgKey(wgDateAt(-10)), startAt: wgConvAt(wgKey(wgDateAt(-10)), 11, 0), endAt: wgConvAt(wgKey(wgDateAt(-10)), 11, 12), tag: 'supplier',
     summary: 'Started drafting the RFQ language before sending anything to Monterrey.',
-    decisions: [], talkingPoints: ['Needs the alloy spec and quantity before it goes out.'],
+    summaryCites: ['s1', 's2'],
+    decisions: [], talkingPoints: [wgD('Needs the alloy spec and quantity before it goes out.', ['s2'])],
     actionClusterIds: [], personIds: ['wp-tomas'],
     transcriptSentences: [wgSent('s1', 'Drafted a first pass at the RFQ language.', 0), wgSent('s2', 'Holding it until the spec is final.', 8)],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv8', title: 'Alloy spec sign-off', isEstimatedTitle: false, day: wgKey(wgDateAt(-13)), startAt: wgConvAt(wgKey(wgDateAt(-13)), 10, 0), endAt: wgConvAt(wgKey(wgDateAt(-13)), 10, 9), tag: 'supplier',
     summary: 'Confirmed the alloy spec internally before quoting anyone.',
-    decisions: [], talkingPoints: ["Spec matches the pilot-run tolerance."],
+    summaryCites: ['s1'],
+    decisions: [], talkingPoints: [wgD("Spec matches the pilot-run tolerance.", ['s2'])],
     actionClusterIds: [], personIds: [],
     transcriptSentences: [wgSent('s1', 'Signed off on the alloy spec internally.', 0), wgSent('s2', 'Matches the pilot-run tolerance.', 7)],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv9', title: 'Second supplier quote came in', isEstimatedTitle: false, day: wgKey(wgDateAt(-3)), startAt: wgConvAt(wgKey(wgDateAt(-3)), 14, 0), endAt: wgConvAt(wgKey(wgDateAt(-3)), 14, 11), tag: 'supplier',
     summary: "A second quote landed, a little higher than Monterrey's number.",
-    decisions: [], talkingPoints: ["About 8% higher than the first quote.", 'Still waiting on lead time from this one.'],
+    summaryCites: ['s1', 's2'],
+    decisions: [], talkingPoints: [wgD("About 8% higher than the first quote.", ['s2']), wgD('Still waiting on lead time from this one.')],
     actionClusterIds: [], personIds: ['wp-tomas'],
     transcriptSentences: [wgSent('s1', 'A second supplier quote came in.', 0), wgSent('s2', "Eight percent higher than Monterrey's.", 8)],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv10', title: 'Coffee with Priya', isEstimatedTitle: false, day: WG_YDAY_KEY, startAt: wgConvAt(WG_YDAY_KEY, 11, 0), endAt: wgConvAt(WG_YDAY_KEY, 11, 24), tag: 'personal',
     summary: 'Coffee with Priya after Maya introduced you — she heads design at Loam and is training for the LA marathon.',
-    decisions: [], talkingPoints: ['Priya heads design at Loam.', 'Training for the LA marathon.', 'Two kids.'],
+    summaryCites: ['s1', 's2', 's3'],
+    decisions: [], talkingPoints: [wgD('Priya heads design at Loam.', ['s2']), wgD('Training for the LA marathon.', ['s3']), wgD('Two kids.', ['s3'])],
     actionClusterIds: [], personIds: ['wp-priya'],
     transcriptSentences: [wgSent('s1', 'Coffee with Maya at Crosscut.', 0), wgSent('s2', 'She introduced Priya Natarajan, head of design at Loam.', 9), wgSent('s3', 'Training for the LA marathon, two kids.', 18)],
     isStarred: true, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv11', title: 'Studio crit reminder', isEstimatedTitle: false, day: wgKey(wgDateAt(-2)), startAt: wgConvAt(wgKey(wgDateAt(-2)), 8, 40), endAt: wgConvAt(wgKey(wgDateAt(-2)), 8, 47), tag: 'school',
     summary: 'The 9AM professor came up again, right before a crit.',
-    decisions: [], talkingPoints: ['Same voice, still no name.', 'Always right before a studio crit.'],
+    summaryCites: ['s1', 's2'],
+    decisions: [], talkingPoints: [wgD('Same voice, still no name.'), wgD('Always right before a studio crit.', ['s2'])],
     actionClusterIds: [], personIds: ['wp-prof'],
     transcriptSentences: [wgSent('s1', 'Heard the same voice again this morning.', 0), wgSent('s2', 'Right before the crit, like always.', 6)],
     isStarred: false, isArchived: false, folderId: 'wf-prepcheck', relatedConversationIds: [] },
   { id: 'wcv12', title: 'Ojai with a friend from work', isEstimatedTitle: false, day: wgKey(wgDateAt(-4)), startAt: wgConvAt(wgKey(wgDateAt(-4)), 18, 20), endAt: wgConvAt(wgKey(wgDateAt(-4)), 18, 27), tag: 'family',
     summary: "Came up on a call with Mom — a trip to Ojai with a friend from work.",
-    decisions: [], talkingPoints: ['No last name yet.', 'Sounded like a standing joke between them.'],
+    summaryCites: ['s1'],
+    decisions: [], talkingPoints: [wgD('No last name yet.'), wgD('Sounded like a standing joke between them.', ['s1'])],
     actionClusterIds: [], personIds: ['wp-momfriend'],
     transcriptSentences: [wgSent('s1', 'Mom mentioned Ojai again, laughing about it.', 0), wgSent('s2', 'Same friend from work, still no name.', 7)],
     isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
   { id: 'wcv13', title: "Dad's school pilot call", isEstimatedTitle: false, day: wgKey(wgDateAt(-3)), startAt: wgConvAt(wgKey(wgDateAt(-3)), 8, 0), endAt: wgConvAt(wgKey(wgDateAt(-3)), 8, 6), tag: 'family',
     summary: "Dad mentioned the pilot moving to October and asked you to call back.",
-    decisions: [], talkingPoints: ['Pilot pushed to October.', "You said you'd call that evening."],
+    summaryCites: ['s1', 's2'],
+    decisions: [], talkingPoints: [wgD('Pilot pushed to October.', ['s1']), wgD("You said you'd call that evening.", ['s2'])],
     actionClusterIds: [], personIds: ['wp-dad'],
     transcriptSentences: [wgSent('s1', 'Dad: the school pilot moves to October.', 0), wgSent('s2', "I'll call you this evening about it.", 5)],
     isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
@@ -5108,13 +5134,22 @@ function wgConvTranscriptHTML(c) {
     return `<p class="wg-conv-sentence" data-sent="${s.id}">${inner}</p>`;
   }).join('');
 }
+/* citations: tie a claim back to the exact transcript line(s) it came from — never a bare summary */
+function wgCiteChip(sentId, idx) { return `<button type="button" class="wg-cite-chip" data-cite="${sentId}" aria-label="Source: transcript line ${idx}">${idx}</button>`; }
+function wgCiteRow(cites, sentences) {
+  const valid = (cites || []).map(sid => ({ sid, idx: sentences.findIndex(s => s.id === sid) + 1 })).filter(x => x.idx > 0);
+  if (!valid.length) return '';
+  return `<span class="wg-cite-row">${valid.map(x => wgCiteChip(x.sid, x.idx)).join('')}</span>`;
+}
 function wgConvBodyHTML(c) {
-  let html = wgSec('Summary', `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>`);
-  if (c.decisions.length) html += wgSec('Decisions', `<ul>${c.decisions.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`);
-  if (c.talkingPoints.length) html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`);
+  const sents = c.transcriptSentences;
+  const summaryCite = wgCiteRow(c.summaryCites, sents);
+  let html = wgSec('Summary', `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>${summaryCite ? `<div class="wg-cite-summary-row"><span class="wg-cite-label">Sourced from</span>${summaryCite}</div>` : ''}`);
+  if (c.decisions.length) html += wgSec('Decisions', `<ul>${c.decisions.map(d => `<li>${esc(d.text)}${wgCiteRow(d.cites, sents)}</li>`).join('')}</ul>`);
+  if (c.talkingPoints.length) html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t.text)}${wgCiteRow(t.cites, sents)}</li>`).join('')}</ul>`);
   if (c.actionClusterIds.length) html += wgSec('Action items', c.actionClusterIds.map(wgConvActionItemHTML).join(''));
   html += wgSec('People', wgConvPeopleHTML(c));
-  if (c.transcriptSentences.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`);
+  if (sents.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`);
   html += `<div class="wg-conv-foot"><button type="button" data-convfootjump>See other conversations from this day &rarr;</button></div>`;
   return html;
 }
@@ -5145,7 +5180,7 @@ function wgConvOpen(id, cardEl) {
 }
 function wgConvClose() {
   $('#wgConvPage').classList.remove('show'); const shell = $('#wgShell'); shell.style.filter = ''; shell.style.opacity = '';
-  wgState.currentConv = null; $('#wgConvMenu').hidden = true; wgCloseMoveMenu(); wgCloseCardMenu();
+  wgState.currentConv = null; $('#wgConvMenu').hidden = true; wgCloseMoveMenu(); wgCloseCardMenu(); wgCloseCitePop();
 }
 function wgConvJumpToActionDay(clusterId, day) {
   wgConvClose();
@@ -5727,6 +5762,25 @@ function wgOpenPop(el) {
   pop.classList.add('show'); pop._anchor = el;
 }
 function wgClosePop() { $('#wgPop').classList.remove('show'); }
+/* citation popover: the exact transcript line a claim was grounded in, with a real way to go check it */
+function wgOpenCitePop(el) {
+  const c = wgConvById(wgState.currentConv); if (!c) return;
+  const sentId = el.dataset.cite, idx = c.transcriptSentences.findIndex(s => s.id === sentId), sent = c.transcriptSentences[idx];
+  if (!sent) return;
+  const pop = $('#wgCitePop'), r = el.getBoundingClientRect();
+  pop.innerHTML = `<div class="wg-cite-pop-label">Transcript · line ${idx + 1}</div>
+    <p class="wg-cite-pop-quote">&ldquo;${esc(sent.text)}&rdquo;</p>
+    <button type="button" class="wg-cite-pop-jump" data-citejump="${sentId}">Jump to transcript →</button>`;
+  pop.style.top = (r.bottom + 8) + 'px'; pop.style.left = clamp(r.left - 100, 12, innerWidth - 300) + 'px';
+  pop.classList.add('show'); pop._anchor = el;
+}
+function wgCloseCitePop() { $('#wgCitePop').classList.remove('show'); }
+function wgJumpToSentence(sentId) {
+  wgCloseCitePop();
+  const el = document.querySelector(`#wgConvTranscript [data-sent="${sentId}"]`); if (!el) return;
+  el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' });
+  el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400);
+}
 function wgJumpToAction(clusterId, anchorEl) {
   wgClosePop();
   const from = anchorEl ? anchorEl.getBoundingClientRect() : null;
@@ -5839,6 +5893,7 @@ function wgInit() {
     if (wgState.currentConv) { const c = wgConvById(wgState.currentConv); if (c) return wgConvJumpToActionDay(b.dataset.wgjump, c.day); }
     wgJumpToAction(b.dataset.wgjump, $('#wgPop')._anchor);
   });
+  $('#wgCitePop').addEventListener('click', e => { const b = e.target.closest('[data-citejump]'); if (b) wgJumpToSentence(b.dataset.citejump); });
   $('#wgPersonPanel').addEventListener('click', e => { if (e.target.closest('#wgPPClose')) return wgClosePersonPanel(); const j = e.target.closest('[data-wgjump]'); if (j) { wgClosePersonPanel(); wgJumpToAction(j.dataset.wgjump, null); } });
   $('#wgDebriefPanel').addEventListener('click', e => {
     if (e.target.closest('#wgDebriefClose') || e.target.closest('#wgDebriefClose2')) return wgCloseDebrief();
@@ -5855,6 +5910,7 @@ function wgInit() {
   $('#wgScrim').addEventListener('click', () => { wgClosePersonPanel(); wgClosePop(); wgCloseDebrief(); });
   document.addEventListener('click', e => {
     if (!e.target.closest('#wgPop') && !e.target.closest('.wg-span')) wgClosePop();
+    if (!e.target.closest('#wgCitePop') && !e.target.closest('[data-cite]')) wgCloseCitePop();
     if (!e.target.closest('.wg-search')) $('#wgResults').classList.remove('show');
     if (!e.target.closest('#wgConvMenuBtn') && !e.target.closest('#wgConvMenu')) $('#wgConvMenu').hidden = true;
     if (!e.target.closest('#wgMovePop') && !e.target.closest('[data-cardact="move"]') && !e.target.closest('[data-convact="movefolder"]')) wgCloseMoveMenu();
@@ -5864,7 +5920,7 @@ function wgInit() {
   });
   addEventListener('keydown', e => {
     if (mode !== 'widgets') return;
-    if (e.key === 'Escape') { if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
+    if (e.key === 'Escape') { if ($('#wgCitePop').classList.contains('show')) return wgCloseCitePop(); if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
     if (!$('#wgDayPage').classList.contains('show')) return;
     if (e.target.closest('input,textarea,select,[contenteditable]')) return;
     if (e.key === 'ArrowLeft') { e.preventDefault(); wgNavigateDay(-1); }
@@ -5915,6 +5971,7 @@ function wgInit() {
     const action = e.target.closest('[data-convaction]'); if (action) return wgConvJumpToActionDay(action.dataset.convaction, action.dataset.convactionday);
     const foot = e.target.closest('[data-convfootjump]'); if (foot) { const c = wgConvById(wgState.currentConv); if (c) wgConvFootJump(c); return; }
     const span = e.target.closest('.wg-span'); if (span) return wgOpenPop(span);
+    const cite = e.target.closest('[data-cite]'); if (cite) { e.stopPropagation(); return wgOpenCitePop(cite); }
   });
   $('#wgConvBody').addEventListener('blur', e => {
     const el = e.target.closest && e.target.closest('#wgConvSummaryEdit'); if (!el) return;
