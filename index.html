@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#0b120c">
-<title>Opal OS · Garden</title>
+<title>Opal OS · Overview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Instrument+Serif:ital@1&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -956,6 +956,61 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-debrief-commit.sent{background:var(--wg-accent)}
 .wg-debrief-close2{font:400 10px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ink-42)}
 .wg-debrief-close2:hover{color:var(--wg-ink)}
+/* the stuck panel: a sibling of the debrief panel, but the artifact is missing, not finished */
+.wg-stuck-missing{border:1.5px dashed var(--wg-ember);border-radius:12px;padding:18px 16px;text-align:center;color:var(--wg-ink-60);font-size:12.5px;line-height:1.55}
+.wg-stuck-missing svg{width:22px;height:22px;color:var(--wg-ember);margin:0 auto 8px;display:block}
+.wg-stuck-screen-preview{margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid var(--wg-border);background:#151713}
+.wg-stuck-screen-preview .chrome{display:flex;align-items:center;gap:5px;padding:8px 10px;background:#26241d}
+.wg-stuck-screen-preview .chrome i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
+.wg-stuck-screen-preview .body{padding:16px;display:flex;flex-direction:column;gap:8px}
+.wg-stuck-screen-preview .ln{height:6px;border-radius:3px;background:rgba(255,255,255,.12)}
+.wg-stuck-screen-preview .ln.field{background:rgba(221,143,69,.5);width:55%;animation:wgStuckLnPulse 1.6s ease-in-out infinite}
+@keyframes wgStuckLnPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.wg-stuck-expandbtn{width:100%;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 11px/1.6 var(--mono);letter-spacing:.06em;color:#fff;background:var(--wg-ink);padding:13px;border-radius:12px;transition:background .2s}
+.wg-stuck-expandbtn:hover{background:#000}
+.wg-stuck-expandbtn svg{width:14px;height:14px}
+.wg-stuck-quick{width:100%;margin-top:8px;font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42);text-align:center;transition:color .15s}
+.wg-stuck-quick:hover{color:var(--wg-ink)}
+
+/* the desktop mini view: a large centered working surface, matte per the glass system's own rule
+   (this is something the user reads and acts in, not a glanced-at overlay) */
+.wg-stuckdesk{position:fixed;inset:0;z-index:var(--z-confirm);background:rgba(31,36,29,.55);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.wg-stuckdesk.show{opacity:1;pointer-events:auto}
+.wg-stuckdesk-card{width:min(760px,100%);max-height:calc(100vh - 48px);overflow-y:auto;scrollbar-width:thin;background:var(--wg-surface);border-radius:26px;box-shadow:var(--wg-shadow-lg);padding:28px;transform:scale(.96);transition:transform .25s var(--ease)}
+.wg-stuckdesk.show .wg-stuckdesk-card{transform:none}
+.wg-stuckdesk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.wg-stuckdesk-head h3{font:600 19px/1.25 var(--sans);color:var(--wg-ink)}
+.wg-stuckdesk-head p{margin-top:5px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--wg-ember)}
+.wg-stuckdesk-head p i{width:6px;height:6px;border-radius:50%;background:var(--wg-ember);animation:wgOrbPulse 1.6s ease-in-out infinite}
+.wg-stuckdesk-close{flex:none;width:32px;height:32px;border-radius:50%;background:var(--wg-surface-2);color:var(--wg-ink-60);display:grid;place-items:center;transition:color .15s,background .15s}
+.wg-stuckdesk-close:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.wg-stuckdesk-win{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--wg-border);box-shadow:0 20px 40px rgba(31,36,29,.18)}
+.wg-stuckdesk-chrome{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#e4e2d8}
+.wg-stuckdesk-dots{display:flex;gap:5px}
+.wg-stuckdesk-dots i{width:9px;height:9px;border-radius:50%}
+.wg-stuckdesk-dots i:nth-child(1){background:#e56a56}
+.wg-stuckdesk-dots i:nth-child(2){background:#e0b64a}
+.wg-stuckdesk-dots i:nth-child(3){background:#6fae5a}
+.wg-stuckdesk-addr{flex:1;font:400 10.5px/1 var(--mono);color:var(--wg-ink-42);background:#fff;border-radius:999px;padding:7px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wg-stuckdesk-screen{position:relative;background:#fbfaf5;padding:44px 36px;min-height:260px}
+.wg-stuckdesk-app{font:600 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:8px}
+.wg-stuckdesk-h1{font:600 22px/1.35 var(--sans);color:var(--wg-ink);margin-bottom:24px;max-width:380px}
+.wg-stuckdesk-field{max-width:320px}
+.wg-stuckdesk-field label{display:block;font:600 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-60);margin-bottom:8px}
+.wg-stuckdesk-input{height:44px;border-radius:10px;background:#fff;border:2px solid var(--wg-ember);box-shadow:0 0 0 4px rgba(221,143,69,.16);animation:wgStuckGlow 1.8s ease-in-out infinite;transition:box-shadow .2s}
+.wg-stuckdesk-input:hover{box-shadow:0 0 0 6px rgba(221,143,69,.24)}
+@keyframes wgStuckGlow{0%,100%{box-shadow:0 0 0 4px rgba(221,143,69,.16)}50%{box-shadow:0 0 0 7px rgba(221,143,69,.28)}}
+.wg-stuckdesk-cta{margin-top:24px;display:inline-block;font:600 12px/1 var(--sans);color:rgba(255,255,255,.75);background:var(--wg-ink-28);padding:13px 22px;border-radius:10px;cursor:not-allowed}
+.wg-stuckdesk-cursor{position:absolute;width:18px;height:18px;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.wg-stuckdesk-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:18px;border-top:1px solid var(--wg-border)}
+.wg-stuckdesk-foot p{font-size:11.5px;line-height:1.5;color:var(--wg-ink-42);max-width:340px}
+.wg-stuckdesk-finish{flex:none;font:600 12.5px/1 var(--sans);color:#fff;background:var(--wg-ink);padding:14px 24px;border-radius:999px;transition:background .2s,transform .12s ease-out}
+.wg-stuckdesk-finish:hover{background:#000}
+.wg-stuckdesk-finish:active{transform:scale(.97)}
+@media (max-width:700px){
+  .wg-stuckdesk-foot{flex-direction:column;align-items:stretch}
+  .wg-stuckdesk-finish{width:100%;text-align:center}
+}
 
 /* toast for a task finishing while you're elsewhere */
 .wg-toast{position:fixed;right:22px;bottom:22px;z-index:var(--z-toast);display:flex;align-items:center;gap:8px;color:#fff;font:400 11px/1.6 var(--mono);letter-spacing:.04em;padding:11px 16px;border-radius:999px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
@@ -1338,6 +1393,24 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-rail-stripicon:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
 .wg-rail-stripicon b{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--wg-accent-ink);color:#fff;font:400 8.5px/15px var(--mono);text-align:center}
 .wg-rail-stripicon b:empty{display:none}
+.wg-rail-stripicon-stuck b{background:var(--wg-ember)}
+.wg-rail-stuck-sec{animation:wgRailStuckIn .5s var(--ease) both}
+@keyframes wgRailStuckIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.wg-rail-stuck-label{color:var(--wg-ember)}
+.wg-rail-stuck-label svg{width:13px;height:13px;flex:none}
+.wg-rail-stuck-row{display:flex;flex-direction:column;gap:8px;padding:11px;margin-bottom:8px;background:rgba(221,143,69,.09);border:1px solid rgba(221,143,69,.3);border-radius:14px;transition:background .2s}
+.wg-rail-stuck-row:last-child{margin-bottom:0}
+.wg-rail-stuck-row:hover{background:rgba(221,143,69,.15)}
+.wg-rail-stuck-top{display:flex;align-items:center;gap:8px}
+.wg-rail-stuck-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--wg-ember);box-shadow:0 0 0 3px rgba(221,143,69,.25);animation:wgOrbPulse 1.6s ease-in-out infinite}
+.wg-rail-stuck-title{flex:1;min-width:0;font-size:12px;font-weight:500;color:var(--wg-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wg-rail-stuck-reason{font-size:11px;line-height:1.4;color:var(--wg-ink-60)}
+.wg-rail-stuck-screen{display:flex;align-items:center;gap:8px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:10px;padding:7px 9px}
+.wg-rail-stuck-screen-thumb{flex:none;width:34px;height:24px;border-radius:5px;background:linear-gradient(155deg,#2a2118,#151713 65%);position:relative;overflow:hidden}
+.wg-rail-stuck-screen-thumb i{position:absolute;left:4px;top:3px;width:3px;height:3px;border-radius:50%;background:var(--wg-ember)}
+.wg-rail-stuck-screen-thumb b{position:absolute;left:4px;right:4px;bottom:4px;height:2px;border-radius:1px;background:rgba(255,255,255,.35)}
+.wg-rail-stuck-screen span{flex:1;min-width:0;font:400 9.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--wg-ink-42);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wg-rail-stuck-expand{flex:none;font:600 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
 .wg-rail-fab{display:none;position:fixed;right:16px;bottom:88px;z-index:var(--z-nav);width:52px;height:52px;border-radius:50%;color:#fff;align-items:center;justify-content:center}
 .wg-rail-fab{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-rail-fab{backdrop-filter:none;background:rgba(11,18,12,.92)}}
@@ -1400,7 +1473,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   background:radial-gradient(1100px 760px at 12% -8%,rgba(122,154,90,.14),transparent 58%),radial-gradient(900px 680px at 102% 108%,rgba(233,183,201,.16),transparent 55%),radial-gradient(700px 500px at 50% 0%,rgba(228,230,74,.08),transparent 60%),var(--putty);
   opacity:0;transform:scale(.965);pointer-events:none;transition:opacity .68s var(--ease),transform .74s var(--ease);}
 body.mode-chat #chatRoot{opacity:1;transform:scale(1);pointer-events:auto}
-body.mode-chat #world,body.mode-widgets #world{opacity:0;transform:scale(1.035);pointer-events:none}
+body.mode-chat #world,body.mode-widgets #world,body.mode-notes #world{opacity:0;transform:scale(1.035);pointer-events:none}
 body.mode-chat #welcome,body.mode-widgets #welcome{opacity:0;pointer-events:none;transition:opacity .5s var(--ease)}
 #world{transition:opacity .68s var(--ease),transform .74s var(--ease)}
 body.sheet-open.mode-chat #chatRoot{filter:blur(14px) brightness(.94) saturate(.92)}
@@ -2166,8 +2239,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   </div>
   <div id="toast" class="mono" role="status" aria-live="polite"></div>
   <nav class="pills" aria-label="Sections">
-    <button data-nav="garden">Garden</button>
-    <button data-nav="widgets" class="on">Widgets</button>
+    <button data-nav="widgets" class="on">Overview</button>
     <button data-nav="chat">Chat</button>
     <button data-nav="notes">Notes</button>
   </nav>
@@ -2181,6 +2253,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <button type="button" class="wg-rail-collapse" id="wgRailCollapse" aria-label="Collapse rail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div class="wg-rail-body" id="wgRailBody">
+      <div class="wg-rail-sec wg-rail-stuck-sec" id="wgRailStuckSec" hidden>
+        <div class="wg-rail-sec-label wg-rail-stuck-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Opal is stuck</div>
+        <div class="wg-rail-stuck" id="wgRailStuck"></div>
+      </div>
       <div class="wg-rail-sec">
         <div class="wg-rail-sec-label">You have to do this</div>
         <div class="wg-rail-mustdo" id="wgRailMustDo"></div>
@@ -2201,6 +2277,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </div>
     </div>
     <div class="wg-rail-strip" id="wgRailStrip">
+      <button type="button" class="wg-rail-stripicon wg-rail-stripicon-stuck" id="wgRailStripStuckBtn" data-railexpand="1" aria-label="Expand: Opal is stuck" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><b id="wgRailStripStuck"></b></button>
       <button type="button" class="wg-rail-stripicon" data-railexpand="1" aria-label="Expand: you have to do this"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg><b id="wgRailStripMust"></b></button>
       <button type="button" class="wg-rail-stripicon" data-railexpand="1" aria-label="Expand: Opal can do this right now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg><b id="wgRailStripReady"></b></button>
       <button type="button" class="wg-rail-stripicon" data-railexpand="1" aria-label="Expand: what Opal just finished"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><b id="wgRailStripDone"></b></button>
@@ -2329,6 +2406,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <div id="wgScrim"></div>
   <aside class="wg-person-panel" id="wgPersonPanel" role="dialog" aria-modal="true" aria-label="Person"></aside>
   <aside class="wg-person-panel" id="wgDebriefPanel" role="dialog" aria-modal="true" aria-label="Result"></aside>
+  <aside class="wg-person-panel wg-stuck-panel" id="wgStuckPanel" role="dialog" aria-modal="true" aria-label="Opal is stuck"></aside>
+  <div class="wg-stuckdesk" id="wgStuckDesk" role="dialog" aria-modal="true" aria-label="Take over for Opal">
+    <div class="wg-stuckdesk-card" id="wgStuckDeskCard"></div>
+  </div>
   <div class="wg-toast" id="wgToast"></div>
   <div class="wg-pop" id="wgPop" role="dialog" aria-label="Action detail"></div>
   <div class="wg-pop" id="wgCitePop" role="dialog" aria-label="Source"></div>
@@ -4783,6 +4864,8 @@ function chatGo(next, rect) {
       if ($('#wgDayPage').classList.contains('show')) wgCloseDay();
       if ($('#wgConvPage').classList.contains('show')) wgConvClose();
       if ($('#wgCitePop').classList.contains('show')) wgCloseCitePop();
+      if ($('#wgStuckDesk').classList.contains('show')) wgCloseStuckDesk();
+      if ($('#wgStuckPanel').classList.contains('show')) wgCloseStuckPanel();
     }
     if (leaving === 'notes') {
       if ($('#ntConfirm').classList.contains('show')) ntCloseConfirm();
@@ -4850,7 +4933,9 @@ const WG_CLUSTERS = [
       preview: 'A formal RFQ covering the titanium clasp, alloy spec, and pilot-run quantity, addressed to the Monterrey shop. Requests pricing and lead time in writing.', deliverableTag: '→ PDF' }] },
 ];
 function wgOpalTaskById(id) { for (const c of WG_CLUSTERS) { const t = c.opalTasks.find(x => x.id === id); if (t) return { cluster: c, task: t }; } return null; }
-const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." } };
+const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." },
+  wo4: { willBlock: true, blockedReason: "Bestia's booking page wants a phone number to hold the table — Opal doesn't have one on file.",
+    stuckScreen: { app: 'Bestia · Reservations', url: 'bestia.la/reserve/confirm', field: 'Phone number', cta: 'Confirm table for two' } } };
 function wgEstimateMinutesFor(t) {
   if (t.connector === 'gmail') return 5;
   if (/×\d/.test(t.deliverableTag || '') || /tier/i.test(t.text) || /moodboard/i.test(t.text)) return 20;
@@ -5180,8 +5265,26 @@ function wgRenderRailDone() {
   $('#wgRailLoadMore').hidden = all.length <= shown.length;
   $('#wgRailStripDone').textContent = all.length ? String(Math.min(all.length, 99)) : '';
 }
+/* stuck tasks: the one state that asks the user to step in, not just glance and approve */
+function wgRailStuckList() { return WG_CLUSTERS.flatMap(c => c.opalTasks.filter(t => t.status === 'blocked').map(t => ({ t, c }))); }
+function wgRailStuckRowHTML({ t, c }) {
+  const screen = t.stuckScreen || {};
+  return `<div class="wg-rail-stuck-row" data-stuckrow="${t.id}">
+    <div class="wg-rail-stuck-top"><span class="wg-rail-stuck-dot"></span><span class="wg-rail-stuck-title">${esc(t.text)}</span></div>
+    <p class="wg-rail-stuck-reason">${esc(t.errorReason || 'Needs your help to finish.')}</p>
+    <div class="wg-rail-stuck-screen"><div class="wg-rail-stuck-screen-thumb"><i></i><b></b></div><span>${esc(screen.app || c.title)}</span><span class="wg-rail-stuck-expand">VIEW →</span></div>
+  </div>`;
+}
+function wgRenderRailStuck() {
+  const list = wgRailStuckList();
+  $('#wgRailStuckSec').hidden = !list.length;
+  $('#wgRailStripStuckBtn').hidden = !list.length;
+  if (!list.length) { $('#wgRailStripStuck').textContent = ''; return; }
+  $('#wgRailStuck').innerHTML = list.map(wgRailStuckRowHTML).join('');
+  $('#wgRailStripStuck').textContent = String(list.length);
+}
 function wgRenderRail() {
-  wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone(); wgRenderStats();
+  wgRenderRailStuck(); wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone(); wgRenderStats();
   const h = new Date().getHours();
   $('#wgRail').classList.toggle('dim', h >= 18 || h < 6);
   document.body.classList.toggle('wg-rail-collapsed', wgState.railCollapsed);
@@ -6028,7 +6131,11 @@ function wgResolveTask(taskId) {
   if (task.status !== 'running') return;
   const sim = WG_TASK_SIM[taskId];
   let autoMoved = false;
-  if (sim && sim.willFail) {
+  if (sim && sim.willBlock) {
+    task.status = 'blocked'; task.errorReason = sim.blockedReason; task.stuckScreen = sim.stuckScreen; task.stuckAt = Date.now();
+    wgShowToast(`Opal got stuck on ${task.text} — needs you`);
+  }
+  else if (sim && sim.willFail) {
     task.retryCount = (task.retryCount || 0) + 1; task.status = 'error'; task.errorReason = sim.errorReason;
     if (task.retryCount >= 2) { autoMoved = true; }
   }
@@ -6054,6 +6161,15 @@ function wgUndoSkip(taskId) {
   task.status = 'proposed'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderTodayActions(); wgRenderWeekly();
 }
 function wgRetryTask(taskId) { wgAcceptTask(taskId); }
+/* stuck tasks: Opal paused mid-task and needs the user to finish it from where it stopped */
+function wgFinishBlockedTask(taskId) {
+  const found = wgOpalTaskById(taskId); if (!found) return; const { cluster, task } = found; if (task.status !== 'blocked') return;
+  task.status = 'done'; task.deliverable = wgDeliverableFor(task); task.completedAt = Date.now(); task.finishedByUser = true;
+  wgSaveTaskState(taskId);
+  if (wgState.currentDay === cluster.day) { wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); }
+  wgUpdateRunningBadge(); wgRenderRail(); wgRenderWeekly(); wgRenderTodayActions();
+  wgShowToast(`✓ You finished it — ${task.text}`);
+}
 function wgMoveToHuman(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { cluster, task } = found;
   const newId = 'moved-' + taskId;
@@ -6181,6 +6297,50 @@ function wgCommitTask(taskId) {
   if (btn) { btn.textContent = 'Sent ✓'; btn.classList.add('sent'); btn.disabled = true; }
   wgShowToast(`✓ ${task.text}`); setTimeout(wgCloseDebrief, 900);
 }
+/* the stuck panel: a sibling of the debrief panel, but the artifact is missing, not finished —
+   this is the "glance" tier. Its own expand button opens the bigger desktop mini view below. */
+function wgOpenStuckPanel(taskId) {
+  const found = wgOpalTaskById(taskId); if (!found || found.task.status !== 'blocked') return; const { cluster, task } = found;
+  const panel = $('#wgStuckPanel'), agoStr = task.stuckAt ? wgRelTime(task.stuckAt) : '';
+  panel.innerHTML = `<button type="button" class="wg-pp-close" id="wgStuckPanelClose" aria-label="Close">&times;</button>
+    <div class="wg-debrief-cap mono">${esc(cluster.title.toUpperCase())} · ${esc(task.text.toUpperCase())} · STUCK ${esc(agoStr.toUpperCase())}</div>
+    <div class="wg-stuck-missing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <b>Nothing to show yet.</b><br>${esc(task.errorReason || 'Opal paused mid-task and needs you to finish it.')}
+      <div class="wg-stuck-screen-preview"><div class="chrome"><i></i><i></i><i></i></div><div class="body"><div class="ln" style="width:70%"></div><div class="ln field"></div><div class="ln" style="width:40%"></div></div></div>
+    </div>
+    <button type="button" class="wg-stuck-expandbtn" data-stuckexpand="${task.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>Open the desktop view →</button>
+    <button type="button" class="wg-stuck-quick" data-stuckfinish="${task.id}">Or just mark it finished yourself</button>`;
+  panel.classList.add('show'); $('#wgScrim').classList.add('show');
+}
+function wgCloseStuckPanel() { const p = $('#wgStuckPanel'); if (p) p.classList.remove('show'); if (!wgAnyScrimPanelOpen()) $('#wgScrim').classList.remove('show'); }
+/* the desktop mini view: large enough to actually read and act in, a live look at exactly where
+   Opal stopped — the field it couldn't fill glows, the button it couldn't press stays greyed out,
+   and finishing it here hands the task straight back into the normal done/review flow */
+function wgOpenStuckDesk(taskId) {
+  const found = wgOpalTaskById(taskId); if (!found || found.task.status !== 'blocked') return; const { task } = found;
+  wgCloseStuckPanel();
+  const s = task.stuckScreen || {};
+  $('#wgStuckDeskCard').innerHTML = `<div class="wg-stuckdesk-head">
+      <div><h3>Take over for Opal</h3><p><i></i>${esc(task.errorReason || 'Stuck — needs your input')}</p></div>
+      <button type="button" class="wg-stuckdesk-close" id="wgStuckDeskClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="wg-stuckdesk-win">
+      <div class="wg-stuckdesk-chrome"><div class="wg-stuckdesk-dots"><i></i><i></i><i></i></div><div class="wg-stuckdesk-addr">${esc(s.url || '')}</div></div>
+      <div class="wg-stuckdesk-screen">
+        <div class="wg-stuckdesk-app">${esc(s.app || '')}</div>
+        <div class="wg-stuckdesk-h1">${esc(s.cta || 'Finish this step')}</div>
+        <div class="wg-stuckdesk-field"><label>${esc(s.field || 'Missing info')}</label><div class="wg-stuckdesk-input"></div></div>
+        <span class="wg-stuckdesk-cta">${esc(s.cta || 'Continue')}</span>
+        <svg class="wg-stuckdesk-cursor" style="left:38%;top:62%" viewBox="0 0 24 24" fill="#fff" stroke="#1f241d" stroke-width="1.2"><path d="M5 3l14 6.5-6 1.7L11 18z"/></svg>
+      </div>
+    </div>
+    <div class="wg-stuckdesk-foot">
+      <p>Opal got this far on its own and stopped rather than guess. Finish the step yourself, then hand it back.</p>
+      <button type="button" class="wg-stuckdesk-finish" data-stuckfinish="${task.id}">I'll finish this →</button>
+    </div>`;
+  $('#wgStuckDesk').classList.add('show');
+}
+function wgCloseStuckDesk() { $('#wgStuckDesk').classList.remove('show'); }
 
 /* day-scoped conversations: the same cards the standalone Conversations grid uses, stacked, filtered to this day */
 function wgRenderDayConversations(dateKey) {
@@ -6404,7 +6564,7 @@ function wgOpenPersonPanel(id) {
   $('#wgPersonPanel').classList.add('show'); $('#wgScrim').classList.add('show');
   const input = $('#wgPPRename'); if (input) input.addEventListener('change', () => { state.wgNames = state.wgNames || {}; state.wgNames[id] = input.value.trim() || null; save(); wgOpenPersonPanel(id); wgRenderPeople(wgState.currentDay); });
 }
-function wgAnyScrimPanelOpen() { return $('#wgPersonPanel').classList.contains('show') || $('#wgDebriefPanel').classList.contains('show'); }
+function wgAnyScrimPanelOpen() { return $('#wgPersonPanel').classList.contains('show') || $('#wgDebriefPanel').classList.contains('show') || $('#wgStuckPanel').classList.contains('show'); }
 function wgClosePersonPanel() { $('#wgPersonPanel').classList.remove('show'); if (!wgAnyScrimPanelOpen()) $('#wgScrim').classList.remove('show'); }
 
 /* search: one ranked list, one destination per type */
@@ -6472,6 +6632,15 @@ function wgInit() {
   });
   $('#wgCitePop').addEventListener('click', e => { const b = e.target.closest('[data-citejump]'); if (b) wgJumpToSentence(b.dataset.citejump); });
   $('#wgPersonPanel').addEventListener('click', e => { if (e.target.closest('#wgPPClose')) return wgClosePersonPanel(); const j = e.target.closest('[data-wgjump]'); if (j) { wgClosePersonPanel(); wgJumpToAction(j.dataset.wgjump, null); } });
+  $('#wgStuckPanel').addEventListener('click', e => {
+    if (e.target.closest('#wgStuckPanelClose')) return wgCloseStuckPanel();
+    const expand = e.target.closest('[data-stuckexpand]'); if (expand) return wgOpenStuckDesk(expand.dataset.stuckexpand);
+    const finish = e.target.closest('[data-stuckfinish]'); if (finish) { wgCloseStuckPanel(); wgFinishBlockedTask(finish.dataset.stuckfinish); return; }
+  });
+  $('#wgStuckDesk').addEventListener('click', e => {
+    if (e.target.id === 'wgStuckDesk' || e.target.closest('#wgStuckDeskClose')) return wgCloseStuckDesk();
+    const finish = e.target.closest('[data-stuckfinish]'); if (finish) { wgFinishBlockedTask(finish.dataset.stuckfinish); wgCloseStuckDesk(); return; }
+  });
   $('#wgDebriefPanel').addEventListener('click', e => {
     if (e.target.closest('#wgDebriefClose') || e.target.closest('#wgDebriefClose2')) return wgCloseDebrief();
     const commit = e.target.closest('[data-commit]'); if (commit) return wgCommitTask(commit.dataset.commit);
@@ -6497,7 +6666,7 @@ function wgInit() {
   });
   addEventListener('keydown', e => {
     if (mode !== 'widgets') return;
-    if (e.key === 'Escape') { if ($('#wgCitePop').classList.contains('show')) return wgCloseCitePop(); if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
+    if (e.key === 'Escape') { if ($('#wgCitePop').classList.contains('show')) return wgCloseCitePop(); if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgStuckDesk').classList.contains('show')) return wgCloseStuckDesk(); if ($('#wgStuckPanel').classList.contains('show')) return wgCloseStuckPanel(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
     if (!$('#wgDayPage').classList.contains('show')) return;
     if (e.target.closest('input,textarea,select,[contenteditable]')) return;
     if (e.key === 'ArrowLeft') { e.preventDefault(); wgNavigateDay(-1); }
@@ -6618,6 +6787,7 @@ function wgInit() {
   $('#wgRailFab').addEventListener('click', wgOpenRailDrawer);
   $('#wgRailDrawerScrim').addEventListener('click', wgCloseRailDrawer);
   $('#wgRailBody').addEventListener('click', e => {
+    const stuck = e.target.closest('[data-stuckrow]'); if (stuck) return wgOpenStuckPanel(stuck.dataset.stuckrow);
     const check = e.target.closest('[data-check]'); if (check) return wgCheckTask(check.dataset.check, check);
     const go = e.target.closest('[data-railgo]'); if (go) return wgRailGo(go.dataset.railgo);
     const skip = e.target.closest('[data-railskip]'); if (skip) return wgSkipTask(skip.dataset.railskip);
