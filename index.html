@@ -31,8 +31,8 @@ ul{list-style:none}
 
 /* ---------- world ---------- */
 #world{position:fixed;inset:0;transition:filter .7s var(--ease)}
-#grass,#field{position:absolute;inset:0;width:100%;height:100%;display:block}
-#field{pointer-events:none}
+#grass,#field,#dome,#annot{position:absolute;inset:0;width:100%;height:100%;display:block}
+#field,#dome,#annot{pointer-events:none}
 #grass{background:var(--ground-900)}
 #garden{position:absolute;inset:0;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 #garden.dragging{cursor:grabbing}
@@ -64,7 +64,7 @@ body.paused .chip .cdot{transform:translateX(12px);background:transparent;box-sh
 body.paused .chip{color:var(--bone-35)}
 .legend{position:absolute;left:32px;bottom:52px;display:flex;gap:22px}
 .legend i{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:8px;vertical-align:1px}
-.ruler{position:absolute;left:32px;right:32px;bottom:22px;height:14px;border-bottom:1px solid var(--bone-25);background:repeating-linear-gradient(to right,var(--bone-25) 0 1px,transparent 1px 40px) left bottom/100% 5px no-repeat;opacity:.9}
+.ruler{position:absolute;left:32px;right:96px;bottom:22px;height:14px;border-bottom:1px solid var(--bone-25);background:repeating-linear-gradient(to right,var(--bone-25) 0 1px,transparent 1px 40px) left bottom/100% 5px no-repeat;opacity:.9}
 .ruler span{position:absolute;top:-16px;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--bone-25)}
 .ruler span:first-child{transform:none}
 .ruler span:last-child{transform:translateX(-100%)}
@@ -77,6 +77,23 @@ body.paused .chip{color:var(--bone-35)}
 .pills{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .pills button{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-35);padding:7px 14px;border-radius:999px;transition:color .4s var(--ease),background .4s var(--ease)}
 .pills button:hover,.pills button.on{color:var(--bone);background:var(--bone-08)}
+
+/* ---------- coordinate readout + crown: the camera's own instruments ---------- */
+.coord{position:absolute;top:74px;right:32px;text-align:right;opacity:0;transform:translateY(-4px);transition:opacity .5s var(--ease),transform .5s var(--ease);white-space:nowrap}
+.coord.show{opacity:.42;transform:none}
+.crown{position:absolute;right:24px;bottom:24px;display:flex;flex-direction:column;align-items:center;gap:8px;touch-action:none}
+.crown-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--bone-42,rgba(236,235,228,.42));opacity:.42;transition:opacity .5s var(--ease)}
+.crown.active .crown-label{opacity:.7}
+.crown-rail{position:relative;width:22px;height:120px;cursor:grab}
+.crown-rail::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;border-radius:999px;background:var(--bone-25);opacity:.55;transition:opacity .5s var(--ease)}
+.crown.active .crown-rail::before{opacity:.85}
+.crown-tick{position:absolute;left:50%;bottom:calc(var(--p) * 100%);width:9px;height:1px;margin-left:-11px;background:var(--bone-25);opacity:.55;transition:opacity .5s var(--ease)}
+.crown-tick.major{width:13px;margin-left:-15px;height:1.4px;background:var(--bone-35)}
+.crown.active .crown-tick{opacity:.85}
+.crown-notch{position:absolute;left:50%;bottom:calc(var(--p, .3) * 100%);width:13px;height:13px;margin:0 0 -6.5px -6.5px;border-radius:50%;background:var(--bone-35);box-shadow:0 0 0 3px rgba(11,18,12,.4);transition:background .35s var(--ease),box-shadow .35s var(--ease),bottom .1s linear;pointer-events:none}
+.crown.active .crown-notch,.crown-rail:hover .crown-notch{background:var(--spore);box-shadow:0 0 10px 2px rgba(217,224,33,.45),0 0 0 3px rgba(11,18,12,.4)}
+body.mode-chat .coord,body.mode-chat .crown{opacity:0;pointer-events:none}
+body.sheet-open .coord,body.sheet-open .crown{opacity:0;pointer-events:none}
 
 /* ---------- calendar sheet: a sorting surface ---------- */
 #sheetWrap.calmode{width:min(420px,calc(100% - 32px))}
@@ -956,6 +973,8 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
 <div id="world">
   <canvas id="grass" aria-hidden="true"></canvas>
   <canvas id="field"></canvas>
+  <canvas id="dome" aria-hidden="true"></canvas>
+  <canvas id="annot" aria-hidden="true"></canvas>
   <div id="garden">
     <div id="orbs"></div>
   </div>
@@ -980,6 +999,23 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   </div>
   <div class="ruler" aria-hidden="true"><i id="kept"><b id="keptLabel"></b></i>
     <span style="left:0">0%</span><span style="left:25%">50%</span><span style="left:50%">100%</span><span style="left:75%">150%</span><span style="left:100%">200%</span>
+  </div>
+  <div class="coord mono" id="coord" aria-hidden="true"></div>
+  <div class="crown" id="crown" aria-label="Depth">
+    <span class="crown-label">CROWN</span>
+    <div class="crown-rail" id="crownRail">
+      <i class="crown-tick major" data-z="0" style="--p:0"></i>
+      <i class="crown-tick" style="--p:.1"></i>
+      <i class="crown-tick" style="--p:.2"></i>
+      <i class="crown-tick major" data-z="60" style="--p:.3"></i>
+      <i class="crown-tick" style="--p:.4"></i>
+      <i class="crown-tick" style="--p:.5"></i>
+      <i class="crown-tick major" data-z="130" style="--p:.65"></i>
+      <i class="crown-tick" style="--p:.8"></i>
+      <i class="crown-tick" style="--p:.9"></i>
+      <i class="crown-tick major" data-z="200" style="--p:1"></i>
+      <b class="crown-notch" id="crownNotch"></b>
+    </div>
   </div>
   <div id="toast" class="mono" role="status" aria-live="polite"></div>
   <nav class="pills" aria-label="Sections">
@@ -1044,6 +1080,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
 (() => {
 'use strict';
@@ -1066,7 +1103,7 @@ const fmtDate = d => `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}
 
 /* ---------- persistence ---------- */
 const KEY = 'opal-os-garden-v1';
-const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS' });
+const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS', navZoom: 60 });
 function load() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') return Object.assign(defaults(), s); } catch (e) {}
   return defaults();
@@ -1265,6 +1302,80 @@ function drawMark(g, key, cx, cy, size) {
 }
 const markSvg = (key, color) => LOGOS[key] ? `<svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path fill="${color}" d="${LOGOS[key]}"/></svg>` : `<svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="${color}" stroke-width="2"/></svg>`;
 
+/* ---------- the dome: a real three.js scene, a perspective camera, orbs on the inside of a sphere ---------- */
+const DOME_R = 2400, PITCH_SOFT = 40 * Math.PI / 180, PITCH_RUBBER = 12 * Math.PI / 180, PITCH_HARD = 48 * Math.PI / 180;
+const FIELD_W = 900, FIELD_H = 680, THETA_MAX = 140 * Math.PI / 180;
+const ZOOM_DETENTS = [0, 60, 130, 200];
+const CAM_FAR_D = 4200, CAM_NEAR_D = 2500;   // camera dolly range; kept just outside DOME_R so it never flips through the field
+const FOV_MIN = 50, FOV_MAX = 65;
+const domeCv = $('#dome'), annotCv = $('#annot'); let actx = annotCv.getContext('2d');
+let scene3, camera3, renderer3, domeGroup;
+function initDome() {
+  scene3 = new THREE.Scene();
+  camera3 = new THREE.PerspectiveCamera(FOV_MIN, innerWidth / Math.max(1, innerHeight), 4, 12000);
+  camera3.position.set(0, 0, CAM_FAR_D); camera3.lookAt(0, 0, 0);
+  renderer3 = new THREE.WebGLRenderer({ canvas: domeCv, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer3.setClearColor(0x000000, 0); renderer3.setPixelRatio(DPR);
+  domeGroup = new THREE.Object3D(); scene3.add(domeGroup);
+  sizeDome();
+}
+function sizeDome() {
+  renderer3.setSize(innerWidth, Math.max(1, innerHeight), false);
+  camera3.aspect = innerWidth / Math.max(1, innerHeight); camera3.updateProjectionMatrix();
+  annotCv.width = Math.round(innerWidth * DPR); annotCv.height = Math.round(innerHeight * DPR); actx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+initDome();
+function sphereFromLattice(x, y) {   // the existing pixel lattice, reprojected onto the dome's spherical band
+  const theta = clamp(x / FIELD_W, -1, 1) * THETA_MAX, phi = clamp(y / FIELD_H * (70 * Math.PI / 180), -PITCH_SOFT, PITCH_SOFT);
+  return { theta, phi };
+}
+/* ---------- crown physics: the state contract from the addendum ---------- */
+const navState = {
+  yaw: 0, pitchRaw: 0, pitch: 0, zoomLevel: 60,
+  panVel: { yaw: 0, pitch: 0 }, zoomVel: 0,
+  focusedOrbId: null, lastInputAt: 0,
+  panDragging: false, zoomDragging: false, zoomEasing: null, recenter: false,
+};
+navState.zoomLevel = ZOOM_DETENTS.reduce((a, b) => Math.abs((state.navZoom || 60) - b) < Math.abs((state.navZoom || 60) - a) ? b : a, 60);
+function pitchDisplay(raw) {
+  const sign = Math.sign(raw), a = Math.abs(raw); if (a <= PITCH_SOFT) return raw;
+  const over = a - PITCH_SOFT, disp = PITCH_SOFT + over / (1 + over / PITCH_RUBBER);
+  return sign * Math.min(disp, PITCH_HARD);
+}
+function camDistFor(z) { return lerp(CAM_FAR_D, CAM_NEAR_D, clamp(z, 0, 200) / 200); }
+function fovFor(z) { return lerp(FOV_MIN, FOV_MAX, 1 - clamp(z, 0, 200) / 200); }
+function wrapPI(a) { a = a % TAU; if (a > Math.PI) a -= TAU; if (a < -Math.PI) a += TAU; return a; }
+function orbTexture(o) {
+  const S = 256, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+  if (o.ghost) {
+    g.strokeStyle = ORB_COLOR; g.lineWidth = 6; g.setLineDash([8, 26]); g.lineCap = 'round';
+    g.beginPath(); g.arc(S / 2, S / 2, S / 2 - 8, 0, TAU); g.stroke(); g.setLineDash([]);
+    const L = S * .14; g.lineWidth = 5; g.beginPath(); g.moveTo(S / 2 - L, S / 2); g.lineTo(S / 2 + L, S / 2); g.moveTo(S / 2, S / 2 - L); g.lineTo(S / 2, S / 2 + L); g.stroke();
+  } else {
+    g.fillStyle = ORB_COLOR; g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, TAU); g.fill();
+    if (o.logo) { g.globalAlpha = .86; g.fillStyle = g.strokeStyle = '#0b120c'; drawMark(g, o.logo, S / 2, S / 2, S * .6); g.globalAlpha = 1; }
+    if (o.pending > 0) { const a = -.9, r = S / 2, ex = S / 2 + Math.cos(a) * (r + S * .05), ey = S / 2 + Math.sin(a) * (r + S * .05);
+      g.fillStyle = 'rgba(232,160,74,.24)'; g.beginPath(); g.arc(ex, ey, S * .09, 0, TAU); g.fill();
+      g.fillStyle = '#e8a04a'; g.beginPath(); g.arc(ex, ey, S * .035, 0, TAU); g.fill(); }
+  }
+  const tex = new THREE.CanvasTexture(c); if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace; tex.needsUpdate = true; return tex;
+}
+const DOME_GEO = new THREE.CircleGeometry(1, 40);
+function createOrbMesh(o) {
+  const mat = new THREE.MeshBasicMaterial({ map: orbTexture(o), transparent: true, depthWrite: true, depthTest: true });
+  const mesh = new THREE.Mesh(DOME_GEO, mat); mesh.renderOrder = 0; mesh.visible = false;
+  domeGroup.add(mesh); o.mesh3 = mesh;
+}
+function refreshOrbTexture(o) { if (!o.mesh3) return; o.mesh3.material.map.dispose(); o.mesh3.material.map = orbTexture(o); o.mesh3.material.needsUpdate = true; }
+const _dummy3 = new THREE.Object3D(), _wpos3 = new THREE.Vector3(), _domeInvQ = new THREE.Quaternion();
+function billboardOrb(o, lerpAmt) {
+  const mesh = o.mesh3; if (!mesh || !mesh.visible) return;
+  mesh.getWorldPosition(_wpos3); _dummy3.position.copy(_wpos3); _dummy3.lookAt(camera3.position);
+  _domeInvQ.copy(domeGroup.quaternion).invert();
+  const localTarget = _dummy3.quaternion.clone().premultiply(_domeInvQ);
+  if (lerpAmt >= 1) mesh.quaternion.copy(localTarget); else mesh.quaternion.slerp(localTarget, lerpAmt);
+}
+
 /* ---------- orbs + layout ---------- */
 const ORBS = [];
 const GAP = () => NARROW() ? 18 : 30;
@@ -1277,7 +1388,7 @@ function makeOrb(def, extra) {
   if (!o.ghost) o.pending = pendingOf(o.id);
   o.tr = radiusFor(o); o.r = o.r == null ? o.tr : o.r;
   o.el = document.createElement('button'); o.el.className = 'orb'; o.el.type = 'button'; o.el.dataset.id = o.id;
-  updateAria(o); $('#orbs').appendChild(o.el);
+  updateAria(o); $('#orbs').appendChild(o.el); createOrbMesh(o);
   return o;
 }
 function updateAria(o) {
@@ -1316,12 +1427,7 @@ function physics(k, snap) {
 /* ---------- canvas ---------- */
 const canvas = $('#field'); const ctx = canvas.getContext('2d');
 let W = innerWidth, H = innerHeight;
-const baseZ = () => NARROW() ? .72 : clamp(Math.min(innerWidth / 1300, innerHeight / 820), .6, 1);
-const view = { x: 0, y: 0, z: baseZ() };
-let lastBase = baseZ();
-const ZMIN = () => NARROW() ? .55 : .7, ZMAX = 1.4;
 const cx = () => W / 2, cy = () => H * (NARROW() ? .52 : .53);
-const toScreen = (wx, wy) => [cx() + view.x + wx * view.z, cy() + view.y + wy * view.z];
 let vignette, moss, mossPat; const T = MOBILE ? 320 : 448, MS = MOBILE ? 2.0 : 2.4;
 function makeMoss() {
   const P = 8, nz = makeNoise(1337, P); const c = document.createElement('canvas'); c.width = c.height = T; const g = c.getContext('2d'); const img = g.createImageData(T, T), d = img.data;
@@ -1338,7 +1444,7 @@ function makeMoss() {
 }
 function resize() {
   W = innerWidth; H = innerHeight;
-  const bz = baseZ(); if (bz !== lastBase) { if (Math.abs(view.z - lastBase) < .01) view.z = bz; lastBase = bz; } canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR); ctx.setTransform(DPR, 0, 0, DPR, 0, 0); sizeDome();
   const vc = document.createElement('canvas'); vc.width = Math.max(2, W >> 2); vc.height = Math.max(2, H >> 2); const g = vc.getContext('2d');
   const m = Math.max(vc.width, vc.height); const gr = g.createRadialGradient(vc.width / 2, vc.height * .45, m * .18, vc.width / 2, vc.height * .45, m * .78);
   gr.addColorStop(0, 'rgba(11,18,12,0)'); gr.addColorStop(1, 'rgba(11,18,12,.88)'); g.fillStyle = gr; g.fillRect(0, 0, vc.width, vc.height); vignette = vc;
@@ -1412,18 +1518,19 @@ function renderGrass(dt) {
   if (!REDUCED) grassT += dt / 1000 * (.25 + .75 * gustLvl);
   const tx = REDUCED || !pointer.on ? 0 : pointer.x / W - .5, ty = REDUCED || !pointer.on ? 0 : pointer.y / H - .5;
   parX += (tx - parX) * (1 - Math.pow(.95, k)); parY += (ty - parY) * (1 - Math.pow(.95, k));
-  const ux = -parX * .035 - view.x / H * .07, uy = parY * .035 + view.y / H * .07;
-  const zf = 1 + (view.z - 1) * .10;
+  const shaderZoom = lerp(.7, 1.35, clamp(navState.zoomLevel, 0, 200) / 200);
+  const ux = -parX * .035 - wrapPI(navState.yaw) / Math.PI * .1, uy = parY * .035 - navState.pitch / Math.PI * .1;
+  const zf = 1 + (shaderZoom - 1) * .10;
   gl.uniform2f(gU.uRes, grassCv.width, grassCv.height); gl.uniform1f(gU.uT, grassT); gl.uniform2f(gU.uPar, ux, uy);
   gl.uniform2f(gU.uPtr, (pointer.x - W / 2) / H / zf + ux, -(pointer.y - H / 2) / H / zf + uy);
-  gl.uniform1f(gU.uPtrOn, pointer.on && !sheetOpen && !REDUCED ? 1 : 0); gl.uniform1f(gU.uZoom, view.z); gl.uniform1f(gU.uExp, .58); gl.uniform1f(gU.uGust, gustLvl);
+  gl.uniform1f(gU.uPtrOn, pointer.on && !sheetOpen && !REDUCED ? 1 : 0); gl.uniform1f(gU.uZoom, shaderZoom); gl.uniform1f(gU.uExp, .58); gl.uniform1f(gU.uGust, gustLvl);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 sizeGrass(); addEventListener('resize', sizeGrass);
 let windNext = 2.5, windStart = -99; const WIND_DUR = 3.8;
 function drawBackground(t, dt) {
   if (grassOn) { renderGrass(dt); ctx.drawImage(vignette, 0, 0, W, H); return; }
-  const ox = view.x * .12 + Math.sin(t * .05) * 30, oy = view.y * .12 + Math.cos(t * .04) * 20;
+  const ox = -wrapPI(navState.yaw) / Math.PI * 220 + Math.sin(t * .05) * 30, oy = -navState.pitch / Math.PI * 220 + Math.cos(t * .04) * 20;
   ctx.save(); ctx.translate(ox, oy); ctx.scale(MS, MS); ctx.fillStyle = mossPat; ctx.fillRect(-ox / MS - T, -oy / MS - T, W / MS + 2 * T, H / MS + 2 * T); ctx.restore();
   if (!REDUCED) {
     if (t > windNext) { windStart = t; windNext = t + 8 + Math.random() * 4; }
@@ -1438,38 +1545,22 @@ function drawBackground(t, dt) {
   }
   ctx.drawImage(vignette, 0, 0, W, H);
 }
-function orbShadow(sx, sy, R) { const g = ctx.createRadialGradient(sx + R * .06, sy + R * .12, R * .55, sx + R * .06, sy + R * .12, R * 1.5); g.addColorStop(0, 'rgba(4,8,4,.42)'); g.addColorStop(1, 'rgba(4,8,4,0)'); ctx.fillStyle = g; ctx.fillRect(sx - R * 1.6, sy - R * 1.5, R * 3.2, R * 3.2); }
-function drawOrb(o, t) {
-  const sx = o.sx, sy = o.sy, R = o.R;
-  if (R < .5 || sx + R * 1.6 < 0 || sx - R * 1.6 > W || sy + R * 1.6 < 0 || sy - R * 1.6 > H) return;
-  ctx.globalAlpha = o.appear;
-  if (o.ghost) { drawGhost(o, sx, sy, R, t); ctx.globalAlpha = 1; return; }
-  orbShadow(sx, sy, R);
-  ctx.fillStyle = ORB_COLOR; ctx.beginPath(); ctx.arc(sx, sy, R, 0, TAU); ctx.fill();
-  if (R > 24 && o.logo) { ctx.globalAlpha = o.appear * clamp((R - 24) / 10, 0, 1) * .86; ctx.fillStyle = ctx.strokeStyle = '#0b120c'; drawMark(ctx, o.logo, sx, sy, R * .92); ctx.globalAlpha = o.appear; }
-  if (o.pending > 0) { const a = -.9, ex = sx + Math.cos(a) * (R + 7), ey = sy + Math.sin(a) * (R + 7); ctx.fillStyle = 'rgba(232,160,74,.2)'; ctx.beginPath(); ctx.arc(ex, ey, 7, 0, TAU); ctx.fill(); ctx.fillStyle = '#e8a04a'; ctx.beginPath(); ctx.arc(ex, ey, 2.8, 0, TAU); ctx.fill(); }
-  ctx.globalAlpha = 1;
-}
-function drawGhost(o, sx, sy, R, t) {
-  ctx.save(); ctx.setLineDash([1.5, 5]); ctx.lineCap = 'round'; ctx.lineDashOffset = REDUCED ? 0 : -t * 5; ctx.strokeStyle = ORB_COLOR; ctx.lineWidth = 1.3; ctx.globalAlpha *= .55 + .45 * o.hot;
-  ctx.beginPath(); ctx.arc(sx, sy, Math.max(1, R - 1), 0, TAU); ctx.stroke(); ctx.setLineDash([]);
-  const L = R * .3; ctx.beginPath(); ctx.moveTo(sx - L, sy); ctx.lineTo(sx + L, sy); ctx.moveTo(sx, sy - L); ctx.lineTo(sx, sy + L); ctx.stroke(); ctx.restore();
-}
 const annot = { orb: null, t: 0 }; const hlabel = $('#hlabel');
 function setAnnot(o) { if (annot.orb !== o) { annot.orb = o; annot.t = 0; } if (!o) hlabel.classList.remove('show'); }
 function drawAnnot(dt) {
+  actx.clearRect(0, 0, W, H);
   const o = annot.orb; if (!o) return;
   annot.t = Math.min(1, annot.t + dt / (REDUCED ? 1 : 400));
   const p = 1 - Math.pow(1 - annot.t, 3);
   const sx = o.sx, sy = o.sy - o.lift, R = o.R + 16;
-  ctx.save(); ctx.setLineDash([1.5, 6]); ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(236,235,228,.55)'; ctx.lineWidth = 1.2;
-  ctx.beginPath(); ctx.arc(sx, sy, R, -Math.PI / 2, -Math.PI / 2 + TAU * p); ctx.stroke(); ctx.setLineDash([]);
+  actx.save(); actx.setLineDash([1.5, 6]); actx.lineCap = 'round'; actx.strokeStyle = 'rgba(236,235,228,.55)'; actx.lineWidth = 1.2;
+  actx.beginPath(); actx.arc(sx, sy, R, -Math.PI / 2, -Math.PI / 2 + TAU * p); actx.stroke(); actx.setLineDash([]);
   const flip = sx + R + 250 > W, a = flip ? -Math.PI * 3 / 4 : -Math.PI / 4, mx = sx + Math.cos(a) * R, my = sy + Math.sin(a) * R, ca = clamp((p - .45) * 2.2, 0, 1);
-  ctx.globalAlpha = ca; ctx.strokeStyle = 'rgba(236,235,228,.8)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.arc(mx, my, 5, 0, TAU); ctx.stroke();
-  ctx.beginPath(); [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { ctx.moveTo(mx + dx * 7, my + dy * 7); ctx.lineTo(mx + dx * 12, my + dy * 12); }); ctx.stroke();
-  ctx.setLineDash([1.5, 4]); ctx.beginPath(); ctx.moveTo(mx + Math.cos(a) * 13, my + Math.sin(a) * 13); ctx.lineTo(mx + Math.cos(a) * 34, my + Math.sin(a) * 34); ctx.stroke();
-  ctx.restore();
+  actx.globalAlpha = ca; actx.strokeStyle = 'rgba(236,235,228,.8)'; actx.lineWidth = 1;
+  actx.beginPath(); actx.arc(mx, my, 5, 0, TAU); actx.stroke();
+  actx.beginPath(); [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { actx.moveTo(mx + dx * 7, my + dy * 7); actx.lineTo(mx + dx * 12, my + dy * 12); }); actx.stroke();
+  actx.setLineDash([1.5, 4]); actx.beginPath(); actx.moveTo(mx + Math.cos(a) * 13, my + Math.sin(a) * 13); actx.lineTo(mx + Math.cos(a) * 34, my + Math.sin(a) * 34); actx.stroke();
+  actx.restore();
   const lx = mx + Math.cos(a) * 40, ly = my + Math.sin(a) * 40;
   hlabel.style.transform = `translate(${lx}px,${ly}px) translate(${flip ? '-100%' : '0'},-50%)`;
   if (p > .45) hlabel.classList.add('show'); else hlabel.classList.remove('show');
@@ -1483,83 +1574,136 @@ function labelFor(o) {
 /* ---------- frame loop ---------- */
 let last = performance.now(), running = true, frame = 0, pointer = { x: -1e4, y: -1e4, on: false };
 let sheetOpen = false;
+const _proj3 = new THREE.Vector3(), _dir3 = new THREE.Vector3(), _camDir3 = new THREE.Vector3();
+function navMarkInput() { navState.lastInputAt = performance.now(); coordEl.classList.add('show'); crownEl.classList.add('active'); clearTimeout(navMarkInput._t); navMarkInput._t = setTimeout(() => { coordEl.classList.remove('show'); crownEl.classList.remove('active'); }, 800); }
+function navTick(k) {
+  const now = performance.now();
+  if (!navState.panDragging) {
+    navState.yaw += navState.panVel.yaw * k; navState.pitchRaw += navState.panVel.pitch * k;
+    const fr = REDUCED ? 0 : Math.pow(.945, k); navState.panVel.yaw *= fr; navState.panVel.pitch *= fr;
+    if (Math.hypot(navState.panVel.yaw, navState.panVel.pitch) < .0006) { navState.panVel.yaw = 0; navState.panVel.pitch = 0; }
+  }
+  navState.pitchRaw = clamp(navState.pitchRaw, -PITCH_HARD, PITCH_HARD);
+  if (!navState.panDragging && Math.abs(navState.pitchRaw) > PITCH_SOFT) {
+    const sign = Math.sign(navState.pitchRaw); navState.pitchRaw += (sign * PITCH_SOFT - navState.pitchRaw) * (REDUCED ? 1 : .12);
+  }
+  navState.pitch = pitchDisplay(navState.pitchRaw);
+  if (navState.recenter) {
+    const e = REDUCED ? 1 : 1 - Math.pow(.86, k);
+    navState.yaw += (0 - navState.yaw) * e; navState.pitchRaw += (0 - navState.pitchRaw) * e; navState.zoomLevel += (60 - navState.zoomLevel) * e;
+    if (Math.abs(navState.yaw) < .002 && Math.abs(navState.pitchRaw) < .002 && Math.abs(navState.zoomLevel - 60) < .3) { navState.yaw = 0; navState.pitchRaw = 0; navState.zoomLevel = 60; navState.recenter = false; saveNavZoom(); }
+  } else if (!navState.panDragging && !REDUCED && now - navState.lastInputAt > 4000) {
+    navState.yaw += (.02 * Math.PI / 180) * (k * 16.67 / 1000);
+  }
+  if (!navState.zoomDragging) {
+    navState.zoomLevel += navState.zoomVel * k; navState.zoomVel *= Math.pow(REDUCED ? 0 : .90, k);
+    if (Math.abs(navState.zoomVel) < .01) navState.zoomVel = 0;
+    if (navState.zoomEasing != null) { navState.zoomLevel += (navState.zoomEasing - navState.zoomLevel) * (REDUCED ? 1 : .15); if (Math.abs(navState.zoomEasing - navState.zoomLevel) < .3) { navState.zoomLevel = navState.zoomEasing; navState.zoomEasing = null; saveNavZoom(); } }
+    navState.zoomLevel = clamp(navState.zoomLevel, 0, 200);
+  }
+  domeGroup.rotation.y = wrapPI(navState.yaw); domeGroup.rotation.x = navState.pitch; domeGroup.updateMatrixWorld(true);
+  const camDist = camDistFor(navState.zoomLevel) + (REDUCED ? 0 : Math.sin(now / 1400) * camDistFor(navState.zoomLevel) * .0015);
+  camera3.position.set(0, 0, camDist); camera3.fov = fovFor(navState.zoomLevel); camera3.lookAt(0, 0, 0); camera3.updateProjectionMatrix();
+  _camDir3.copy(camera3.position).normalize();
+}
 function loop(now) {
   if (!running) return;
   requestAnimationFrame(loop);
   const dt = Math.min(64, now - last); last = now; frame++;
   if (sheetOpen && frame % 2) return;
   const k = Math.min(dt / 16.67, 2.2), t = now / 1000;
-  physics(k);
+  physics(k); navTick(k);
+  const fovRad = camera3.fov * Math.PI / 180, pxPerWorldAtD = d => H / (2 * Math.max(1, d) * Math.tan(fovRad / 2));
+  let nearestCenter = null, nearestCenterD = 1e9;
   for (const o of ORBS) {
-    const [sx, sy] = toScreen(o.x, o.y), sp = SP(), hovO = sheetOpen ? null : annot.orb;
-    const dC = Math.hypot(sx - cx(), sy - cy()) / (sp * view.z);
-    const dR = dC - ringMin; let tier = dR < .12 ? (NARROW() ? 2 : 3) : dR < .9 ? 2 : 1;               // near, mid, far, measured from the ring around the widget
-    if (hovO === o) tier = 4; else if (hovO && Math.hypot(o.x - hovO.x, o.y - hovO.y) < sp * 1.6) tier = Math.min(3, tier + 1);   // hovered, and its ring steps up one size
-    o.tier = tier; o.tr = o.gone || o.center ? 0 : sp * TIER[tier];
-    o.rv = ((o.rv || 0) + (o.tr - o.r) * .16 * k) * Math.pow(.7, k); o.r = Math.max(0, o.r + o.rv * k);
+    const { theta, phi } = sphereFromLattice(o.x, o.y);
+    o.mesh3.position.set(DOME_R * Math.cos(phi) * Math.sin(theta), DOME_R * Math.sin(phi), DOME_R * Math.cos(phi) * Math.cos(theta));
+    o.mesh3.getWorldPosition(_wpos3); _dir3.copy(_wpos3).normalize();
+    const facing = _dir3.dot(_camDir3), hovO = sheetOpen ? null : annot.orb;
     o.hot += ((hovO === o ? 1 : 0) - o.hot) * (1 - Math.pow(.88, k)); o.press *= Math.pow(.84, k); o.flash *= Math.pow(.95, k);
-    const R2 = o.r * view.z * (1 - .05 * o.press + .10 * o.flash); o.sx = sx; o.sy = sy; o.R = R2; o.lift = 0;
+    o.tr = o.gone || o.center ? 0 : radiusFor(o) * (1 + .32 * o.hot);
+    o.rv = ((o.rv || 0) + (o.tr - o.r) * .16 * k) * Math.pow(.7, k); o.r = Math.max(0, o.r + o.rv * k);
     if (o.appear < 1) { if (!o.t0) o.t0 = Math.max(now, o.bornAt); o.appear = clamp((now - o.t0) / (REDUCED ? 1 : 520), 0, 1); }
-    o.el.style.width = o.el.style.height = (2 * R2) + 'px';
-    o.el.style.transform = `translate3d(${sx - R2}px,${sy - R2}px,0)`;
+    const dist = camera3.position.distanceTo(_wpos3), fade = clamp((facing + .06) / .3, 0, 1);
+    o.mesh3.visible = !o.gone && fade > .02;
+    o.mesh3.material.opacity = o.appear * fade * (1 - .05 * o.press + .10 * o.flash);
+    if (o.mesh3.visible) billboardOrb(o, REDUCED ? 1 : .12);
+    _proj3.copy(_wpos3).project(camera3);
+    const sx = (_proj3.x + 1) / 2 * W, sy = (1 - _proj3.y) / 2 * H, R2 = o.r * pxPerWorldAtD(dist) * fade;
+    o.sx = sx; o.sy = sy; o.R = R2; o.lift = 0; o.mesh3.scale.setScalar(Math.max(.001, o.r));
+    o.el.style.width = o.el.style.height = (2 * Math.max(0, R2)) + 'px';
+    o.el.style.transform = `translate3d(${sx - Math.max(0, R2)}px,${sy - Math.max(0, R2)}px,0)`;
+    o.el.style.visibility = fade > .04 && !o.gone ? '' : 'hidden';
+    if (!o.center && !o.ghost && fade > .5) { const dC = Math.hypot(sx - cx(), sy - cy()); if (dC < nearestCenterD) { nearestCenterD = dC; nearestCenter = o; } }
   }
-  // rubber band
-  if (!drag) {
-    view.x += vel.x * k; view.y += vel.y * k; vel.x *= Math.pow(.93, k); vel.y *= Math.pow(.93, k);
-    const b = bounds(); const tx = clamp(view.x, -b.x, b.x), ty = clamp(view.y, -b.y, b.y);
-    if (tx !== view.x || ty !== view.y) { view.x += (tx - view.x) * (1 - Math.pow(.86, k)); view.y += (ty - view.y) * (1 - Math.pow(.86, k)); vel.x *= .6; vel.y *= .6; }
-    if (Math.abs(vel.x) < .02) vel.x = 0; if (Math.abs(vel.y) < .02) vel.y = 0;
+  // magnetic snap + focus: an orb settled near screen center pulls itself the rest of the way, and becomes the crown's target
+  if (!navState.panDragging && !REDUCED && Math.hypot(navState.panVel.yaw, navState.panVel.pitch) < .00015 && nearestCenter && nearestCenterD < 60) {
+    const { theta, phi } = sphereFromLattice(nearestCenter.x, nearestCenter.y);
+    navState.yaw += (-theta - navState.yaw) * .08 * k; navState.pitchRaw += (-phi - navState.pitchRaw) * .08 * k;
+    navState.focusedOrbId = nearestCenter.id;
+    if (!sheetOpen && !annot.orb && (!document.activeElement || !document.activeElement.classList.contains('orb'))) setAnnot(nearestCenter);
+  } else if (navState.focusedOrbId && (!nearestCenter || nearestCenter.id !== navState.focusedOrbId || nearestCenterD > 90)) {
+    navState.focusedOrbId = null; if (annot.orb && !pointer.on) setAnnot(null);
   }
-  if (false && snapAt && now > snapAt && !drag && !pinch && !recenter && !sheetOpen) {
-    let best = null, bd = 1e9; for (const o of ORBS) { const d = Math.hypot(o.sx - cx(), o.sy - cy()); if (d < bd) { bd = d; best = o; } }
-    if (best) { const e = 1 - Math.pow(.88, k), tx = -best.x * view.z, ty = -best.y * view.z; view.x += (tx - view.x) * e; view.y += (ty - view.y) * e; if (Math.hypot(tx - view.x, ty - view.y) < .4) snapAt = 0; }
+  // crossing 200% on a focused orb dives into its sheet, same as a tap
+  if (navState.zoomLevel >= 199.5 && navState.focusedOrbId && !sheetOpen) {
+    const o = ORBS.find(x => x.id === navState.focusedOrbId); navState.zoomEasing = null; navState.zoomLevel = 130;
+    if (o) openOrb(o);
   }
-  if (recenter) { snapAt = 0; const e = 1 - Math.pow(.86, k); view.x += (0 - view.x) * e; view.y += (0 - view.y) * e; view.z += (recenter.z - view.z) * e; if (Math.abs(view.x) < .3 && Math.abs(view.y) < .3 && Math.abs(view.z - recenter.z) < .002) { view.x = view.y = 0; view.z = recenter.z; recenter = null; } }
   // prune finished
-  for (let i = ORBS.length - 1; i >= 0; i--) { const o = ORBS[i]; if (o.gone && o.r < 1.5) { o.el.remove(); ORBS.splice(i, 1); } }
+  for (let i = ORBS.length - 1; i >= 0; i--) { const o = ORBS[i]; if (o.gone && o.r < 1.5) { o.mesh3.parent.remove(o.mesh3); o.mesh3.material.map.dispose(); o.mesh3.material.dispose(); o.el.remove(); ORBS.splice(i, 1); } }
   ctx.clearRect(0, 0, W, H);
   drawBackground(t, dt);
-  for (const o of ORBS) drawOrb(o, t);
+  renderer3.render(scene3, camera3);
   drawAnnot(dt);
+  paintCrown(); paintCoord();
 }
-function bounds() {
-  let ext = 0; for (const o of ORBS) if (!o.ghost) ext = Math.max(ext, Math.hypot(o.x, o.y) + o.r);
-  return { x: Math.max(40, ext * view.z), y: Math.max(40, ext * view.z) };
+function paintCrown() { crownNotch.style.setProperty('--p', clamp(navState.zoomLevel, 0, 200) / 200); }
+function paintCoord() {
+  const yawDeg = Math.round(wrapPI(navState.yaw) * 180 / Math.PI), pitchDeg = Math.round(navState.pitch * 180 / Math.PI);
+  coordEl.textContent = `θ ${yawDeg}° · φ ${pitchDeg}° · ${Math.round(navState.zoomLevel)}%`;
 }
+let navZoomTimer = 0; function saveNavZoom() { clearTimeout(navZoomTimer); navZoomTimer = setTimeout(() => { const b = ZOOM_DETENTS.reduce((a, b) => Math.abs(navState.zoomLevel - b) < Math.abs(navState.zoomLevel - a) ? b : a, 60); state.navZoom = b; save(); }, 400); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) running = false; else if (!running) { running = true; last = performance.now(); requestAnimationFrame(loop); } });
 requestAnimationFrame(loop);
 
-/* ---------- pointer / pan / zoom ---------- */
-const garden = $('#garden'); const ptrs = new Map(); let drag = null, pinch = null, recenter = null, lastTap = null; const vel = { x: 0, y: 0 };
+/* ---------- pointer / crown / depth: two hands, two axes, never fighting ---------- */
+const garden = $('#garden'); const ptrs = new Map(); let drag = null, pinch = null, lastTap = null;
+const coordEl = $('#coord'), crownEl = $('#crown'), crownRail = $('#crownRail'), crownNotch = $('#crownNotch');
 function hit(x, y) { let best = null; for (const o of ORBS) { if (o.center) continue; const R = o.R + (o.ghost ? 10 : 2); if (Math.hypot(x - o.sx, y - o.sy) <= R) best = o; } return best; }
-function zoomAt(z, px, py) { z = clamp(z, ZMIN(), ZMAX); const wx = (px - cx() - view.x) / view.z, wy = (py - cy() - view.y) / view.z; view.z = z; view.x = px - cx() - wx * z; view.y = py - cy() - wy * z; }
+function panRate() { return .0022 / (1 + navState.zoomLevel / 100); }
 garden.addEventListener('pointerdown', e => {
   if (sheetOpen || (e.button && e.button !== 0)) return;
   if (e.pointerType === 'mouse' || drag && performance.now() - drag.t > 4000) { ptrs.clear(); drag = null; pinch = null; }
-  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); recenter = null;
-  if (ptrs.size === 1) { drag = { x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, moved: false, t: performance.now(), sx: 0, sy: 0, orb: null }; vel.x = vel.y = 0;
-    const o = hit(e.clientX, e.clientY); if (o) o.press = 1; snapAt = 0; }
-  else if (ptrs.size === 2) { if (drag && drag.orb) { drag.orb.dragging = false; drag.orb = null; } const [a, b] = [...ptrs.values()]; pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y), z0: view.z, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 }; if (drag) drag.moved = true; }
+  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); navState.recenter = false;
+  if (ptrs.size === 1) {
+    drag = { x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, moved: false, t: performance.now(), orb: null, hist: [] };
+    const o = hit(e.clientX, e.clientY);
+    if (o && !o.center) { o.press = 1; drag.orb = o; drag.gx = o.x; drag.gy = o.y; }
+    navState.panVel.yaw = 0; navState.panVel.pitch = 0; navState.panDragging = true;
+  } else if (ptrs.size === 2) {
+    if (drag && drag.orb) { drag.orb.dragging = false; drag.orb = null; } const [a, b] = [...ptrs.values()];
+    pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y), z0: navState.zoomLevel }; if (drag) drag.moved = true;
+  }
 });
 addEventListener('pointermove', e => {
-  if (drag && e.pointerType === 'mouse' && e.buttons === 0 && performance.now() - drag.t > 1500) { if (drag.orb) drag.orb.dragging = false; ptrs.clear(); pinch = null; drag = null; garden.classList.remove('dragging'); }
+  if (drag && e.pointerType === 'mouse' && e.buttons === 0 && performance.now() - drag.t > 1500) { if (drag.orb) drag.orb.dragging = false; ptrs.clear(); pinch = null; drag = null; navState.panDragging = false; garden.classList.remove('dragging'); }
   if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   if (pinch && ptrs.size >= 2) {
-    const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-    zoomAt(pinch.z0 * d / pinch.d0, mx, my); view.x += mx - pinch.mx; view.y += my - pinch.my; pinch.mx = mx; pinch.my = my; return;
+    const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y);
+    navState.zoomLevel = clamp(pinch.z0 + (d / pinch.d0 - 1) * 240, 0, 200); navState.zoomVel = 0; navMarkInput(); return;
   }
   if (drag) {
     const dx = e.clientX - drag.lx, dy = e.clientY - drag.ly; drag.lx = e.clientX; drag.ly = e.clientY;
     if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > 6) { drag.moved = true; garden.classList.add('dragging'); setAnnot(null); }
     if (drag.moved && drag.orb) {
-      const o = drag.orb; o.dragging = true; const nx = (e.clientX - cx() - view.x) / view.z - drag.gx, ny = (e.clientY - cy() - view.y) / view.z - drag.gy;
+      const o = drag.orb; o.dragging = true; const rate = 1.1;
+      const nx = drag.gx + (e.clientX - drag.x0) * rate, ny = drag.gy + (e.clientY - drag.y0) * rate;
       const lim = 560, dl = Math.hypot(nx, ny) || 1, f = dl > lim ? lim / dl : 1;
       o.vx = o.vx * .5 + (nx * f - o.x) * .5; o.vy = o.vy * .5 + (ny * f - o.y) * .5; o.x = nx * f; o.y = ny * f; drag.t = performance.now();
     } else if (drag.moved) {
-      const b = bounds();
-      const rx = Math.abs(view.x) > b.x && Math.sign(dx) === Math.sign(view.x) ? .32 : 1, ry = Math.abs(view.y) > b.y && Math.sign(dy) === Math.sign(view.y) ? .32 : 1;
-      view.x += dx * rx; view.y += dy * ry;
-      const now = performance.now(), dtm = Math.max(1, now - drag.t); vel.x = vel.x * .5 + (dx * rx / dtm * 16) * .5; vel.y = vel.y * .5 + (dy * ry / dtm * 16) * .5; drag.t = now;
+      const rate = panRate(); navState.yaw += dx * rate; navState.pitchRaw -= dy * rate;
+      const now = performance.now(); drag.hist.push({ dx, dy, t: now }); drag.hist = drag.hist.filter(h => now - h.t < 66); drag.t = now; navMarkInput();
     }
     pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = true; return;
   }
@@ -1569,33 +1713,63 @@ function endPointer(e) {
   const had = ptrs.delete(e.pointerId);
   if (pinch && ptrs.size < 2) { pinch = null; if (drag) drag.moved = true; }
   if (had && ptrs.size === 0 && drag) {
-    garden.classList.remove('dragging');
+    garden.classList.remove('dragging'); navState.panDragging = false;
     if (!drag.moved && performance.now() - drag.t < 900 && e.type !== 'pointercancel') {
       const o = hit(e.clientX, e.clientY); const now = performance.now();
       if (o) { if (e.pointerType !== 'mouse') { hlabel.innerHTML = labelFor(o); } openOrb(o); lastTap = null; }
-      else if (lastTap && now - lastTap.t < 380 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) { recenter = { z: baseZ() }; lastTap = null; }
+      else if (lastTap && now - lastTap.t < 380 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) { navState.recenter = true; lastTap = null; }
       else lastTap = { x: e.clientX, y: e.clientY, t: now };
     }
-    if (performance.now() - drag.t > 80) { vel.x = vel.y = 0; }
-    if (drag.moved) snapAt = performance.now() + 420;
+    if (drag.moved && drag.hist.length) {
+      const h0 = drag.hist[0], h1 = drag.hist[drag.hist.length - 1], span = Math.max(16, h1.t - h0.t), rate = panRate(), CAP = .12;
+      navState.panVel.yaw = clamp((drag.hist.reduce((s, h) => s + h.dx, 0) / span) * 16.67 * rate, -CAP, CAP);
+      navState.panVel.pitch = clamp(-(drag.hist.reduce((s, h) => s + h.dy, 0) / span) * 16.67 * rate, -CAP, CAP);
+    } else { navState.panVel.yaw = 0; navState.panVel.pitch = 0; }
     if (drag.orb) { const o = drag.orb; if (o.dragging) { o.dragging = false; if (performance.now() - drag.t > 80) o.vx = o.vy = 0; o.vx = clamp(o.vx, -16, 16); o.vy = clamp(o.vy, -16, 16); o.liftV -= 1.2; lastTap = null; } }
     drag = null;
   }
 }
 addEventListener('pointerup', endPointer); addEventListener('pointercancel', endPointer);
 garden.addEventListener('pointerleave', () => { if (!drag) { pointer.on = false; if (!document.activeElement || !document.activeElement.classList.contains('orb')) setAnnot(null); } });
-let snapAt = 0;
-garden.addEventListener('wheel', e => { e.preventDefault(); if (sheetOpen) return; recenter = null;
-  if (e.ctrlKey) zoomAt(view.z * Math.exp(-e.deltaY * .01), e.clientX, e.clientY);
-  else { const m = e.deltaMode === 1 ? 32 : 1; view.x -= e.deltaX * m; view.y -= e.deltaY * m; vel.x = vel.y = 0; }
-  snapAt = performance.now() + 240; }, { passive: false });
-garden.addEventListener('dblclick', e => { if (e.target.closest('.orb')) return; recenter = { z: baseZ() }; });
+garden.addEventListener('wheel', e => {
+  e.preventDefault(); if (sheetOpen) return; navState.recenter = false;
+  const amt = e.ctrlKey ? -e.deltaY * .22 : -e.deltaY * .11;
+  navState.zoomLevel = clamp(navState.zoomLevel + amt, 0, 200); navState.zoomVel = clamp(amt * .3, -6, 6); navMarkInput();
+}, { passive: false });
+garden.addEventListener('dblclick', e => { if (e.target.closest('.orb')) return; navState.recenter = true; });
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('contextmenu', e => { if (e.target.closest('#garden')) e.preventDefault(); });
+// keyboard: the crown and the field, from a keyboard
+addEventListener('keydown', e => {
+  if (sheetOpen || e.target.closest('input,textarea,select,[contenteditable]')) return;
+  const inGarden = document.activeElement && (document.activeElement.closest('#garden') || document.activeElement === document.body) && document.body.classList.contains('mode-chat') === false;
+  if (!inGarden) return;
+  const accel = e.repeat ? 1.8 : 1, step = 6 * Math.PI / 180 * accel;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); navState.recenter = false; navState.yaw -= step; navMarkInput(); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); navState.recenter = false; navState.yaw += step; navMarkInput(); }
+  else if (e.key === 'ArrowUp' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); navState.recenter = false; navState.pitchRaw -= step; navMarkInput(); }
+  else if (e.key === 'ArrowDown' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); navState.recenter = false; navState.pitchRaw += step; navMarkInput(); }
+  else if (e.key === '+' || e.key === '=' || (e.key === 'ArrowUp' && (e.metaKey || e.ctrlKey))) { e.preventDefault(); navState.recenter = false; navState.zoomEasing = null; navState.zoomLevel = clamp(navState.zoomLevel + 16, 0, 200); navMarkInput(); }
+  else if (e.key === '-' || e.key === '_' || (e.key === 'ArrowDown' && (e.metaKey || e.ctrlKey))) { e.preventDefault(); navState.recenter = false; navState.zoomEasing = null; navState.zoomLevel = clamp(navState.zoomLevel - 16, 0, 200); navMarkInput(); }
+});
 // keyboard on orbs
 $('#orbs').addEventListener('click', e => { const el = e.target.closest('.orb'); if (!el || e.detail !== 0) return; const o = ORBS.find(o => o.el === el); if (o) openOrb(o); });
 $('#orbs').addEventListener('focusin', e => { const el = e.target.closest('.orb'); if (!el || !el.matches(':focus-visible')) return; const o = ORBS.find(o => o.el === el); if (o) { hlabel.innerHTML = labelFor(o); setAnnot(o); } });
 $('#orbs').addEventListener('focusout', () => { if (!sheetOpen) setAnnot(null); });
+
+/* ---------- the crown, on screen ---------- */
+let crownDrag = null;
+crownRail.addEventListener('pointerdown', e => {
+  const tick = e.target.closest('.crown-tick'); navState.recenter = false;
+  if (tick && tick.dataset.z != null) { navState.zoomEasing = +tick.dataset.z; navMarkInput(); return; }
+  crownDrag = { y0: e.clientY, z0: navState.zoomLevel }; crownRail.setPointerCapture(e.pointerId); navState.zoomDragging = true; navState.zoomEasing = null; navMarkInput();
+});
+crownRail.addEventListener('pointermove', e => {
+  if (!crownDrag) return; const railH = crownRail.clientHeight || 120;
+  navState.zoomLevel = clamp(crownDrag.z0 + (crownDrag.y0 - e.clientY) / railH * 200, 0, 200); navMarkInput();
+});
+function crownEnd() { if (!crownDrag) return; crownDrag = null; navState.zoomDragging = false; navState.zoomVel = 0; }
+crownRail.addEventListener('pointerup', crownEnd); crownRail.addEventListener('pointercancel', crownEnd);
 
 /* ---------- header / chip / clock ---------- */
 function tickClock() { const d = new Date(); $('#cap').textContent = `${NARROW() ? 'OPAL' : 'OPAL OS'} · ${fmtDate(d)} · ${fmtTime(d)}`; }
@@ -2590,7 +2764,7 @@ function paintSkin(o) {
   g.fillStyle = g.strokeStyle = 'rgba(30,40,30,.9)'; drawMark(g, o.logo, mx, my, S);
   g.fillStyle = g.strokeStyle = o.center ? 'rgba(232,160,74,.10)' : 'rgba(236,235,228,.05)'; drawMark(g, o.logo, mx, my, S);
 }
-function originFor(o) { const [sx, sy] = toScreen(o.x, o.y); return { x: sx, y: sy, r: o.r * view.z }; }
+function originFor(o) { return { x: o.sx, y: o.sy, r: Math.max(6, o.R) }; }
 function openSheet(kind, o, origin, fixed) {
   if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
   current = { kind, orb: o, origin, fixed: !!fixed }; lastFocus = document.activeElement;
@@ -2612,6 +2786,7 @@ function closeSheet() {
   const dx = origin.x - (rect.left + rect.width / 2), dy = origin.y - (rect.top + rect.height / 2), s = Math.max(.04, (2 * origin.r) / rect.width);
   sheet.classList.remove('dragY'); sheet.style.transform = `translate(${dx}px,${dy}px) scale(${s})`; sheet.style.opacity = '0';
   document.body.classList.remove('sheet-open'); sheetOpen = false; hideUndo(true);
+  navState.recenter = false; navState.zoomEasing = 130;   // closing surfaces one step, back to Orb Focus, not all the way out
   closeTimer = setTimeout(() => { sheetWrap.hidden = true; closeTimer = null; }, REDUCED ? 20 : 720);
   if (!current.fixed && o && o.el && document.body.contains(o.el)) o.el.focus({ preventScroll: true }); else if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   setAnnot(null);
@@ -2656,7 +2831,7 @@ function swapCard(li, cls, html) {
 }
 function refreshOrb(id) {
   const o = ORBS.find(o => o.id === id); if (!o) return;
-  const before = o.pending; o.pending = pendingOf(id); o.tr = radiusFor(o); updateAria(o);
+  const before = o.pending; o.pending = pendingOf(id); o.tr = radiusFor(o); updateAria(o); if (o.pending !== before) refreshOrbTexture(o);
   if (o.pending === 0 && before > 0) o.pendingClear = true; else if (o.pending > 0) o.pendingClear = false;
   if (o.pending < before) o.flash = Math.max(o.flash, .35);
   if (annot.orb === o) hlabel.innerHTML = labelFor(o);
@@ -2733,7 +2908,7 @@ sheet.addEventListener('click', e => {
 });
 sheet.addEventListener('change', e => { const s = e.target.closest('[data-role=retention]'); if (s) { state.retention = s.value; save(); } });
 
-window.__opal = { view, ORBS, get recenter() { return recenter; }, get drag() { return drag; }, bounds };
+window.__opal = { navState, ORBS, get recenter() { return navState.recenter; }, get drag() { return drag; }, scene3, camera3, domeGroup };
 /* ================================================================
    Chat: a second way to live in the garden. Same Opal, same mock
    memory (PROMISES/TIMELINE/MAILS/SB_PIECES/LI_MOCK/SP_TRACKS),
@@ -3073,7 +3248,7 @@ function chatInit() {
 
 /* ---------- switching between Garden and Chat ---------- */
 function chatGo(next, rect) {
-  if (next === mode) { if (next === 'garden' && !sheetOpen) recenter = { z: baseZ() }; return; }
+  if (next === mode) { if (next === 'garden' && !sheetOpen) navState.recenter = true; return; }
   const after = () => {
     mode = next; $$nav(mode); document.body.classList.toggle('mode-chat', mode === 'chat'); chatRoot.setAttribute('aria-hidden', String(mode !== 'chat'));
     if (mode === 'chat') { chatInit(); chatResize(); chatStartFx(); if (rect && !REDUCED) setTimeout(() => chatBurst(rect.x, rect.y, { n: 22 }), 30); }
