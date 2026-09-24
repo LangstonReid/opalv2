@@ -96,8 +96,8 @@ body.paused .chip{color:var(--bone-35)}
 .crown.active .crown-tick{opacity:.85}
 .crown-notch{position:absolute;left:50%;bottom:calc(var(--p, .3) * 100%);width:13px;height:13px;margin:0 0 -6.5px -6.5px;border-radius:50%;background:var(--bone-35);box-shadow:0 0 0 3px rgba(11,18,12,.4);transition:background .35s var(--ease),box-shadow .35s var(--ease),bottom .1s linear;pointer-events:none}
 .crown.active .crown-notch,.crown-rail:hover .crown-notch{background:var(--spore);box-shadow:0 0 10px 2px rgba(217,224,33,.45),0 0 0 3px rgba(11,18,12,.4)}
-body.mode-chat .coord,body.mode-chat .crown,body.mode-widgets .coord,body.mode-widgets .crown,body.mode-notes .coord,body.mode-notes .crown{opacity:0;pointer-events:none}
-body.sheet-open .coord,body.sheet-open .crown{opacity:0;pointer-events:none}
+body.mode-chat #coord,body.mode-chat #crown,body.mode-widgets #coord,body.mode-widgets #crown,body.mode-notes #coord,body.mode-notes #crown{opacity:0;pointer-events:none}
+body.sheet-open #coord,body.sheet-open #crown{opacity:0;pointer-events:none}
 
 /* ---------- calendar sheet: a sorting surface ---------- */
 #sheetWrap.calmode{width:min(860px,calc(100% - 64px))}
@@ -1742,10 +1742,11 @@ body.mode-notes .nt-rail{display:block}
 /* note detail page */
 .nt-detail{position:fixed;inset:0;z-index:9;background:var(--wg-bg);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 .nt-detail.show{opacity:1;pointer-events:auto}
-.nt-detail-inner{position:absolute;inset:0;overflow-y:auto;scrollbar-width:thin;padding:92px 40px 80px}
+.nt-detail-inner{position:absolute;inset:0;overflow-y:auto;scrollbar-width:thin;padding:88px 40px 80px}
+.nt-detail-topbar{max-width:640px;margin:0 auto 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .nt-detail-content{max-width:640px;margin:0 auto;position:relative}
-.nt-detail-close{position:fixed;top:28px;right:32px;z-index:2;width:36px;height:36px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);color:var(--wg-ink-60);font-size:18px;display:grid;place-items:center;box-shadow:var(--wg-shadow-sm);transition:color .15s,background .15s}
-.nt-detail-close:hover{color:var(--wg-ink);background:var(--wg-surface-2)}
+.nt-detail-close{flex:none;width:36px;height:36px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);color:var(--wg-ink-60);font-size:18px;display:grid;place-items:center;box-shadow:var(--wg-shadow-sm);transition:color .15s,background .15s,transform .15s}
+.nt-detail-close:hover{color:var(--wg-ink);background:var(--wg-surface-2);transform:scale(1.06)}
 .nt-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
 .nt-detail-headl{flex:1;min-width:0}
 .nt-detail-title{font-family:'Caveat',cursive;font-weight:600;font-size:36px;line-height:1.15;color:var(--wg-ink);outline:none;border-radius:6px}
@@ -2339,7 +2340,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   </aside>
   <div class="nt-detail" id="ntDetail" role="dialog" aria-modal="true" aria-label="Note">
     <div class="nt-detail-inner" id="ntDetailInner">
-      <button type="button" class="nt-detail-close" id="ntDetailClose" aria-label="Close">&times;</button>
+      <div class="nt-detail-topbar">
+        <button type="button" class="wg-alldays" id="ntDetailBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg>All Notes</button>
+        <button type="button" class="nt-detail-close" id="ntDetailClose" aria-label="Close">&times;</button>
+      </div>
       <div class="nt-detail-content" id="ntDetailContent"></div>
     </div>
   </div>
@@ -6493,7 +6497,7 @@ function ntSkinFor(n) {
   return words <= 8 ? 'billboard' : 'evidence';
 }
 const NT_STICKY_PALETTE = ['#f4a9b7', '#f7e07f', '#a9c9e8', '#bcd9a8', '#e3b8e0', '#f5c98a'];
-const NT_BOARD_W = 1180, NT_BOARD_COLS = 4, NT_BOARD_GAP = 26;
+const NT_BOARD_W = 1180, NT_BOARD_COLS = 4, NT_BOARD_GAP = 14;
 const NT_SKIN_H_EST = { sticky: 200, report: 260, evidence: 190, billboard: 150 };
 const NT_SKIN_W = { sticky: 190, report: 250, evidence: 210, billboard: 260 };
 const NT_TAPE_COLORS = ['rgba(243,230,150,.72)', 'rgba(230,190,150,.68)', 'rgba(180,205,220,.6)', 'rgba(210,210,210,.55)'];
@@ -6517,8 +6521,11 @@ function ntAssignScrapbookPlacement(n) {
   const skinW = NT_SKIN_W[n.scrapbook.skin];
   const jitterX = (ntRand(seed + 1) - 0.5) * Math.max(0, colW - skinW) * 0.7;
   n.scrapbook.x = Math.round(col * (colW + NT_BOARD_GAP) + Math.max(0, (colW - skinW) / 2) + jitterX);
-  n.scrapbook.y = Math.round(colBottoms[col] + ntRand(seed + 2) * 8);
-  n.scrapbook.rotation = Math.round((ntRand(seed + 3) - 0.5) * 12 * 10) / 10;
+  n.scrapbook.y = Math.round(colBottoms[col] + ntRand(seed + 2) * 5);
+  const tiltMag = ntRand(seed + 3) < 0.5 ? 5 : 10;
+  const tiltSign = ntRand(seed + 6) < 0.5 ? -1 : 1;
+  const tiltJitter = (ntRand(seed + 7) - 0.5) * 3;
+  n.scrapbook.rotation = Math.round((tiltMag * tiltSign + tiltJitter) * 10) / 10;
   n.scrapbook.paletteIdx = Math.floor(ntRand(seed + 4) * NT_STICKY_PALETTE.length);
   n.scrapbook.tornSeed = Math.floor(ntRand(seed + 5) * 1000);
   n.scrapbook.z = ntNextZ();
@@ -7023,6 +7030,7 @@ function noteInit() {
   $('#ntScrapCanvas').addEventListener('contextmenu', e => { const card = e.target.closest('.nt-scrap-card'); if (card) { e.preventDefault(); ntOpenMoveMenu(card.dataset.note, card); } });
 
   $('#ntDetailClose').addEventListener('click', ntCloseDetail);
+  $('#ntDetailBack').addEventListener('click', ntCloseDetail);
   $('#ntDetail').addEventListener('click', e => {
     if (e.target.id === 'ntDetail') return ntCloseDetail();
     const star = e.target.closest('#ntDetailStar'); if (star) return ntToggleStar(ntState.currentNote);
