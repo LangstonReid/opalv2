@@ -688,7 +688,88 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-cal-cell.inactive .n{color:var(--wg-ink-42)}
 .wg-cal-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .wg-cal-nav .mono{font:400 11px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ink-60);min-width:110px;text-align:center}
+.wg-week-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.wg-week-nav .mono{font:400 11px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ink-60);min-width:140px;text-align:center}
+.wg-week-jump{font:400 10px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-accent-ink);background:var(--wg-yellow-soft);padding:8px 14px;border-radius:999px;transition:background .2s}
+.wg-week-jump:hover{background:var(--wg-yellow)}
 
+/* ---------- weekly: a triage board, seven days, one screen ---------- */
+.wg-weekly{width:100%}
+.wg-week-kpibar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.wg-week-kpi{flex:1;min-width:150px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:16px;padding:14px 16px;text-align:left;box-shadow:var(--wg-shadow-sm)}
+.wg-week-kpi .l{display:block;font:400 9px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-week-kpi b{display:block;margin-top:6px;font:600 21px/1.15 var(--sans);color:var(--wg-ink)}
+.wg-week-kpi b small{display:block;margin-top:2px;font:400 9px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-week-kpi.tap{cursor:pointer;transition:background .2s,transform .2s}
+.wg-week-kpi.tap:hover{background:var(--wg-surface-2);transform:translateY(-1px)}
+.wg-week-kpi.tap.on{background:var(--wg-yellow-soft);border-color:var(--wg-yellow)}
+.wg-week-savedpanel{background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:14px;padding:12px 16px;margin-bottom:14px}
+.wg-week-saved-head{font-size:11.5px;color:var(--wg-ink-42);margin-bottom:8px}
+.wg-week-saved-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--wg-border);font-size:12.5px;color:var(--wg-ink)}
+.wg-week-saved-row:first-of-type{border-top:0}
+.wg-week-saved-row b{flex:none;color:var(--wg-accent-ink);font-weight:600}
+.wg-week-filterbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.wg-week-viewmode{display:flex;gap:4px;padding:4px;width:fit-content;border-radius:999px;background:var(--wg-surface-3)}
+.wg-week-viewmode button{font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:8px 14px;border-radius:999px;transition:color .3s,background .3s}
+.wg-week-viewmode button.on{color:#fff;background:var(--wg-ink);box-shadow:var(--wg-shadow-sm)}
+.wg-week-viewmode button:not(.on):hover{color:var(--wg-ink)}
+.wg-week-statuspills{display:flex;gap:8px;flex-wrap:wrap}
+.wg-week-statuspills button{display:flex;align-items:center;gap:6px;font:400 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);padding:8px 12px;border-radius:999px;transition:color .2s,background .2s,border-color .2s}
+.wg-week-statuspills button b{font-weight:400;color:var(--wg-ink-42)}
+.wg-week-statuspills button:hover{border-color:var(--wg-ink-28)}
+.wg-week-statuspills button.on{color:#fff;background:var(--wg-ink);border-color:var(--wg-ink)}
+.wg-week-statuspills button.on b{color:rgba(255,255,255,.7)}
+.wg-week-mobilenav{display:none;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.wg-week-mobilenav .mono{font:400 12px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink);min-width:120px;text-align:center}
+.wg-week-cols{display:flex;gap:14px;align-items:flex-start}
+.wg-week-col{flex:1;min-width:0;background:var(--wg-surface);border-radius:18px;display:flex;flex-direction:column;max-height:calc(100vh - 340px);min-height:220px;transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s}
+.wg-week-col.drop-hover{background:var(--wg-yellow-soft);box-shadow:0 0 0 2px var(--wg-yellow) inset}
+.wg-week-col.bounce{animation:wgFolderBounce .3s var(--ease)}
+.wg-week-col.today{background:linear-gradient(180deg,rgba(195,207,63,.14),rgba(195,207,63,.05) 60px,var(--wg-surface) 60px)}
+.wg-week-col-head{flex:none;padding:14px 14px 10px;position:relative}
+.wg-week-col.today .wg-week-col-head::before{content:'';position:absolute;top:0;left:14px;right:14px;height:3px;border-radius:0 0 3px 3px;background:var(--wg-spore)}
+.wg-week-col-head div{display:flex;align-items:baseline;gap:5px}
+.wg-week-col-head b{font:600 13.5px/1.2 var(--sans);color:var(--wg-ink)}
+.wg-week-col-head>div>span{font:400 11.5px/1.2 var(--sans);color:var(--wg-ink-60)}
+.wg-week-col-frac{display:block;margin-top:3px;font:400 9px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-week-col-body{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;padding:2px 12px 14px}
+.wg-week-sec-label{font:700 10px/1.6 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink);margin:10px 0 8px}
+.wg-week-sec-label:first-child{margin-top:0}
+.wg-week-hr{height:1px;background:var(--wg-border);margin:12px 0}
+.wg-week-nothing{font-size:11.5px;color:var(--wg-ink-42);padding:2px 0 10px}
+.wg-week-card{position:relative;display:flex;align-items:center;gap:8px;padding:9px 10px;margin-bottom:7px;background:var(--wg-surface-2);border-radius:12px;transition:opacity .2s,transform .2s,background .15s}
+.wg-week-card:hover{background:var(--wg-yellow-soft)}
+.wg-week-card.wg-ghost{opacity:0;pointer-events:none}
+.wg-week-card.wg-dragging{position:fixed;z-index:12;pointer-events:none;box-shadow:0 20px 40px rgba(26,26,22,.18);will-change:transform;margin:0}
+.wg-week-card-title{flex:1;min-width:0;font-size:12px;line-height:1.4;color:var(--wg-ink);cursor:default}
+.wg-week-card.opal .wg-week-card-title{cursor:pointer}
+.wg-week-card.opal .wg-week-card-title:hover{text-decoration:underline}
+.wg-week-go{flex:none;font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;color:#fff;background:var(--wg-accent);padding:6px 11px;border-radius:999px;transition:background .2s}
+.wg-week-go:hover{background:var(--wg-accent-ink)}
+.wg-week-skip{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--wg-border-2);color:var(--wg-ink-42);display:grid;place-items:center;font-size:10px;transition:color .2s,border-color .2s}
+.wg-week-skip:hover{color:var(--wg-ink);border-color:var(--wg-ink-28)}
+.wg-week-spin{flex:none;width:14px;height:14px;border-radius:50%;background-image:url('assets/brand/loading-orb.webp');background-size:cover;background-position:center;animation:wgOrbPulse 1.3s ease-in-out infinite}
+.wg-week-done{flex:none;width:20px;height:20px;border-radius:50%;background:var(--wg-accent);color:#fff;display:grid;place-items:center;cursor:pointer}
+.wg-week-done svg{width:10px;height:10px}
+.wg-week-err{flex:none;width:20px;height:20px;border-radius:50%;background:var(--wg-ember);color:#fff;display:grid;place-items:center}
+.wg-week-err svg{width:10px;height:10px}
+.wg-week-blocked{flex:none;width:20px;height:20px;border-radius:50%;background:var(--wg-surface-3);color:var(--wg-ink-42);display:grid;place-items:center}
+.wg-week-blocked svg{width:10px;height:10px}
+.wg-week-card.you{cursor:grab}
+.wg-week-card.you:active{cursor:grabbing}
+.wg-week-card.you.done .wg-week-card-title{color:var(--wg-ink-42);text-decoration:line-through}
+.wg-week-card.you.overdue{background:rgba(221,143,69,.14)}
+.wg-week-overdue-chip{flex:none;font:400 8px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--wg-ember);padding:3px 7px;border-radius:999px}
+.wg-week-cardmenu{flex:none;width:18px;height:18px;border-radius:6px;color:var(--wg-ink-42);display:grid;place-items:center;font-size:13px;transition:background .15s,color .15s}
+.wg-week-cardmenu:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.wg-week-addtask{width:100%;text-align:left;font-size:11.5px;color:var(--wg-ink-42);padding:6px 2px;transition:color .2s}
+.wg-week-addtask:hover{color:var(--wg-ink)}
+@media (max-width:900px){
+  .wg-week-mobilenav{display:flex}
+  .wg-week-cols{overflow:hidden}
+  .wg-week-col{display:none;max-height:none;flex:1 1 100%}
+  .wg-week-col.mobile-active{display:flex}
+}
 
 /* the day page */
 .wg-day-page{position:fixed;inset:0;z-index:4;background:var(--wg-bg,#f5f5f0);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
@@ -1187,7 +1268,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-spin{animation:none}
   .wg-running i,.wg-day-title-wrap .mono.live i{animation:none}
   .wg-day-content.slideoutL,.wg-day-content.slideoutR,.wg-day-content.slideinL,.wg-day-content.slideinR{animation:none}
-  .wg-conv-card,.wg-conv-page,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce,.wg-today-feed-row.new,.wg-today-live-head i,.wg-loading-orb,.wg-spin,.wg-rail-spin,.wg-today-row.you.done p::after,.wg-today-row.you.done .wg-check{transition:none!important;animation:none!important}
+  .wg-conv-card,.wg-conv-page,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce,.wg-today-feed-row.new,.wg-today-live-head i,.wg-loading-orb,.wg-spin,.wg-rail-spin,.wg-today-row.you.done p::after,.wg-today-row.you.done .wg-check,.wg-week-card,.wg-week-col,.wg-week-col.bounce,.wg-week-spin{transition:none!important;animation:none!important}
   .wg-today-row.you.done p::after{width:100%}
   .wg-conv-card:hover{transform:none}
 }
@@ -1776,11 +1857,18 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           <button type="button" data-wgmode="today" class="on">Today</button>
           <button type="button" data-wgmode="calendar">Calendar</button>
           <button type="button" data-wgmode="conversations">Conversations</button>
+          <button type="button" data-wgmode="weekly">Weekly</button>
         </div>
         <div class="wg-cal-nav" id="wgCalNav" hidden>
           <button type="button" class="wg-daynav-btn sm" id="wgCalPrev" aria-label="Previous month">‹</button>
           <span class="mono" id="wgCalMonthLabel"></span>
           <button type="button" class="wg-daynav-btn sm" id="wgCalNext" aria-label="Next month">›</button>
+        </div>
+        <div class="wg-week-nav" id="wgWeekNav" hidden>
+          <button type="button" class="wg-daynav-btn sm" id="wgWeekPrev" aria-label="Previous week">‹</button>
+          <span class="mono" id="wgWeekRangeLabel"></span>
+          <button type="button" class="wg-daynav-btn sm" id="wgWeekNext" aria-label="Next week">›</button>
+          <button type="button" class="wg-week-jump" id="wgWeekJumpThis" hidden>This week</button>
         </div>
         <div class="wg-conv-filters" id="wgConvFilters" hidden>
           <button type="button" data-convfilter="all" class="on">All</button>
@@ -1795,6 +1883,17 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         <div class="wg-conv-layout" id="wgConvLayout" hidden>
           <aside class="wg-conv-folders-col" id="wgConvFoldersCol"><div class="wg-todos-head"><span>Folders</span></div><div id="wgFolderList"></div></aside>
           <div class="wg-conv-grid" id="wgConvGrid"></div>
+        </div>
+        <div class="wg-weekly" id="wgWeekly" hidden>
+          <div class="wg-week-kpibar" id="wgWeekKPI"></div>
+          <div class="wg-week-savedpanel" id="wgWeekSavedPanel" hidden></div>
+          <div class="wg-week-filterbar" id="wgWeekFilterBar"></div>
+          <div class="wg-week-mobilenav" id="wgWeekMobileNav">
+            <button type="button" class="wg-daynav-btn sm" id="wgWeekMobilePrev" aria-label="Previous day">‹</button>
+            <span class="mono" id="wgWeekMobileLabel"></span>
+            <button type="button" class="wg-daynav-btn sm" id="wgWeekMobileNext" aria-label="Next day">›</button>
+          </div>
+          <div class="wg-week-cols" id="wgWeekCols"></div>
         </div>
       </div>
     </div>
@@ -1960,7 +2059,7 @@ const fmtDate = d => `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}
 
 /* ---------- persistence ---------- */
 const KEY = 'opal-os-garden-v1';
-const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS', navZoom: 60, eventNotes: {} });
+const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS', navZoom: 60, eventNotes: {}, weekStartsOn: 0 });
 function load() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') return Object.assign(defaults(), s); } catch (e) {}
   return defaults();
@@ -3645,6 +3744,7 @@ function buildSheet(kind, o) {
       <li class="card"><span class="dot" style="--c:var(--spore)"></span><div class="body"><p class="quote">Listening</p><p class="cap">14H 22M TODAY · SILENCE IS NEVER STORED</p></div><div class="actions"><button data-act="toggle-listen" class="accept">${state.listening ? 'Pause' : 'Resume'}</button></div></li>
       <li class="card"><span class="dot" style="--c:var(--bone-35)"></span><div class="body"><p class="quote">Opal · Titanium</p><p class="cap">SERIAL 0417 · ${WELCOME.band.battery}% · LAST HEARD ${synced()}</p></div></li>
       <li class="card"><span class="dot" style="--c:var(--bone-35)"></span><div class="body"><p class="quote">Keep memory for</p><p class="cap">AFTER THAT IT'S GONE. NOT ARCHIVED.</p></div><div class="actions"><select class="msel" data-role="retention" aria-label="Retention">${['30 DAYS', '90 DAYS', 'ONE YEAR', 'UNTIL I SAY'].map(r => `<option${r === state.retention ? ' selected' : ''}>${r}</option>`).join('')}</select></div></li>
+      <li class="card"><span class="dot" style="--c:var(--bone-35)"></span><div class="body"><p class="quote">Week starts on</p><p class="cap">USED BY THE WEEKLY VIEW</p></div><div class="actions"><select class="msel" data-role="weekstart" aria-label="Week starts on"><option value="0"${(state.weekStartsOn || 0) === 0 ? ' selected' : ''}>SUNDAY</option><option value="1"${state.weekStartsOn === 1 ? ' selected' : ''}>MONDAY</option></select></div></li>
       <li class="card"><span class="dot" style="--c:var(--ember)"></span><div class="body"><p class="quote">Reset the day</p><p class="cap">CLEARS EVERY DECISION IN THIS GARDEN</p></div><div class="actions"><button data-act="reset" class="emberb">Reset</button></div></li></ul>`;
     foot = `<span class="muted">YOU OWN THE RECORDING. ALWAYS.</span><button data-act="later">Back to garden</button>`;
   } else {
@@ -3809,6 +3909,7 @@ sheet.addEventListener('click', e => {
   }
 });
 sheet.addEventListener('change', e => { const s = e.target.closest('[data-role=retention]'); if (s) { state.retention = s.value; save(); } });
+sheet.addEventListener('change', e => { const s = e.target.closest('[data-role=weekstart]'); if (s) { state.weekStartsOn = +s.value; save(); wgRenderWeekly(); } });
 
 window.__opal = { navState, ORBS, get recenter() { return navState.recenter; }, get drag() { return drag; }, scene3, camera3, domeGroup };
 /* ================================================================
@@ -4271,7 +4372,7 @@ const WG_TODOS = [
   { id: 'wt3', text: 'Text Owen the gym address', status: 'open', createdOnDay: WG_YDAY_KEY, dueOnDay: null, due: wgDueAt(WG_TODAY_KEY, 7), source: { day: WG_YDAY_KEY, hour: 19, quote: 'tomorrow at seven' } },
   { id: 'wt4', text: 'Approve the titanium alloy spec', status: 'open', createdOnDay: WG_D6_KEY, dueOnDay: null, due: wgDueAt(WG_TODAY_KEY, 17), source: { day: WG_D6_KEY, hour: 9, quote: 'nine weeks works if we lock the alloy by the 23rd' } },
   { id: 'wt5', text: 'Call Dad back about the pilot', status: 'done', createdOnDay: wgKey(wgDateAt(-3)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-3)), hour: 8, quote: "I'll call you this evening about the school pilot" } },
-  { id: 'wt6', text: 'Send Rylan the supplier contract notes', status: 'open', createdOnDay: wgKey(wgDateAt(-9)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-9)), hour: 11, quote: 'review the supplier contract by Thursday' } },
+  { id: 'wt6', text: 'Send Rylan the supplier contract notes', status: 'open', createdOnDay: wgKey(wgDateAt(-9)), dueOnDay: wgKey(wgDateAt(-2)), due: null, source: { day: wgKey(wgDateAt(-9)), hour: 11, quote: 'review the supplier contract by Thursday' } },
   { id: 'wt7', text: 'Reply to Lena about trying the bracelet', status: 'done', createdOnDay: wgKey(wgDateAt(-5)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-5)), hour: 22, quote: 'a unit is yours the week of the 21st' } },
 ];
 function wgTodoById(id) { return WG_TODOS.find(t => t.id === id) || null; }
@@ -4300,6 +4401,12 @@ const WG_CLUSTERS = [
 ];
 function wgOpalTaskById(id) { for (const c of WG_CLUSTERS) { const t = c.opalTasks.find(x => x.id === id); if (t) return { cluster: c, task: t }; } return null; }
 const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." } };
+function wgEstimateMinutesFor(t) {
+  if (t.connector === 'gmail') return 5;
+  if (/×\d/.test(t.deliverableTag || '') || /tier/i.test(t.text) || /moodboard/i.test(t.text)) return 20;
+  return 10;
+}
+WG_CLUSTERS.forEach(c => c.opalTasks.forEach(t => { t.estimatedMinutesSaved = wgEstimateMinutesFor(t); }));
 function wgClustersFor(dayKey) { return WG_CLUSTERS.filter(c => c.day === dayKey); }
 
 const WG_PEOPLE = [
@@ -4534,7 +4641,8 @@ function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = 
 const wgState = { viewMode: 'today', currentDay: null, tab: 'actions',
   convFilter: 'all', currentFolder: null, currentConv: null, aaSize: (state.wgAaSize || 'm'), drag: null, pendingConvFromChat: false,
   calMonth: { year: WG_T0.getFullYear(), month: WG_T0.getMonth() },
-  railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null };
+  railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null,
+  weekAnchor: new Date(WG_T0), weekViewFilter: 'all', weekStatusFilter: null, weekMobileDayIdx: null, weekSavedOpen: false };
 
 function wgOpenTodos() { return WG_TODOS.filter(t => t.status === 'open' && !(t.snoozedUntil && t.snoozedUntil > Date.now())); }
 function wgByDeadline(a, b) { if (a.due && b.due) return new Date(a.due) - new Date(b.due); if (a.due) return -1; if (b.due) return 1; return 0; }
@@ -4667,10 +4775,11 @@ function wgNavigateCalMonth(dir) {
   let { year, month } = wgState.calMonth; month += dir; if (month < 0) { month = 11; year--; } else if (month > 11) { month = 0; year++; }
   wgState.calMonth = { year, month }; wgRenderCalendarInto($('#wgGrid'));
 }
-function wgViewPanes() { return { today: $('#wgToday'), calendar: $('#wgGrid'), conversations: $('#wgConvLayout') }; }
+function wgViewPanes() { return { today: $('#wgToday'), calendar: $('#wgGrid'), conversations: $('#wgConvLayout'), weekly: $('#wgWeekly') }; }
 function wgRenderModeContent(mode) {
   if (mode === 'today') wgRenderToday();
   else if (mode === 'calendar') wgRenderCalendarInto($('#wgGrid'));
+  else if (mode === 'weekly') wgRenderWeekly();
   else wgRenderConvGrid();
 }
 function wgRenderGrid() { wgRenderModeContent(wgState.viewMode); }
@@ -4681,6 +4790,7 @@ function wgSwitchViewMode(newMode) {
   document.querySelectorAll('#wgFilters button').forEach(b => b.classList.toggle('on', b.dataset.wgmode === newMode));
   $('#wgConvFilters').hidden = newMode !== 'conversations';
   $('#wgCalNav').hidden = newMode !== 'calendar';
+  $('#wgWeekNav').hidden = newMode !== 'weekly';
   wgRenderModeContent(newMode);
   if (newMode === 'today') wgStartTodayFeed(); else wgStopTodayFeed();
   const panes = wgViewPanes(), showEl = panes[newMode], hideEl = panes[prevMode];
@@ -4690,6 +4800,238 @@ function wgSwitchViewMode(newMode) {
     showEl.hidden = false;
     showEl.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.22,1,.36,1)' });
   };
+}
+
+/* ---------- widgets: weekly — a triage board over the same task data, seven days at a time ---------- */
+function wgWeekStartsOn() { return state.weekStartsOn === 1 ? 1 : 0; }
+function wgAddDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+function wgWeekStartDate(anchor) {
+  const pref = wgWeekStartsOn(), d = new Date(anchor); d.setHours(0, 0, 0, 0);
+  const diff = (d.getDay() - pref + 7) % 7;
+  return wgAddDays(d, -diff);
+}
+function wgWeekDayKeys() { const start = wgWeekStartDate(wgState.weekAnchor); return Array.from({ length: 7 }, (_, i) => wgKey(wgAddDays(start, i))); }
+function wgIsCurrentWeek() { return wgWeekDayKeys().includes(WG_TODAY_KEY); }
+function wgNavigateWeek(dir) { wgState.weekAnchor = wgAddDays(wgState.weekAnchor, dir * 7); wgState.weekMobileDayIdx = null; wgRenderWeekly(); }
+function wgJumpThisWeek() { wgState.weekAnchor = new Date(WG_T0); wgState.weekMobileDayIdx = null; wgRenderWeekly(); }
+function wgTodoOverdue(t) { return t.status === 'open' && t.dueOnDay && t.dueOnDay < WG_TODAY_KEY; }
+
+function wgWeekOpalTasks(dayKey) { return wgClustersFor(dayKey).flatMap(c => c.opalTasks.filter(t => t.status !== 'moved').map(t => ({ t, c }))); }
+function wgClusterDayForTodo(todoId) {
+  for (const c of WG_CLUSTERS) { if (c.humanTaskId === todoId || (c.movedToHuman || []).includes(todoId)) return c.day; }
+  return null;
+}
+// one column per todo, no duplicates by construction: an explicit due date wins, then the day its cluster actually happened on, then today
+function wgTodoEffectiveDay(t) { return t.dueOnDay || wgClusterDayForTodo(t.id) || WG_TODAY_KEY; }
+function wgWeekHumanTasks(dayKey) { return WG_TODOS.filter(t => wgTodoEffectiveDay(t) === dayKey); }
+function wgWeekAllOpal(dayKeys) { return dayKeys.flatMap(wgWeekOpalTasks); }
+function wgWeekAllHuman(dayKeys) { return dayKeys.flatMap(wgWeekHumanTasks); }
+function wgWeekStats() {
+  const dayKeys = wgWeekDayKeys(), opalAll = wgWeekAllOpal(dayKeys).map(x => x.t), humanAll = wgWeekAllHuman(dayKeys);
+  const doneOpal = opalAll.filter(t => t.status === 'done');
+  return {
+    assigned: opalAll.length + humanAll.length,
+    completed: doneOpal.length + humanAll.filter(t => t.status === 'done').length,
+    opalRemaining: opalAll.filter(t => t.status !== 'done').length,
+    humanRemaining: humanAll.filter(t => t.status !== 'done').length,
+    opalRunning: opalAll.filter(t => t.status === 'running').length,
+    blocked: opalAll.filter(t => t.status === 'blocked').length,
+    overdue: humanAll.filter(wgTodoOverdue).length,
+    minutesSaved: doneOpal.reduce((s, t) => s + (t.estimatedMinutesSaved || 10), 0),
+    doneOpal,
+  };
+}
+function wgWeekFilterOpal(items) {
+  if (!wgState.weekStatusFilter) return items;
+  if (wgState.weekStatusFilter === 'blocked') return items.filter(({ t }) => t.status === 'blocked');
+  if (wgState.weekStatusFilter === 'running') return items.filter(({ t }) => t.status === 'running');
+  return [];
+}
+function wgWeekFilterHuman(items) {
+  if (!wgState.weekStatusFilter) return items;
+  if (wgState.weekStatusFilter === 'overdue') return items.filter(wgTodoOverdue);
+  return [];
+}
+
+function wgWeekKPIHTML(stats) {
+  return `<div class="wg-week-kpi"><span class="l">Assigned this week</span><b>${stats.assigned}</b></div>
+    <div class="wg-week-kpi"><span class="l">Completed this week</span><b>${stats.completed}</b></div>
+    <div class="wg-week-kpi"><span class="l">Opal — remaining</span><b>${stats.opalRemaining}</b></div>
+    <div class="wg-week-kpi"><span class="l">You — remaining</span><b>${stats.humanRemaining}</b></div>
+    <div class="wg-week-kpi"><span class="l">Opal — working now</span><b>${stats.opalRunning}</b></div>
+    <button type="button" class="wg-week-kpi tap" id="wgWeekSavedTile"><span class="l">Time saved this week</span><b>~${fmtMin(stats.minutesSaved).toUpperCase()} <small>saved · estimated</small></b></button>`;
+}
+function wgWeekSavedBreakdownHTML(stats) {
+  if (!stats.doneOpal.length) return `<p class="wg-week-nothing">Nothing completed yet this week.</p>`;
+  return `<div class="wg-week-saved-head">One line per finished task, so the number's never a bare claim.</div>` +
+    stats.doneOpal.map(t => `<div class="wg-week-saved-row"><span>${esc(t.text)}</span><b>${t.estimatedMinutesSaved || 10}m</b></div>`).join('');
+}
+function wgToggleWeekSaved() {
+  wgState.weekSavedOpen = !wgState.weekSavedOpen;
+  const panel = $('#wgWeekSavedPanel'); panel.hidden = !wgState.weekSavedOpen;
+  if (wgState.weekSavedOpen) panel.innerHTML = wgWeekSavedBreakdownHTML(wgWeekStats());
+  $('#wgWeekSavedTile').classList.toggle('on', wgState.weekSavedOpen);
+}
+function wgWeekFilterBarHTML(stats) {
+  const vm = wgState.weekViewFilter, sf = wgState.weekStatusFilter;
+  return `<div class="wg-week-viewmode">
+      <button type="button" class="${vm === 'all' ? 'on' : ''}" data-weekview="all">All</button>
+      <button type="button" class="${vm === 'opal' ? 'on' : ''}" data-weekview="opal">Opal's only</button>
+      <button type="button" class="${vm === 'mine' ? 'on' : ''}" data-weekview="mine">Mine only</button>
+    </div>
+    <div class="wg-week-statuspills">
+      <button type="button" class="${sf === 'blocked' ? 'on' : ''}" data-weekstatus="blocked">Blocked <b>${stats.blocked}</b></button>
+      <button type="button" class="${sf === 'running' ? 'on' : ''}" data-weekstatus="running">Running <b>${stats.opalRunning}</b></button>
+      <button type="button" class="${sf === 'overdue' ? 'on' : ''}" data-weekstatus="overdue">Overdue <b>${stats.overdue}</b></button>
+    </div>`;
+}
+function wgSetWeekView(v) { wgState.weekViewFilter = v; wgRenderWeekly(); }
+function wgSetWeekStatus(f) { wgState.weekStatusFilter = wgState.weekStatusFilter === f ? null : f; wgRenderWeekly(); }
+
+function wgWeekOpalCardHTML(t, c) {
+  let right;
+  if (t.status === 'running') right = `<span class="wg-week-spin"></span>`;
+  else if (t.status === 'done') right = `<span class="wg-week-done" data-weekopen="${t.id}">${wgCheckSvg}</span>`;
+  else if (t.status === 'error') right = `<button type="button" class="wg-week-err" data-weekretry="${t.id}" aria-label="Couldn't finish, tap to retry">${wgWarnSvg}</button>`;
+  else if (t.status === 'blocked') right = `<span class="wg-week-blocked" title="${esc(t.errorReason || 'Waiting on you')}">${wgLockSvg}</span>`;
+  else right = `<button type="button" class="wg-week-go" data-weekgo="${t.id}">GO</button><button type="button" class="wg-week-skip" data-weekskip="${t.id}" aria-label="Skip">✕</button>`;
+  return `<div class="wg-week-card opal wg-wst-${t.status}" data-weekrow="${t.id}"><span class="wg-week-card-title" data-weekjump="${c.id}" data-weekjumpday="${c.day}">${esc(t.text)}</span>${right}</div>`;
+}
+function wgWeekHumanCardHTML(t) {
+  const overdue = wgTodoOverdue(t), done = t.status === 'done';
+  return `<div class="wg-week-card you${done ? ' done' : ''}${overdue ? ' overdue' : ''}" data-weektodo="${t.id}">
+    <button type="button" class="wg-check" data-weekcheck="${t.id}" aria-label="Mark ${esc(t.text)} done">${wgCheckSvg}</button>
+    <span class="wg-week-card-title">${esc(t.text)}</span>
+    ${overdue ? `<span class="wg-week-overdue-chip">Overdue</span>` : ''}
+    <button type="button" class="wg-week-cardmenu" data-weekcardmenu="${t.id}" aria-label="More options">&#8230;</button>
+  </div>`;
+}
+function wgWeekDayColumnHTML(dayKey) {
+  const d = new Date(dayKey + 'T00:00:00'), isToday = dayKey === WG_TODAY_KEY;
+  const allOpal = wgWeekOpalTasks(dayKey), allHuman = wgWeekHumanTasks(dayKey);
+  const total = allOpal.length + allHuman.length, doneN = allOpal.filter(({ t }) => t.status === 'done').length + allHuman.filter(t => t.status === 'done').length;
+  const showOpal = wgState.weekViewFilter !== 'mine', showHuman = wgState.weekViewFilter !== 'opal';
+  const opalItems = showOpal ? wgWeekFilterOpal(allOpal) : [];
+  const humanItems = showHuman ? wgWeekFilterHuman(allHuman) : [];
+  return `<div class="wg-week-col${isToday ? ' today' : ''}" data-weekcol="${dayKey}">
+    <div class="wg-week-col-head"><div><b>${esc(TITLE(DAYS[d.getDay()]))}</b> <span>${d.getDate()}</span></div><span class="wg-week-col-frac">${doneN}/${total} done</span></div>
+    <div class="wg-week-col-body">
+      ${showOpal ? `<div class="wg-week-sec-label">Opal</div>${opalItems.length ? opalItems.map(({ t, c }) => wgWeekOpalCardHTML(t, c)).join('') : '<p class="wg-week-nothing">Nothing here.</p>'}` : ''}
+      ${showOpal && showHuman ? '<div class="wg-week-hr"></div>' : ''}
+      ${showHuman ? `<div class="wg-week-sec-label">You</div><div class="wg-week-you-list">${humanItems.length ? humanItems.map(wgWeekHumanCardHTML).join('') : '<p class="wg-week-nothing">Nothing here.</p>'}</div><button type="button" class="wg-week-addtask" data-weekaddtask="${dayKey}">+ Add task</button>` : ''}
+    </div>
+  </div>`;
+}
+function wgWeekDayLabel(dayKey) { const d = new Date(dayKey + 'T00:00:00'); return `${TITLE(DAYS[d.getDay()])} ${d.getDate()}`; }
+function wgRenderWeekNav(dayKeys) {
+  const first = new Date(dayKeys[0] + 'T00:00:00'), last = new Date(dayKeys[6] + 'T00:00:00'), sameMonth = first.getMonth() === last.getMonth();
+  $('#wgWeekRangeLabel').textContent = sameMonth
+    ? `${TITLE(MONTHS[first.getMonth()])} ${first.getDate()} – ${last.getDate()}`
+    : `${TITLE(MONTHS[first.getMonth()])} ${first.getDate()} – ${TITLE(MONTHS[last.getMonth()])} ${last.getDate()}`;
+  $('#wgWeekJumpThis').hidden = wgIsCurrentWeek();
+}
+function wgWeekMobileIdx(dayKeys) {
+  if (wgState.weekMobileDayIdx != null) return clamp(wgState.weekMobileDayIdx, 0, 6);
+  const ti = dayKeys.indexOf(WG_TODAY_KEY); return ti >= 0 ? ti : 0;
+}
+function wgSetWeekMobileDay(idx, dayKeys) { wgState.weekMobileDayIdx = clamp(idx, 0, 6); wgApplyWeekMobileVisibility(dayKeys || wgWeekDayKeys()); }
+function wgApplyWeekMobileVisibility(dayKeys) {
+  const idx = wgWeekMobileIdx(dayKeys), activeKey = dayKeys[idx];
+  document.querySelectorAll('#wgWeekCols .wg-week-col').forEach(col => col.classList.toggle('mobile-active', col.dataset.weekcol === activeKey));
+  $('#wgWeekMobileLabel').textContent = wgWeekDayLabel(activeKey);
+}
+function wgRenderWeekly() {
+  const dayKeys = wgWeekDayKeys(), stats = wgWeekStats();
+  $('#wgWeekKPI').innerHTML = wgWeekKPIHTML(stats);
+  $('#wgWeekFilterBar').innerHTML = wgWeekFilterBarHTML(stats);
+  $('#wgWeekCols').innerHTML = dayKeys.map(wgWeekDayColumnHTML).join('');
+  if (wgState.weekSavedOpen) { $('#wgWeekSavedPanel').hidden = false; $('#wgWeekSavedPanel').innerHTML = wgWeekSavedBreakdownHTML(stats); $('#wgWeekSavedTile').classList.add('on'); }
+  wgRenderWeekNav(dayKeys);
+  wgApplyWeekMobileVisibility(dayKeys);
+}
+function wgMoveTaskToDay(todoId, dayKey) {
+  const t = wgTodoById(todoId); if (!t) return; t.dueOnDay = dayKey;
+  wgRenderWeekly(); wgRenderRail();
+  wgShowToast(`Moved to ${wgWeekDayLabel(dayKey)}`);
+}
+function wgBounceWeekCol(dayKey) {
+  const col = document.querySelector(`.wg-week-col[data-weekcol="${dayKey}"]`);
+  if (col && !REDUCED) { col.classList.add('bounce'); setTimeout(() => col.classList.remove('bounce'), 320); }
+}
+function wgCloseWeekMoveMenu() { const el = document.getElementById('wgWeekMovePop'); if (el) el.remove(); }
+function wgOpenWeekMoveMenu(todoId, anchorEl) {
+  wgCloseWeekMoveMenu(); wgCloseCardMenu(); wgCloseMoveMenu();
+  const t = wgTodoById(todoId); if (!t) return; const r = anchorEl.getBoundingClientRect(), dayKeys = wgWeekDayKeys();
+  const items = dayKeys.map(k => { const d = new Date(k + 'T00:00:00'); return `<button type="button" data-weekmoveto="${k}">${t.dueOnDay === k ? '&check; ' : ''}${esc(TITLE(DAYS[d.getDay()]))} ${d.getDate()}</button>`; }).join('');
+  const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'wgWeekMovePop';
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, dayKeys.length * 38 + 12) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 9;
+  div.innerHTML = items; document.body.appendChild(div);
+  div.addEventListener('click', e => { const b = e.target.closest('[data-weekmoveto]'); if (!b) return; wgMoveTaskToDay(todoId, b.dataset.weekmoveto); wgBounceWeekCol(b.dataset.weekmoveto); wgCloseWeekMoveMenu(); });
+}
+/* drag a You card straight onto another day's column — same lift/lag/tilt/drop as filing a conversation into a folder */
+function wgWeekDragStart(e, card) {
+  if (e.target.closest('[data-weekcheck],[data-weekcardmenu]')) return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  const todoId = card.dataset.weektodo, startX = e.clientX, startY = e.clientY, rect = card.getBoundingClientRect();
+  let dragging = false, clone = null, raf = null, hoverCol = null, lastX = startX, tilt = 0;
+  const pos = { x: rect.left, y: rect.top }, target = { x: rect.left, y: rect.top };
+  function tick() {
+    if (!dragging) return;
+    const k = REDUCED ? 1 : 0.35;
+    pos.x += (target.x - pos.x) * k; pos.y += (target.y - pos.y) * k;
+    clone.style.transform = `translate(${pos.x - rect.left}px,${pos.y - rect.top}px) scale(1.05) rotate(${REDUCED ? 0 : tilt}deg)`;
+    const cx = pos.x + rect.width / 2, cy = pos.y + rect.height * .4, atPoint = document.elementFromPoint(clamp(cx, 0, innerWidth - 1), clamp(cy, 0, innerHeight - 1));
+    const col = atPoint && atPoint.closest && atPoint.closest('[data-weekcol]');
+    if (col !== hoverCol) { if (hoverCol) hoverCol.classList.remove('drop-hover'); if (col) col.classList.add('drop-hover'); hoverCol = col; }
+    raf = requestAnimationFrame(tick);
+  }
+  function onMove(ev) {
+    const dx = ev.clientX - startX, dy = ev.clientY - startY;
+    if (!dragging) {
+      if (Math.hypot(dx, dy) < 8) return;
+      dragging = true;
+      clone = card.cloneNode(true); clone.removeAttribute('data-weektodo'); clone.classList.add('wg-dragging');
+      card.classList.add('wg-ghost');
+      clone.style.width = rect.width + 'px'; clone.style.left = rect.left + 'px'; clone.style.top = rect.top + 'px';
+      document.body.appendChild(clone); tick();
+    }
+    target.x = ev.clientX - rect.width / 2; target.y = ev.clientY - rect.height * .4;
+    const vx = ev.clientX - lastX; lastX = ev.clientX; tilt = clamp(vx * .6, -4, 4);
+  }
+  let ended = false;
+  function onUp() {
+    document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp);
+    document.removeEventListener('pointercancel', onUp); document.removeEventListener('mouseup', onUp);
+    if (ended) return; ended = true;
+    if (!dragging) return; cancelAnimationFrame(raf);
+    if (hoverCol) hoverCol.classList.remove('drop-hover');
+    if (hoverCol) {
+      const fr = hoverCol.getBoundingClientRect(), toX = fr.left + fr.width / 2 - rect.left - rect.width / 2, toY = fr.top + 40 - rect.top;
+      const dayKey = hoverCol.dataset.weekcol;
+      if (REDUCED) { clone.remove(); wgMoveTaskToDay(todoId, dayKey); wgBounceWeekCol(dayKey); }
+      else clone.animate([{ transform: clone.style.transform }, { transform: `translate(${toX}px,${toY}px) scale(.4)`, opacity: .3 }], { duration: 300, easing: 'cubic-bezier(.4,0,1,1)' }).onfinish = () => { clone.remove(); wgMoveTaskToDay(todoId, dayKey); wgBounceWeekCol(dayKey); };
+    } else if (REDUCED) { clone.remove(); card.classList.remove('wg-ghost'); }
+    else {
+      let sx = pos.x, sy = pos.y;
+      (function spring() {
+        sx += (rect.left - sx) * .15; sy += (rect.top - sy) * .15;
+        clone.style.transform = `translate(${sx - rect.left}px,${sy - rect.top}px) scale(1.05)`;
+        if (Math.abs(sx - rect.left) > .5 || Math.abs(sy - rect.top) > .5) requestAnimationFrame(spring);
+        else { clone.remove(); card.classList.remove('wg-ghost'); }
+      })();
+    }
+    wgState.drag = null;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp, { once: true });
+  document.addEventListener('pointercancel', onUp, { once: true });
+  document.addEventListener('mouseup', onUp, { once: true });
+}
+function wgAddWeekTask(dayKey) {
+  const text = prompt("What's the task?"); if (!text || !text.trim()) return;
+  const id = 'wt-u' + Date.now().toString(36);
+  WG_TODOS.push({ id, text: text.trim(), status: 'open', createdOnDay: WG_TODAY_KEY, dueOnDay: dayKey, due: null, source: { day: WG_TODAY_KEY, hour: null, quote: null } });
+  wgRenderWeekly(); wgRenderRail();
 }
 
 /* ---------- widgets: conversations rendering ---------- */
@@ -5128,7 +5470,7 @@ function wgAcceptTask(taskId) {
   if (task.status !== 'proposed' && task.status !== 'error' && task.status !== 'skipped') return;
   if (task.dependsOn && !wgTodoDone(task.dependsOn)) return;
   task.status = 'running'; task.runStatus = wgRunStatusFor(task); wgSaveTaskState(taskId);
-  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgUpdateRunningBadge(); wgRenderRail(); wgRenderTodayActions();
+  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgUpdateRunningBadge(); wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
   setTimeout(() => wgResolveTask(taskId), 1500 + Math.random() * 1300);
 }
 function wgResolveTask(taskId) {
@@ -5149,17 +5491,17 @@ function wgResolveTask(taskId) {
     if (task.status === 'done') { wgState.railPinned[taskId] = 'done'; setTimeout(() => { delete wgState.railPinned[taskId]; wgRenderRail(); }, REDUCED ? 0 : 2200); }
     else delete wgState.railPinned[taskId];
   }
-  wgRenderRail();
+  wgRenderRail(); wgRenderWeekly();
   if (autoMoved) { wgMoveToHuman(taskId); return; }
   wgRenderTodayActions();
 }
 function wgSkipTask(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found; if (task.status !== 'proposed') return;
-  task.status = 'skipped'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail(); wgRenderTodayActions();
+  task.status = 'skipped'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
 }
 function wgUndoSkip(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found; if (task.status !== 'skipped') return;
-  task.status = 'proposed'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderTodayActions();
+  task.status = 'proposed'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderTodayActions(); wgRenderWeekly();
 }
 function wgRetryTask(taskId) { wgAcceptTask(taskId); }
 function wgMoveToHuman(taskId) {
@@ -5169,7 +5511,7 @@ function wgMoveToHuman(taskId) {
   cluster.movedToHuman = cluster.movedToHuman || []; if (!cluster.movedToHuman.includes(newId)) cluster.movedToHuman.push(newId);
   task.status = 'moved'; wgSaveTaskState(taskId);
   const st = wgS(); st.moved = st.moved || {}; st.moved[taskId] = newId; save();
-  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail(); wgRenderTodayActions();
+  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
 }
 function wgAcceptAllCluster(clusterId) {
   const c = WG_CLUSTERS.find(x => x.id === clusterId); if (!c) return;
@@ -5239,6 +5581,14 @@ function wgCheckTask(id, btnEl) {
     setTimeout(() => wgRenderTodayActions(), REDUCED ? 0 : 450);
     return;
   }
+  const weekRow = btnEl.closest('.wg-week-card');
+  if (weekRow) {
+    weekRow.classList.add('done');
+    wgShowToast(`✓ ${todo.text}`, { actionLabel: 'Undo', duration: 6000, onAction: () => wgUndoCheckTask(id) });
+    wgRenderRail();
+    setTimeout(() => wgRenderWeekly(), REDUCED ? 0 : 450);
+    return;
+  }
   const card = btnEl.closest('.wg-tcard'); if (card) card.classList.add('done');
   const newlyUnlocked = [];
   WG_CLUSTERS.forEach(c => c.opalTasks.forEach(t => { if (t.dependsOn === id && t.status === 'proposed') newlyUnlocked.push(t.id); }));
@@ -5246,12 +5596,12 @@ function wgCheckTask(id, btnEl) {
     wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay);
     newlyUnlocked.forEach(tid => { const el = document.querySelector(`[data-otask="${tid}"]`); if (el && !REDUCED) { el.classList.add('wg-unlock-flourish'); const ring = el.querySelector('[data-ring]'); if (ring) ring.classList.add('go'); setTimeout(() => el.classList.remove('wg-unlock-flourish'), 600); } });
   }
-  wgRenderRail(); wgRenderTodayActions();
+  wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
 }
 function wgUndoCheckTask(id) {
   const todo = wgTodoById(id); if (!todo) return;
   todo.status = 'open'; delete wgS().done[id]; save();
-  wgRenderRail(); wgRenderTodayActions();
+  wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
   if (wgState.currentDay) { wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); }
 }
 
@@ -5509,6 +5859,7 @@ function wgInit() {
     if (!e.target.closest('#wgConvMenuBtn') && !e.target.closest('#wgConvMenu')) $('#wgConvMenu').hidden = true;
     if (!e.target.closest('#wgMovePop') && !e.target.closest('[data-cardact="move"]') && !e.target.closest('[data-convact="movefolder"]')) wgCloseMoveMenu();
     if (!e.target.closest('#wgCardMenuPop') && !e.target.closest('[data-cardmenu]')) wgCloseCardMenu();
+    if (!e.target.closest('#wgWeekMovePop') && !e.target.closest('[data-weekcardmenu]')) wgCloseWeekMoveMenu();
     if (!e.target.closest('.wg-conv-new')) document.querySelectorAll('.wg-conv-new.open').forEach(x => x.classList.remove('open'));
   });
   addEventListener('keydown', e => {
@@ -5587,6 +5938,29 @@ function wgInit() {
   /* calendar: month navigation */
   $('#wgCalPrev').addEventListener('click', () => wgNavigateCalMonth(-1));
   $('#wgCalNext').addEventListener('click', () => wgNavigateCalMonth(1));
+
+  /* weekly: nav, KPI/filters, columns, drag-to-reschedule */
+  $('#wgWeekPrev').addEventListener('click', () => wgNavigateWeek(-1));
+  $('#wgWeekNext').addEventListener('click', () => wgNavigateWeek(1));
+  $('#wgWeekJumpThis').addEventListener('click', wgJumpThisWeek);
+  $('#wgWeekMobilePrev').addEventListener('click', () => wgSetWeekMobileDay(wgWeekMobileIdx(wgWeekDayKeys()) - 1));
+  $('#wgWeekMobileNext').addEventListener('click', () => wgSetWeekMobileDay(wgWeekMobileIdx(wgWeekDayKeys()) + 1));
+  $('#wgWeekKPI').addEventListener('click', e => { if (e.target.closest('#wgWeekSavedTile')) wgToggleWeekSaved(); });
+  $('#wgWeekFilterBar').addEventListener('click', e => {
+    const v = e.target.closest('[data-weekview]'); if (v) return wgSetWeekView(v.dataset.weekview);
+    const s = e.target.closest('[data-weekstatus]'); if (s) return wgSetWeekStatus(s.dataset.weekstatus);
+  });
+  $('#wgWeekCols').addEventListener('click', e => {
+    const go = e.target.closest('[data-weekgo]'); if (go) return wgAcceptTask(go.dataset.weekgo);
+    const skip = e.target.closest('[data-weekskip]'); if (skip) return wgSkipTask(skip.dataset.weekskip);
+    const retry = e.target.closest('[data-weekretry]'); if (retry) return wgRetryTask(retry.dataset.weekretry);
+    const open = e.target.closest('[data-weekopen]'); if (open) return wgOpenDebrief(open.dataset.weekopen);
+    const check = e.target.closest('[data-weekcheck]'); if (check) return wgCheckTask(check.dataset.weekcheck, check);
+    const add = e.target.closest('[data-weekaddtask]'); if (add) return wgAddWeekTask(add.dataset.weekaddtask);
+    const menu = e.target.closest('[data-weekcardmenu]'); if (menu) { e.stopPropagation(); return wgOpenWeekMoveMenu(menu.closest('[data-weektodo]').dataset.weektodo, menu); }
+    const jump = e.target.closest('[data-weekjump]'); if (jump) return wgRailJumpToTask(jump.dataset.weekjump, jump.dataset.weekjumpday);
+  });
+  $('#wgWeekCols').addEventListener('pointerdown', e => { const card = e.target.closest('.wg-week-card.you'); if (card) wgWeekDragStart(e, card); });
 
   /* the command rail */
   $('#wgRailCollapse').addEventListener('click', wgToggleRailCollapse);
