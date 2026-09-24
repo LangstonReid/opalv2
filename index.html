@@ -718,8 +718,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-cal-cell.empty{background:transparent;border-color:transparent;visibility:hidden}
 .wg-cal-cell .n{font:500 19px/1 var(--sans);color:var(--wg-ink)}
 .wg-cal-cell.today .n{font-weight:700;color:var(--wg-ink)}
-.wg-cal-cell .badges{display:flex;gap:3px;min-height:11px}
-.wg-cal-cell .badges b{width:11px;height:11px;border-radius:3px;background:var(--c,var(--wg-accent))}
+.wg-cal-cell .notif{width:6px;height:6px;border-radius:50%;background:var(--wg-spore)}
+.wg-cal-cell.today .notif{background:var(--wg-ink)}
 .wg-cal-cell .dot{width:5px;height:5px;border-radius:50%;background:var(--wg-ink-28)}
 .wg-cal-cell.today .dot{background:var(--wg-ink-42)}
 .wg-cal-cell.inactive{cursor:default;opacity:.4}
@@ -5227,7 +5227,7 @@ function wgRenderCalendarInto(grid) {
   for (let day = 1; day <= daysInMonth; day++) {
     const d = new Date(year, month, day), key = wgKey(d), obj = wgDayByKey(key), isToday = d.getTime() === now.getTime(), openable = wgDayOpenable(key);
     const hasData = !!(obj && (obj.actionCount || obj.connectorsTouched.length));
-    const indicator = hasData ? `<span class="badges">${obj.connectorsTouched.slice(0, 3).map(wgBadge).join('')}</span>` : `<span class="dot"></span>`;
+    const indicator = hasData ? `<span class="notif"></span>` : `<span class="dot"></span>`;
     const label = openable ? `${esc(TITLE(DAYS[d.getDay()]))} ${day}${isToday ? ', today' : ''}, ${obj.actionCount} actions` : `${esc(TITLE(DAYS[d.getDay()]))} ${day}, nothing recorded`;
     html += `<div class="wg-cal-cell${hasData ? ' has' : ''}${isToday ? ' today' : ''}${openable ? '' : ' inactive'}" data-flip="${key}" data-day="${key}" role="button" tabindex="0" aria-label="${label}"><span class="n">${day}</span>${indicator}</div>`;
   }
@@ -6244,7 +6244,12 @@ function wgDayTxJumpNextFlag() {
 /* today: the default landing view — today's action items, talking points, conversations, and a live-updating transcript feed */
 function wgTodayOpalItems() {
   const items = [];
-  wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved') items.push({ t, c }); }));
+  wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved' && t.status !== 'done') items.push({ t, c }); }));
+  return items;
+}
+function wgTodayOpalDoneItems() {
+  const items = [];
+  wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status === 'done') items.push({ t, c }); }));
   return items;
 }
 function wgTodayYouItems() {
@@ -6268,17 +6273,19 @@ function wgTodayYouRowHTML(todo) {
   return `<div class="wg-today-row you${todo.status === 'done' ? ' done' : ''}" data-todo="${todo.id}"><button type="button" class="wg-check" data-check="${todo.id}" aria-label="Mark ${esc(todo.text)} done">${wgCheckSvg}</button><p>${esc(todo.text)}</p></div>`;
 }
 function wgTodayActionsHTML() {
-  const opalItems = wgTodayOpalItems(), youItems = wgTodayYouItems();
+  const opalItems = wgTodayOpalItems(), youItems = wgTodayYouItems(), opalDoneItems = wgTodayOpalDoneItems();
   let html = `<div class="wg-today-subhead">Opal's action items</div>`;
   html += opalItems.length ? `<div class="wg-today-list">${opalItems.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing for Opal right now.</p>`;
   html += `<div class="wg-today-subhead">Your action items</div>`;
   html += youItems.length ? `<div class="wg-today-list">${youItems.map(wgTodayYouRowHTML).join('')}</div>` : `<p class="wg-today-empty">Nothing for you right now.</p>`;
+  html += `<div class="wg-today-subhead">Opal's completed</div>`;
+  html += opalDoneItems.length ? `<div class="wg-today-list">${opalDoneItems.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing finished yet today.</p>`;
   return html;
 }
 function wgTodayTalkingHTML() {
   const points = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.talkingPoints);
   if (!points.length) return `<p class="wg-today-empty">Nothing yet.</p>`;
-  return `<div class="wg-today-tplist">${points.map(p => `<p class="wg-today-tp">${esc(p)}</p>`).join('')}</div>`;
+  return `<div class="wg-today-tplist">${points.map(p => `<p class="wg-today-tp">${esc(p.text)}</p>`).join('')}</div>`;
 }
 function wgTodayConvsHTML() {
   const list = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
