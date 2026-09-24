@@ -30,8 +30,27 @@
   /* real, measured height of the fixed top chrome (logo/date row + pills nav) —
      content padding-top is always calc(--nav-height + --space-2), never a guess */
   --nav-height:67px;
+
+  /* glass material system — floating, glance-only UI only; never a reading surface */
+  --glass-blur:20px; --glass-blur-heavy:32px; --glass-saturate:140%;
+  --glass-dark-tint:rgba(11,18,12,.55); --glass-dark-border:rgba(236,235,228,.14); --glass-dark-highlight:rgba(236,235,228,.06);
+  --glass-light-tint:rgba(255,255,255,.6); --glass-light-border:rgba(26,26,22,.10); --glass-light-highlight:rgba(255,255,255,.5);
+  --glass-shadow:0 20px 40px rgba(0,0,0,.22);
 }
 @media (max-width:640px){:root{--nav-height:97px}} /* pills wraps to two rows below 640px */
+.glass-dark{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+.glass-light{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
+.glass-nested{--glass-blur:14px}
+.glass-dark.glass-nested{background:rgba(11,18,12,.68)}
+.glass-light.glass-nested{background:rgba(255,255,255,.74)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass-dark{backdrop-filter:none;background:rgba(11,18,12,.92)}
+  .glass-light{backdrop-filter:none;background:rgba(255,255,255,.92)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .glass-dark{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}
+  .glass-light{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--ground-900);color:var(--bone);font:400 14px/1.5 var(--sans);overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -85,7 +104,9 @@ body.paused .chip{color:var(--bone-35)}
 .ruler span:last-child{transform:translateX(-100%)}
 #kept{position:absolute;bottom:-1px;left:0;width:1px;height:14px;background:var(--spore);transition:left 1.4s var(--ease)}
 #kept b{position:absolute;top:18px;left:0;transform:translateX(-2px);white-space:nowrap;font:400 9px/1 var(--mono);letter-spacing:.14em;color:var(--spore)}
-#toast{position:absolute;top:52px;left:50%;transform:translate(-50%,-8px);padding:9px 16px;border-radius:999px;background:rgba(11,18,12,.72);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--bone);opacity:0;pointer-events:none!important;transition:opacity .5s var(--ease),transform .6s var(--ease);white-space:nowrap}
+#toast{position:absolute;top:52px;left:50%;transform:translate(-50%,-8px);padding:9px 16px;border-radius:999px;background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight);backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));color:var(--bone);opacity:0;pointer-events:none!important;transition:opacity .5s var(--ease),transform .6s var(--ease);white-space:nowrap}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#toast{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){#toast{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 #toast i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--spore);margin-right:10px;vertical-align:1px}
 .legend .hud{color:var(--bone-60)}
@@ -96,8 +117,11 @@ body.paused .chip{color:var(--bone-35)}
 .pills button.on::after{content:'';position:absolute;left:14px;right:14px;bottom:2px;height:2px;border-radius:1px;background:var(--spore)}
 
 /* ---------- coordinate readout + crown: the camera's own instruments ---------- */
-.coord{position:absolute;top:74px;right:32px;text-align:right;opacity:0;transform:translateY(-4px);transition:opacity .5s var(--ease),transform .5s var(--ease);white-space:nowrap}
-.coord.show{opacity:.42;transform:none}
+.coord{position:absolute;top:74px;right:32px;text-align:right;color:var(--bone);opacity:0;transform:translateY(-4px);transition:opacity .5s var(--ease),transform .5s var(--ease);white-space:nowrap;padding:7px 12px;border-radius:12px}
+.coord{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+.coord.show{opacity:1;transform:none}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.coord{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){.coord{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 .crown{position:absolute;right:24px;bottom:24px;display:flex;flex-direction:column;align-items:center;gap:8px;touch-action:none}
 .crown-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--bone-42,rgba(236,235,228,.42));opacity:.42;transition:opacity .5s var(--ease)}
 .crown.active .crown-label{opacity:.7}
@@ -609,7 +633,8 @@ body.mode-widgets #chrome::before,body.mode-widgets #chrome::after,body.mode-not
 body.mode-widgets .chip,body.mode-notes .chip{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-widgets .chip .track,body.mode-notes .chip .track{border-color:rgba(31,36,29,.26)}
 body.mode-widgets.paused .chip{color:rgba(31,36,29,.34)}
-body.mode-widgets #toast{background:rgba(255,255,255,.9);border-color:rgba(31,36,29,.10);color:var(--wg-ink,#1f241d)}
+body.mode-widgets #toast{background:var(--glass-light-tint);border-color:var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight);color:var(--wg-ink,#1f241d)}
+@media (prefers-reduced-transparency:reduce){body.mode-widgets #toast{background:rgba(255,255,255,.94)}}
 body.mode-widgets .pills{background:rgba(255,255,255,.72);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
 body.mode-widgets .pills button{color:rgba(31,36,29,.4)}
 body.mode-widgets .pills button:hover{color:var(--wg-ink,#1f241d);background:rgba(31,36,29,.06)}
@@ -933,7 +958,10 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-debrief-close2:hover{color:var(--wg-ink)}
 
 /* toast for a task finishing while you're elsewhere */
-.wg-toast{position:fixed;right:22px;bottom:22px;z-index:var(--z-toast);display:flex;align-items:center;gap:8px;background:var(--wg-ink);color:#fff;font:400 11px/1.6 var(--mono);letter-spacing:.04em;padding:11px 16px;border-radius:999px;box-shadow:var(--wg-shadow-lg);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.wg-toast{position:fixed;right:22px;bottom:22px;z-index:var(--z-toast);display:flex;align-items:center;gap:8px;color:#fff;font:400 11px/1.6 var(--mono);letter-spacing:.04em;padding:11px 16px;border-radius:999px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.wg-toast{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-toast{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-toast{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 .wg-toast.show{opacity:1;transform:none}
 
 @media (max-width:900px){
@@ -999,7 +1027,10 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-span{text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--wg-accent);text-underline-offset:3px;text-decoration-thickness:1.4px;cursor:pointer;color:var(--wg-accent-ink);font-weight:500}
 .wg-span:hover,.wg-span:focus-visible{background:var(--wg-yellow);border-radius:3px}
 
-.wg-pop{position:fixed;z-index:var(--z-tooltip);width:260px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:14px;padding:12px 14px;box-shadow:var(--wg-shadow-lg);opacity:0;transform:translateY(4px) scale(.98);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.wg-pop{position:fixed;z-index:var(--z-tooltip);width:260px;border-radius:12px;padding:12px 14px;opacity:0;transform:translateY(4px) scale(.98);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease),backdrop-filter .2s var(--ease)}
+.wg-pop{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-pop{backdrop-filter:none;background:rgba(255,255,255,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-pop{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}}
 .wg-pop.show{opacity:1;transform:none;pointer-events:auto}
 .wg-pop-row{display:flex;align-items:center;gap:9px;padding:6px 0}
 .wg-pop-row b{width:22px;height:22px;flex:none;border-radius:7px;display:grid;place-items:center;background:var(--c,var(--wg-accent))}
@@ -1009,7 +1040,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-pop-conf{display:flex;align-items:center;gap:8px;margin:6px 0;padding:8px 0;border-top:1px solid var(--wg-border);border-bottom:1px solid var(--wg-border)}
 .wg-pop-conf .track{flex:1;height:3px;border-radius:2px;background:var(--wg-surface-3);position:relative}
 .wg-pop-conf .fill{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--wg-accent)}
-.wg-pop-conf small{font:400 9px/1.6 var(--mono);color:var(--wg-ink-42)}
+.wg-pop-conf small{font:500 9px/1.6 var(--mono);color:var(--wg-ink)}
 .wg-pop-jump{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:4px;padding:8px 2px 2px;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
 
 /* citations: every summary line, decision and talking point can name the exact transcript line it came from */
@@ -1038,15 +1069,17 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 #wgScrim{position:fixed;inset:0;z-index:var(--z-modal);background:rgba(31,36,29,.18);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 #wgScrim.show{opacity:1;pointer-events:auto}
 .wg-person-panel{position:fixed;left:0;top:0;bottom:0;z-index:var(--z-modal);width:min(380px,90vw);
-  background:linear-gradient(195deg,#fbf7ea 0%,rgba(255,255,255,.94) 40%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-right:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);padding:24px 22px;transform:translateX(-104%);transition:transform .4s var(--ease);overflow-y:auto;color:var(--wg-ink)}
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  background:var(--glass-light-tint);border-right:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight);padding:24px 22px;transform:translateX(-104%);transition:transform .4s var(--ease);overflow-y:auto;color:var(--wg-ink)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-person-panel{backdrop-filter:none;background:rgba(255,255,255,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-person-panel{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}}
 .wg-person-panel.show{transform:none}
 .wg-pp-close{float:right;width:28px;height:28px;border-radius:50%;background:var(--wg-surface-3);font:400 17px/28px var(--sans);color:var(--wg-ink-60);text-align:center}
 .wg-pp-av{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 65%,#54713a) center/cover;margin-bottom:16px;box-shadow:var(--wg-shadow-sm)}
 .wg-pp-name{font:400 23px/1.15 var(--sans);color:var(--wg-ink)}
 .wg-pp-title{margin-top:4px;font:400 9px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ember)}
-.wg-pp-sum{margin-top:14px;font-size:13px;line-height:1.6;color:var(--wg-ink-60)}
-.wg-pp-sec{margin-top:20px;font:400 9px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wg-ink-42);border-top:1px solid var(--wg-border);padding-top:14px}
+.wg-pp-sum{margin-top:14px;font-size:13px;font-weight:400;line-height:1.6;color:var(--wg-ink)}
+.wg-pp-sec{margin-top:20px;font:600 9px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wg-ink);border-top:1px solid var(--wg-border);padding-top:14px}
 .wg-pp-cluster{display:block;width:100%;text-align:left;padding:10px 12px;margin-top:8px;font-size:12.5px;font-weight:500;color:var(--wg-ink);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:11px;transition:background .2s}
 .wg-pp-cluster:hover{background:var(--wg-surface-2)}
 .wg-pp-rename{margin-top:10px}
@@ -1109,7 +1142,10 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-menu-wrap{position:relative}
 .wg-menu-btn{width:34px;height:34px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);font-size:16px;line-height:1;color:var(--wg-ink-60);box-shadow:var(--wg-shadow-sm)}
 .wg-menu-btn:hover{color:var(--wg-ink)}
-.wg-conv-menu{position:absolute;right:0;top:calc(100% + 6px);width:180px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:14px;box-shadow:var(--wg-shadow-lg);padding:6px;z-index:var(--z-dropdown)}
+.wg-conv-menu{position:absolute;right:0;top:calc(100% + 6px);width:180px;border-radius:12px;padding:6px;z-index:var(--z-dropdown)}
+.wg-conv-menu{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-conv-menu{backdrop-filter:none;background:rgba(255,255,255,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-conv-menu{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}}
 .wg-conv-menu button{display:block;width:100%;text-align:left;padding:9px 11px;font-size:12.5px;color:var(--wg-ink);border-radius:9px;transition:background .15s}
 .wg-conv-menu button:hover{background:var(--wg-surface-2)}
 .wg-conv-title{font:400 30px/1.15 var(--sans);color:var(--wg-ink);outline:none;border-radius:8px}
@@ -1268,12 +1304,18 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-rail-stripicon:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
 .wg-rail-stripicon b{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--wg-accent-ink);color:#fff;font:400 8.5px/15px var(--mono);text-align:center}
 .wg-rail-stripicon b:empty{display:none}
-.wg-rail-fab{display:none;position:fixed;right:16px;bottom:88px;z-index:var(--z-nav);width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;box-shadow:var(--wg-shadow-lg);align-items:center;justify-content:center}
+.wg-rail-fab{display:none;position:fixed;right:16px;bottom:88px;z-index:var(--z-nav);width:52px;height:52px;border-radius:50%;color:#fff;align-items:center;justify-content:center}
+.wg-rail-fab{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-rail-fab{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-rail-fab{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 .wg-rail-fab b{font:400 12px/1 var(--mono)}
 .wg-rail-fab b:empty::before{content:'0'}
 .wg-rail-drawerscrim{position:fixed;inset:0;z-index:var(--z-nav);background:rgba(31,36,29,.3);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 .wg-rail-drawerscrim.show{opacity:1;pointer-events:auto}
-.wg-rail-snooze{position:fixed;z-index:var(--z-dropdown);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;box-shadow:var(--wg-shadow-lg);padding:6px}
+.wg-rail-snooze{position:fixed;z-index:var(--z-dropdown);border-radius:12px;padding:6px}
+.wg-rail-snooze{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-rail-snooze{backdrop-filter:none;background:rgba(255,255,255,.92)}}
+@media (prefers-reduced-transparency:reduce){.wg-rail-snooze{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}}
 .wg-rail-snooze button{display:block;width:100%;text-align:left;padding:8px 10px;font-size:12px;color:var(--wg-ink);border-radius:8px;white-space:nowrap}
 .wg-rail-snooze button:hover{background:var(--wg-surface-2)}
 .wg-toast-action{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-spore);text-decoration:underline;text-underline-offset:2px}
@@ -1336,7 +1378,8 @@ body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode
 body.mode-chat .chip{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-chat .chip .track{border-color:rgba(31,36,29,.28)}
 body.mode-chat.paused .chip{color:rgba(31,36,29,.34)}
-body.mode-chat #toast{background:rgba(255,255,255,.86);border-color:rgba(31,36,29,.10);color:var(--ink,#1f241d)}
+body.mode-chat #toast{background:var(--glass-light-tint);border-color:var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight);color:var(--ink,#1f241d)}
+@media (prefers-reduced-transparency:reduce){body.mode-chat #toast{background:rgba(255,255,255,.94)}}
 .pills{transition:background .5s var(--ease),border-color .5s var(--ease)}
 body.mode-chat .pills{background:rgba(255,255,255,.6);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
 body.mode-chat .pills button{color:rgba(31,36,29,.42)}
@@ -1690,7 +1733,10 @@ body.mode-notes .nt-rail{display:block}
     var(--cork-200);
   background-size:auto,16px 16px,auto,auto,auto}
 .nt-scrap-canvas{position:relative;left:0;top:0;transform-origin:0 0}
-.nt-scrap-add{position:fixed;right:24px;bottom:24px;z-index:var(--z-nav);width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;font-size:24px;display:grid;place-items:center;box-shadow:var(--wg-shadow-lg);transition:transform .2s var(--ease)}
+.nt-scrap-add{position:fixed;right:24px;bottom:24px;z-index:var(--z-nav);width:52px;height:52px;border-radius:50%;color:#fff;font-size:24px;display:grid;place-items:center;transition:transform .2s var(--ease)}
+.nt-scrap-add{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.nt-scrap-add{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){.nt-scrap-add{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 .nt-scrap-add:hover{transform:scale(1.08)}
 
 /* scrapbook cards — physical skins, each with real paper texture and a torn/taped/stamped edge */
@@ -1902,7 +1948,10 @@ body.sheet-open #welcome{filter:blur(8px) brightness(.62);pointer-events:none}
 body.sheet-open #scrim{opacity:1;pointer-events:auto}
 #sheetWrap{position:fixed;z-index:var(--z-modal);left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100% - 32px));max-height:82vh;display:flex}
 #sheetWrap[hidden]{display:none}
-#sheet{position:relative;width:100%;max-height:82vh;display:flex;flex-direction:column;background:rgba(18,27,19,.92);border:1px solid var(--bone-10);border-radius:24px;overflow:hidden;transform-origin:center center;will-change:transform,opacity;transition:transform .8s var(--ease),opacity .45s var(--ease)}
+#sheet{position:relative;width:100%;max-height:82vh;display:flex;flex-direction:column;border-radius:24px;overflow:hidden;transform-origin:center center;will-change:transform,opacity;transition:transform .8s var(--ease),opacity .45s var(--ease),backdrop-filter .8s var(--ease)}
+#sheet{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-dark-tint);border:1px solid var(--glass-dark-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-dark-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#sheet{backdrop-filter:none;background:rgba(11,18,12,.92)}}
+@media (prefers-reduced-transparency:reduce){#sheet{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,18,12,.94)}}
 #sheet.dragY{transition:none}
 .skin{position:absolute;top:0;left:0;width:100%;height:160px;pointer-events:none;opacity:1;-webkit-mask-image:linear-gradient(#000 0,rgba(0,0,0,.6) 45%,transparent 100%);mask-image:linear-gradient(#000 0,rgba(0,0,0,.6) 45%,transparent 100%)}
 .sheet-head{position:relative;padding:22px 28px 16px;touch-action:none}
@@ -5336,7 +5385,7 @@ function wgOpenWeekMoveMenu(todoId, anchorEl) {
   const t = wgTodoById(todoId); if (!t) return; const r = anchorEl.getBoundingClientRect(), dayKeys = wgWeekDayKeys();
   const items = dayKeys.map(k => { const d = new Date(k + 'T00:00:00'); return `<button type="button" data-weekmoveto="${k}">${t.dueOnDay === k ? '&check; ' : ''}${esc(TITLE(DAYS[d.getDay()]))} ${d.getDate()}</button>`; }).join('');
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'wgWeekMovePop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, dayKeys.length * 38 + 12) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 9;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, dayKeys.length * 38 + 12) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = items; document.body.appendChild(div);
   div.addEventListener('click', e => { const b = e.target.closest('[data-weekmoveto]'); if (!b) return; wgMoveTaskToDay(todoId, b.dataset.weekmoveto); wgBounceWeekCol(b.dataset.weekmoveto); wgCloseWeekMoveMenu(); });
 }
@@ -5590,7 +5639,7 @@ function wgOpenCardMenu(convId, anchorEl) {
   wgCloseMoveMenu(); wgCloseCardMenu();
   const c = wgConvById(convId); if (!c) return; const r = anchorEl.getBoundingClientRect();
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'wgCardMenuPop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, 160) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 9;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, 160) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = `<button type="button" data-cardact="star">${c.isStarred ? 'Unstar' : 'Star'}</button><button type="button" data-cardact="move">Move to folder &#9656;</button><button type="button" data-cardact="archive">Archive</button>`;
   document.body.appendChild(div);
   div.addEventListener('click', e => {
@@ -5607,7 +5656,7 @@ function wgOpenMoveMenu(convId, anchorEl) {
   const items = WG_FOLDERS.map(f => `<button type="button" data-moveto="${f.id}">${f.id === c.folderId ? '&check; ' : ''}${esc(f.name)}</button>`).join('')
     + `<button type="button" data-moveto="">${!c.folderId ? '&check; ' : ''}Unsorted</button>`;
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'wgMovePop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, (WG_FOLDERS.length + 1) * 38 + 12) + 'px'; div.style.left = clamp(r.left - 160, 12, innerWidth - 196) + 'px'; div.style.zIndex = 9;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, (WG_FOLDERS.length + 1) * 38 + 12) + 'px'; div.style.left = clamp(r.left - 160, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = items; document.body.appendChild(div);
   div.addEventListener('click', e => { const b = e.target.closest('[data-moveto]'); if (!b) return; wgMoveConvToFolder(convId, b.dataset.moveto || null); wgCloseMoveMenu(); });
 }
@@ -6853,7 +6902,7 @@ function ntOpenMoveMenu(id, anchorEl) {
   const n = ntById(id); if (!n) return;
   const r = anchorEl.getBoundingClientRect();
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntMovePop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, 190) + 'px'; div.style.left = clamp(r.left - 80, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, 190) + 'px'; div.style.left = clamp(r.left - 80, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = `<button type="button" data-ntnudge="up">&uarr; Move up</button><button type="button" data-ntnudge="down">&darr; Move down</button><button type="button" data-ntnudge="left">&larr; Move left</button><button type="button" data-ntnudge="right">&rarr; Move right</button>`;
   document.body.appendChild(div);
   div.addEventListener('click', e => {
@@ -6958,7 +7007,7 @@ function ntOpenCatMenu(id, anchorEl) {
   const n = ntById(id); if (!n) return;
   const r = anchorEl.getBoundingClientRect();
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntCatPop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, NOTE_CATS.length * 38 + 12) + 'px'; div.style.left = clamp(r.left, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, NOTE_CATS.length * 38 + 12) + 'px'; div.style.left = clamp(r.left, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = NOTE_CATS.map(c => `<button type="button" data-ntsetcat="${c}">${c === n.category ? '&check; ' : ''}${NOTE_CAT_LABEL[c]}</button>`).join('');
   document.body.appendChild(div);
   div.addEventListener('click', e => {
@@ -6975,7 +7024,7 @@ function ntOpenAddToCollectionMenu(id, anchorEl) {
   const r = anchorEl.getBoundingClientRect();
   const items = NOTE_COLLECTIONS.map(c => `<button type="button" data-ntaddcoll="${c.id}">${n.collectionIds.includes(c.id) ? '&check; ' : ''}${esc(c.name)}</button>`).join('') + `<button type="button" data-ntaddcoll="__new">+ New collection</button>`;
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntAddCollPop';
-  div.style.position = 'fixed'; div.style.top = wgPopTop(r, (NOTE_COLLECTIONS.length + 1) * 38 + 12) + 'px'; div.style.left = clamp(r.left - 160, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, (NOTE_COLLECTIONS.length + 1) * 38 + 12) + 'px'; div.style.left = clamp(r.left - 160, 12, innerWidth - 196) + 'px'; div.style.zIndex = 'var(--z-dropdown)';
   div.innerHTML = items; document.body.appendChild(div);
   div.addEventListener('click', e => {
     const b = e.target.closest('[data-ntaddcoll]'); if (!b) return; div.remove();
