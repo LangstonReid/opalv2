@@ -96,7 +96,7 @@ body.paused .chip{color:var(--bone-35)}
 .crown.active .crown-tick{opacity:.85}
 .crown-notch{position:absolute;left:50%;bottom:calc(var(--p, .3) * 100%);width:13px;height:13px;margin:0 0 -6.5px -6.5px;border-radius:50%;background:var(--bone-35);box-shadow:0 0 0 3px rgba(11,18,12,.4);transition:background .35s var(--ease),box-shadow .35s var(--ease),bottom .1s linear;pointer-events:none}
 .crown.active .crown-notch,.crown-rail:hover .crown-notch{background:var(--spore);box-shadow:0 0 10px 2px rgba(217,224,33,.45),0 0 0 3px rgba(11,18,12,.4)}
-body.mode-chat .coord,body.mode-chat .crown,body.mode-widgets .coord,body.mode-widgets .crown{opacity:0;pointer-events:none}
+body.mode-chat .coord,body.mode-chat .crown,body.mode-widgets .coord,body.mode-widgets .crown,body.mode-notes .coord,body.mode-notes .crown{opacity:0;pointer-events:none}
 body.sheet-open .coord,body.sheet-open .crown{opacity:0;pointer-events:none}
 
 /* ---------- calendar sheet: a sorting surface ---------- */
@@ -591,10 +591,10 @@ body.sheet-open.mode-widgets #widgetsRoot{filter:blur(14px) brightness(.97)}
 .wg-shell{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:92px 40px 60px;scrollbar-width:thin}
 .wg-col{max-width:1180px;margin:0 auto}
 /* light-mode top chrome: header, chip, pills all recolor over #widgetsRoot exactly like chat does */
-body.mode-widgets .hdr .cap{color:rgba(31,36,29,.48)}
-body.mode-widgets #chrome::before,body.mode-widgets #chrome::after{opacity:0}
-body.mode-widgets .chip{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
-body.mode-widgets .chip .track{border-color:rgba(31,36,29,.26)}
+body.mode-widgets .hdr .cap,body.mode-notes .hdr .cap{color:rgba(31,36,29,.48)}
+body.mode-widgets #chrome::before,body.mode-widgets #chrome::after,body.mode-notes #chrome::before,body.mode-notes #chrome::after{opacity:0}
+body.mode-widgets .chip,body.mode-notes .chip{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
+body.mode-widgets .chip .track,body.mode-notes .chip .track{border-color:rgba(31,36,29,.26)}
 body.mode-widgets.paused .chip{color:rgba(31,36,29,.34)}
 body.mode-widgets #toast{background:rgba(255,255,255,.9);border-color:rgba(31,36,29,.10);color:var(--wg-ink,#1f241d)}
 body.mode-widgets .pills{background:rgba(255,255,255,.72);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
@@ -1319,7 +1319,7 @@ body.sheet-open.mode-chat #chatRoot{filter:blur(14px) brightness(.94) saturate(.
 /* chrome recolors for the light chat canvas: same elements, reread on a putty ground */
 body.mode-chat .hdr .cap{color:rgba(31,36,29,.5)}
 body.mode-chat #chrome::before,body.mode-chat #chrome::after{opacity:0}
-body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode-widgets .ruler{opacity:0;pointer-events:none}
+body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode-widgets .ruler,body.mode-notes .legend,body.mode-notes .ruler{opacity:0;pointer-events:none}
 body.mode-chat .chip{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-chat .chip .track{border-color:rgba(31,36,29,.28)}
 body.mode-chat.paused .chip{color:rgba(31,36,29,.34)}
@@ -1551,6 +1551,215 @@ body.paused .c-wave i{animation-play-state:paused;height:10%!important;backgroun
 .cag-notes-form button:hover{background:#e8ec8c}
 @media (max-width:640px){
   .cag-list,.cag-detail{padding:44px 20px 32px}
+}
+
+/* ============================================================================
+   Notes: a fourth top-level mode. The unstructured, half-formed stuff — no
+   Command Rail here, this page isn't a task surface. Reuses Widgets' exact
+   paper theme (same --wg-* values, redeclared here since this is a sibling
+   root, not a child of #widgetsRoot — the same local-token-per-root pattern
+   #chatRoot already uses) plus --cork-200, scoped to the scrapbook canvas only.
+   ============================================================================ */
+#notesRoot{position:fixed;inset:0;z-index:1;overflow:hidden;
+  --wg-bg:#f5f5f0; --wg-surface:#ffffff; --wg-surface-2:#f7f7f2; --wg-surface-3:#eeeee6;
+  --wg-border:rgba(31,36,29,.09); --wg-border-2:rgba(31,36,29,.16);
+  --wg-ink:#1f241d; --wg-ink-60:rgba(31,36,29,.62); --wg-ink-42:rgba(31,36,29,.44); --wg-ink-28:rgba(31,36,29,.26);
+  --wg-accent:#6f8f4e; --wg-accent-ink:#3c4c2a; --wg-spore:#c3cf3f; --wg-ember:#dd8f45; --wg-yellow:#f3f0b8; --wg-yellow-soft:#faf8e2;
+  --wg-shadow-sm:0 1px 2px rgba(31,36,29,.05),0 1px 1px rgba(31,36,29,.03);
+  --wg-shadow-md:0 4px 10px rgba(31,36,29,.05),0 14px 32px rgba(31,36,29,.07);
+  --wg-shadow-lg:0 20px 44px rgba(31,36,29,.14),0 4px 14px rgba(31,36,29,.08);
+  --cork-200:#cfc0a4;
+  --cat-work:#6b6b62; --cat-ideas:var(--wg-spore); --cat-people:var(--wg-ember); --cat-reflect:#8a6f9e; --cat-life:#4f8a7a; --cat-uncat:var(--wg-ink-60);
+  color:var(--wg-ink);
+  background:
+    linear-gradient(rgba(31,36,29,.035) 1px,transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg,rgba(31,36,29,.035) 1px,transparent 1px) 0 0/44px 44px,
+    radial-gradient(1200px 800px at 14% -10%,rgba(122,154,90,.10),transparent 58%),
+    radial-gradient(900px 700px at 100% 0%,rgba(221,143,69,.06),transparent 55%),
+    var(--wg-bg);
+  opacity:0;transform:scale(.97);pointer-events:none;transition:opacity .7s var(--ease),transform .76s var(--ease)}
+body.mode-notes #notesRoot{opacity:1;transform:scale(1);pointer-events:auto}
+body.sheet-open.mode-notes #notesRoot{filter:blur(14px) brightness(.97)}
+.nt-shell{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:92px 336px 60px 40px;scrollbar-width:thin;transition:padding-right .3s var(--ease)}
+.nt-col{max-width:1180px;margin:0 auto}
+
+/* header + top chrome */
+.nt-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.nt-addbtn{flex:none;width:40px;height:40px;border-radius:50%;background:var(--wg-ink);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center;box-shadow:var(--wg-shadow-md);transition:transform .2s var(--ease),background .2s}
+.nt-addbtn:hover{transform:scale(1.06);background:#000}
+.nt-header h1{font:400 27px/1.15 var(--sans);letter-spacing:-.01em;color:var(--wg-ink)}
+.nt-filterrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.nt-pillgroup{display:flex;gap:4px;padding:4px;width:fit-content;border-radius:999px;background:var(--wg-surface-3)}
+.nt-pillgroup button{font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:9px 16px;border-radius:999px;transition:color .3s,background .3s}
+.nt-pillgroup.sm button{padding:9px 13px}
+.nt-pillgroup button.on{color:#fff;background:var(--wg-ink);box-shadow:var(--wg-shadow-sm)}
+.nt-pillgroup button:not(.on):hover{color:var(--wg-ink);background:rgba(31,36,29,.05)}
+.nt-catclear{display:flex;align-items:center;gap:8px;font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-60)}
+.nt-catclear button{color:var(--wg-accent-ink);padding:6px 10px;border-radius:999px;background:var(--wg-yellow-soft);transition:background .15s}
+.nt-catclear button:hover{background:var(--wg-yellow)}
+.nt-viewswitch{margin-left:auto;display:flex;gap:4px;padding:4px;width:fit-content;border-radius:999px;background:var(--wg-surface-3)}
+.nt-viewswitch button{font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:9px 16px;border-radius:999px;transition:color .3s,background .3s}
+.nt-viewswitch button.on{color:#fff;background:var(--wg-ink);box-shadow:var(--wg-shadow-sm)}
+.nt-collrow{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:22px}
+.nt-collrow::-webkit-scrollbar{display:none}
+.nt-coll-chip{flex:none;display:flex;align-items:center;gap:6px;font:400 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);padding:8px 14px;border-radius:999px;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.nt-coll-chip:hover{border-color:var(--wg-ink-28);color:var(--wg-ink)}
+.nt-coll-chip.on{background:var(--wg-ink);border-color:var(--wg-ink);color:#fff}
+.nt-coll-chip.all.on{background:var(--wg-accent);border-color:var(--wg-accent)}
+.nt-coll-new{flex:none;font:400 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--wg-ink-42);border:1px dashed var(--wg-border-2);padding:8px 14px;border-radius:999px;white-space:nowrap;transition:color .15s,border-color .15s}
+.nt-coll-new:hover{color:var(--wg-ink);border-color:var(--wg-ink-28)}
+
+/* category chip, reused on cards, detail, legend */
+.nt-cat{display:inline-flex;align-items:center;gap:5px;font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;color:#fff}
+.nt-cat i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.001}
+.nt-cat.work{background:var(--cat-work)} .nt-cat.ideas{background:var(--cat-ideas);color:#2c2e11}
+.nt-cat.people{background:var(--cat-people)} .nt-cat.reflect{background:var(--cat-reflect)}
+.nt-cat.life{background:var(--cat-life)} .nt-cat.uncat{background:var(--wg-surface-3);color:var(--wg-ink-60)}
+.nt-guess{display:block;margin-top:4px;font:400 9px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+
+/* grid view */
+.nt-views{position:relative}
+.nt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;align-content:start}
+.nt-card{position:relative;display:flex;flex-direction:column;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:16px;padding:16px;box-shadow:var(--wg-shadow-sm);cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.nt-card:hover{transform:translateY(-3px);box-shadow:var(--wg-shadow-md)}
+.nt-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.nt-card-prov{flex:none;width:20px;height:20px;border-radius:6px;background:var(--wg-surface-3);color:var(--wg-ink-42);display:grid;place-items:center}
+.nt-card-prov svg{width:11px;height:11px}
+.nt-card-star{flex:none;width:24px;height:24px;border-radius:50%;color:var(--wg-ink-28);display:grid;place-items:center;transition:color .15s,transform .15s}
+.nt-card-star.on{color:var(--wg-ember)}
+.nt-card-star:hover{transform:scale(1.12)}
+.nt-card-star svg{width:15px;height:15px}
+.nt-card-title{font-family:'Caveat',cursive;font-weight:600;font-size:23px;line-height:1.2;color:var(--wg-ink);margin-bottom:6px;flex:none}
+.nt-card-sum{font-size:12px;line-height:1.5;color:var(--wg-ink-60);flex:1;margin-bottom:12px}
+.nt-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nt-card-date{font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42)}
+.nt-card.new{align-items:center;justify-content:center;text-align:center;border:1.5px dashed var(--wg-border-2);box-shadow:none;color:var(--wg-ink-42);min-height:170px}
+.nt-card.new:hover{border-color:var(--wg-accent);color:var(--wg-accent-ink);background:var(--wg-yellow-soft)}
+.nt-card.new b{display:block;font-size:24px;margin-bottom:6px}
+.nt-empty{grid-column:1/-1;padding:60px 24px;text-align:center;color:var(--wg-ink-42);font-size:13px;background:var(--wg-surface);border-radius:18px;border:1px solid var(--wg-border)}
+
+/* the overview rail — same floating-panel language as the Command Rail, belongs to Notes alone */
+.nt-rail{position:fixed;right:12px;top:12px;bottom:12px;z-index:8;width:clamp(220px,15vw,296px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);padding:18px 16px;overflow-y:auto;scrollbar-width:thin;display:none}
+body.mode-notes .nt-rail{display:block}
+.nt-rail-stat{margin-bottom:14px}
+.nt-rail-stat .l{display:block;font:400 9px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42)}
+.nt-rail-stat b{display:block;margin-top:4px;font:600 26px/1.15 var(--sans);color:var(--wg-ink)}
+.nt-rail-range{display:flex;gap:3px;padding:3px;border-radius:999px;background:var(--wg-surface-3);margin-bottom:18px}
+.nt-rail-range button{flex:1;font:400 8.5px/1.6 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--wg-ink-42);padding:6px 2px;border-radius:999px;transition:color .2s,background .2s}
+.nt-rail-range button.on{color:#fff;background:var(--wg-ink)}
+.nt-rail-pie{display:flex;justify-content:center;margin-bottom:14px}
+.nt-rail-pie svg{width:150px;height:150px}
+.nt-pie-slice{cursor:pointer;transition:opacity .15s,transform .15s;transform-origin:center;transform-box:fill-box}
+.nt-pie-slice:hover{opacity:.82}
+.nt-pie-slice.dim{opacity:.28}
+.nt-pie-total{font:600 20px/1 var(--sans);fill:var(--wg-ink)}
+.nt-pie-total-l{font:400 8px/1.6 var(--mono);letter-spacing:.08em;fill:var(--wg-ink-42)}
+.nt-rail-legend{display:flex;flex-direction:column;gap:2px}
+.nt-legend-row{display:flex;align-items:center;gap:8px;padding:7px 6px;border-radius:9px;font-size:11.5px;color:var(--wg-ink);transition:background .15s}
+.nt-legend-row:hover{background:var(--wg-surface-2)}
+.nt-legend-row.dim{opacity:.4}
+.nt-legend-dot{flex:none;width:8px;height:8px;border-radius:50%}
+.nt-legend-row span{flex:1}
+.nt-legend-row b{font-weight:600;color:var(--wg-ink-60)}
+@media (max-width:1180px){ .nt-shell{padding-right:40px} body.mode-notes .nt-rail{display:none} }
+
+/* scrapbook: an infinite pannable corkboard */
+.nt-scrap{position:relative;height:calc(100vh - 260px);min-height:420px;border-radius:20px;overflow:hidden;border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-sm) inset}
+.nt-scrap-viewport{position:absolute;inset:0;overflow:hidden;background:var(--cork-200);cursor:grab;
+  background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1.4px);background-size:14px 14px}
+.nt-scrap-viewport.panning{cursor:grabbing}
+.nt-scrap-canvas{position:absolute;left:0;top:0;width:1px;height:1px;transform-origin:0 0;will-change:transform}
+.nt-scrap-add{position:absolute;right:20px;bottom:20px;z-index:2;width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;font-size:24px;display:grid;place-items:center;box-shadow:var(--wg-shadow-lg);transition:transform .2s var(--ease)}
+.nt-scrap-add:hover{transform:scale(1.08)}
+
+/* scrapbook cards — skins */
+.nt-scrap-card{position:absolute;left:0;top:0;user-select:none;cursor:grab;transition:box-shadow .2s}
+.nt-scrap-card:active{cursor:grabbing}
+.nt-scrap-card.wg-ghost{opacity:0;pointer-events:none}
+.nt-scrap-card.wg-dragging-scrap{z-index:999;pointer-events:none;will-change:transform}
+.nt-scrap-star-badge{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--wg-ember);color:#fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:1}
+.nt-scrap-star-badge svg{width:12px;height:12px}
+.nt-scrap-clip{position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-8deg);width:18px;height:30px;z-index:2;opacity:.85;pointer-events:none}
+
+.nt-skin-sticky{width:180px;min-height:170px;padding:18px 16px;box-shadow:0 6px 16px rgba(0,0,0,.16);position:relative}
+.nt-skin-sticky::after{content:'';position:absolute;right:0;bottom:0;width:0;height:0;border-style:solid;border-width:0 0 16px 16px;border-color:transparent transparent rgba(0,0,0,.14) transparent}
+.nt-skin-sticky .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:20px;line-height:1.2;color:#2a2a1f;margin-bottom:6px}
+.nt-skin-sticky .nt-scrap-body{font-family:'Caveat',cursive;font-weight:500;font-size:15px;line-height:1.25;color:#3a3a2c}
+
+.nt-skin-report{width:230px;min-height:200px;padding:20px 18px;background:#fffdf7;border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.nt-skin-report .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:20px;color:#1f241d;margin-bottom:8px}
+.nt-skin-report .nt-scrap-body{font:400 11px/1.7 var(--mono);letter-spacing:.02em;color:#333228}
+
+.nt-skin-evidence{width:200px;min-height:130px;padding:18px 16px 16px;background:#d9c49c;background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);background-size:8px 8px;box-shadow:0 8px 18px rgba(0,0,0,.2);clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%)}
+.nt-skin-evidence .nt-scrap-title{font:600 12px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:#332918;margin-bottom:6px}
+.nt-skin-evidence .nt-scrap-body{font:400 10.5px/1.6 var(--mono);color:#4a4025}
+
+.nt-skin-billboard{width:270px;min-height:110px;padding:22px 22px;background:#1f241d;box-shadow:0 10px 26px rgba(0,0,0,.3);display:flex;align-items:center}
+.nt-skin-billboard .nt-scrap-title{display:none}
+.nt-skin-billboard .nt-scrap-body{font:700 22px/1.25 var(--sans);letter-spacing:-.01em;color:#f3f0b8}
+
+.nt-scrap-cat{position:absolute;left:14px;bottom:10px;font:400 8px/1.6 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.nt-skin-billboard .nt-scrap-cat{color:rgba(243,240,184,.6);position:static;margin-top:8px}
+
+/* extracted fragments + hand-drawn connector arrows */
+.nt-frag{position:absolute;left:0;top:0;width:150px;padding:10px 12px;background:#fffdf7;border:1px solid rgba(0,0,0,.08);border-radius:3px;box-shadow:0 4px 12px rgba(0,0,0,.14);font-family:'Caveat',cursive;font-weight:500;font-size:15px;line-height:1.25;color:#3a3a2c;pointer-events:none}
+.nt-arrow-svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.nt-arrow-path{fill:none;stroke:#4a4638;stroke-width:1.3;stroke-linecap:round}
+
+/* decorative props, ambient only */
+.nt-prop{position:absolute;pointer-events:none;opacity:.5}
+.nt-prop-clip{width:20px;height:34px}
+.nt-prop-pencil{width:70px;height:10px}
+.nt-prop-tape{width:56px;height:22px;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.5);transform:rotate(-6deg)}
+
+/* note detail page */
+.nt-detail{position:fixed;inset:0;z-index:9;background:var(--wg-bg);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+.nt-detail.show{opacity:1;pointer-events:auto}
+.nt-detail-inner{position:absolute;inset:0;overflow-y:auto;scrollbar-width:thin;padding:92px 40px 80px}
+.nt-detail-content{max-width:640px;margin:0 auto;position:relative}
+.nt-detail-close{position:fixed;top:28px;right:32px;z-index:2;width:36px;height:36px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);color:var(--wg-ink-60);font-size:18px;display:grid;place-items:center;box-shadow:var(--wg-shadow-sm);transition:color .15s,background .15s}
+.nt-detail-close:hover{color:var(--wg-ink);background:var(--wg-surface-2)}
+.nt-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
+.nt-detail-headl{flex:1;min-width:0}
+.nt-detail-title{font-family:'Caveat',cursive;font-weight:600;font-size:36px;line-height:1.15;color:var(--wg-ink);outline:none;border-radius:6px}
+.nt-detail-title[contenteditable]:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2);padding:2px 6px;margin:-2px -6px}
+.nt-detail-headr{flex:none;display:flex;align-items:center;gap:8px}
+.nt-detail-star{width:32px;height:32px;border-radius:50%;color:var(--wg-ink-28);display:grid;place-items:center;transition:color .15s,transform .15s}
+.nt-detail-star.on{color:var(--wg-ember)}
+.nt-detail-star:hover{transform:scale(1.1)}
+.nt-detail-star svg{width:18px;height:18px}
+.nt-detail-menu-wrap{position:relative}
+.nt-detail-menubtn{width:32px;height:32px;border-radius:50%;color:var(--wg-ink-42);display:grid;place-items:center;font-size:16px;transition:background .15s,color .15s}
+.nt-detail-menubtn:hover{background:var(--wg-surface-2);color:var(--wg-ink)}
+.nt-detail-cat-wrap{margin:14px 0 24px}
+.nt-detail-cat-select{appearance:none;-webkit-appearance:none;border:none;cursor:pointer}
+.nt-detail-meta{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42);margin-bottom:26px}
+.nt-detail-quotelabel{font:400 9.5px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:8px}
+.nt-detail-quote{font-size:16px;line-height:1.6;color:var(--wg-ink);background:var(--wg-surface-2);border-left:3px solid var(--wg-accent);border-radius:0 12px 12px 0;padding:16px 18px;cursor:default}
+.nt-detail-annolabel{font:700 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin:24px 0 10px}
+.nt-detail-body{font-size:14.5px;line-height:1.7;color:var(--wg-ink);outline:none;min-height:80px;border-radius:8px}
+.nt-detail-body[contenteditable]:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2);padding:4px 8px;margin:-4px -8px}
+.nt-detail-body:empty:before{content:attr(data-placeholder);color:var(--wg-ink-42)}
+.nt-detail-jump{display:inline-block;margin-top:22px;font:400 11px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink);transition:color .15s}
+.nt-detail-jump:hover{color:var(--wg-ink)}
+.nt-detail-colls{margin-top:30px;padding-top:20px;border-top:1px solid var(--wg-border)}
+.nt-detail-colls-label{font:400 9.5px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:8px}
+
+/* real destructive confirmation — this page has no "delete" without one */
+.nt-confirm{position:fixed;inset:0;z-index:12;background:rgba(31,36,29,.4);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+.nt-confirm.show{opacity:1;pointer-events:auto}
+.nt-confirm-card{width:min(360px,calc(100% - 40px));background:var(--wg-surface);border-radius:18px;padding:24px;box-shadow:var(--wg-shadow-lg);transform:scale(.96);transition:transform .2s var(--ease)}
+.nt-confirm.show .nt-confirm-card{transform:scale(1)}
+.nt-confirm-card p{font-size:14px;line-height:1.5;color:var(--wg-ink)}
+.nt-confirm-actions{display:flex;gap:10px;margin-top:20px}
+.nt-confirm-actions button{flex:1;padding:11px;border-radius:999px;font:400 11px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;transition:background .15s}
+.nt-confirm-actions button:first-child{background:var(--wg-surface-3);color:var(--wg-ink)}
+.nt-confirm-actions button:first-child:hover{background:var(--wg-border-2)}
+.nt-confirm-actions button.danger{background:#b0452f;color:#fff}
+.nt-confirm-actions button.danger:hover{background:#93381f}
+
+@media (prefers-reduced-motion:reduce){
+  .nt-scrap-card,.nt-card,.nt-addbtn,.nt-scrap-add,.nt-pie-slice{transition:none!important}
 }
 
 .c-tasks-w{background:var(--board)}
@@ -1836,6 +2045,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     <button data-nav="garden">Garden</button>
     <button data-nav="widgets" class="on">Widgets</button>
     <button data-nav="chat">Chat</button>
+    <button data-nav="notes">Notes</button>
   </nav>
 </div>
 
@@ -2052,6 +2262,64 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         <div class="cag-rows" id="cAgendaRows"></div>
       </div>
       <div class="cag-detail" id="cAgendaDetail"></div>
+    </div>
+  </div>
+</div>
+
+<div id="notesRoot" aria-hidden="true">
+  <div class="nt-shell" id="ntShell">
+    <div class="nt-col">
+      <div class="nt-header">
+        <button type="button" class="nt-addbtn" id="ntAddBtn" aria-label="New note">+</button>
+        <h1>Notes</h1>
+      </div>
+      <div class="nt-filterrow">
+        <div class="nt-pillgroup" id="ntSrcFilter">
+          <button type="button" data-ntsrc="all" class="on">All</button>
+          <button type="button" data-ntsrc="manual">Mine</button>
+          <button type="button" data-ntsrc="opal-bookmark">Opal Bookmarks</button>
+        </div>
+        <div class="nt-pillgroup sm" id="ntSort">
+          <button type="button" data-ntsort="newest" class="on">Newest</button>
+          <button type="button" data-ntsort="oldest">Oldest</button>
+        </div>
+        <div class="nt-catclear" id="ntCatClear" hidden><span id="ntCatClearLabel"></span><button type="button" id="ntCatClearBtn">&times; Clear</button></div>
+        <div class="nt-viewswitch" id="ntViewSwitch">
+          <button type="button" data-ntview="grid" class="on">Grid</button>
+          <button type="button" data-ntview="scrapbook">Scrapbook</button>
+        </div>
+      </div>
+      <div class="nt-collrow" id="ntCollRow"></div>
+      <div class="nt-views">
+        <div class="nt-grid" id="ntGrid"></div>
+        <div class="nt-scrap" id="ntScrap" hidden>
+          <div class="nt-scrap-viewport" id="ntScrapViewport">
+            <div class="nt-scrap-canvas" id="ntScrapCanvas"></div>
+          </div>
+          <button type="button" class="nt-scrap-add" id="ntScrapAdd" aria-label="New note">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="nt-rail" id="ntRail">
+    <div class="nt-rail-stat"><span class="l">Total notes</span><b id="ntRailTotal"></b></div>
+    <div class="nt-rail-stat"><span class="l">This period</span><b id="ntRailPeriod"></b></div>
+    <div class="nt-rail-range" id="ntRailRange">
+      <button type="button" data-ntrange="day">Day</button><button type="button" data-ntrange="week">Week</button><button type="button" data-ntrange="month" class="on">Month</button><button type="button" data-ntrange="year">Year</button>
+    </div>
+    <div class="nt-rail-pie" id="ntRailPie"></div>
+    <div class="nt-rail-legend" id="ntRailLegend"></div>
+  </aside>
+  <div class="nt-detail" id="ntDetail" role="dialog" aria-modal="true" aria-label="Note">
+    <div class="nt-detail-inner" id="ntDetailInner">
+      <button type="button" class="nt-detail-close" id="ntDetailClose" aria-label="Close">&times;</button>
+      <div class="nt-detail-content" id="ntDetailContent"></div>
+    </div>
+  </div>
+  <div class="nt-confirm" id="ntConfirm" hidden>
+    <div class="nt-confirm-card">
+      <p>This note is permanently deleted. This can&rsquo;t be undone.</p>
+      <div class="nt-confirm-actions"><button type="button" id="ntConfirmCancel">Cancel</button><button type="button" id="ntConfirmDelete" class="danger">Delete</button></div>
     </div>
   </div>
 </div>
@@ -4374,11 +4642,12 @@ function chatGo(next, rect) {
   const enteringGarden = mode !== 'garden' && next === 'garden';
   const after = () => {
     mode = next; $$nav(mode);
-    document.body.classList.toggle('mode-chat', mode === 'chat'); document.body.classList.toggle('mode-widgets', mode === 'widgets');
-    chatRoot.setAttribute('aria-hidden', String(mode !== 'chat')); $('#widgetsRoot').setAttribute('aria-hidden', String(mode !== 'widgets'));
+    document.body.classList.toggle('mode-chat', mode === 'chat'); document.body.classList.toggle('mode-widgets', mode === 'widgets'); document.body.classList.toggle('mode-notes', mode === 'notes');
+    chatRoot.setAttribute('aria-hidden', String(mode !== 'chat')); $('#widgetsRoot').setAttribute('aria-hidden', String(mode !== 'widgets')); $('#notesRoot').setAttribute('aria-hidden', String(mode !== 'notes'));
     if (mode === 'chat') { chatInit(); chatResize(); chatStartFx(); if (rect && !REDUCED) setTimeout(() => chatBurst(rect.x, rect.y, { n: 22 }), 30); }
     else chatStopFx();
     if (mode === 'widgets') { wgInit(); wgRefresh(); }
+    if (mode === 'notes') { noteInit(); noteRefresh(); }
     if (enteringGarden) navState.recenter = true;
   };
   if (sheetOpen) { closeSheet(); setTimeout(after, 260); } else after();
@@ -6150,6 +6419,602 @@ function wgPullThrough(force) {
   }
   return true;
 }
+
+/* ================================================================================
+   Notes: the fourth top-level mode. Everything unstructured a person wanted to
+   keep — a typed thought or an on-device bookmark of something Opal heard — with
+   no task machinery anywhere on it. Two views of one dataset: a findable grid,
+   and a scrapbook that looks the way ideas actually sit together before they're
+   sorted. Prefixed `nt` throughout to keep it distinct from `wg`/`chat`.
+   ================================================================================ */
+const NOTE_CATS = ['work', 'ideas', 'people', 'reflect', 'life', 'uncat'];
+const NOTE_CAT_LABEL = { work: 'Work', ideas: 'Ideas', people: 'People', reflect: 'Reflections', life: 'Life', uncat: 'Uncategorized' };
+function noteWords(t) { return (t || '').trim().split(/\s+/).filter(Boolean).length; }
+function noteBodyText(n) { return n.source === 'opal-bookmark' ? n.quoteText : n.body; }
+let NT_SEED_CTR = 4000;
+function ntSeed() { return NT_SEED_CTR++; }
+function ntRand(seed) { let t = seed += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+function noteAt(daysAgo, hour) { const d = new Date(WG_T0); d.setDate(d.getDate() - daysAgo); d.setHours(hour || 10, 0, 0, 0); return d.getTime(); }
+
+const NOTE_RECORDS = [
+  { id: 'n1', title: 'Moss wall for the studio corner', isEstimatedTitle: false, source: 'manual', body: 'Try the moss wall idea for the studio corner.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(0, 9), updatedAt: noteAt(0, 9), category: 'ideas', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n2', title: "Ask Mom about Ojai", isEstimatedTitle: false, source: 'manual', body: "Ask Mom about Ojai trip dates before it's fully booked.", quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(0, 12), updatedAt: noteAt(0, 12), category: 'life', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n3', title: 'Reframe the brand deck', isEstimatedTitle: false, source: 'manual', body: "Reframe the brand deck around one idea instead of five — right now it tries to be a pitch, a case study, and a mood board all at once, and Ellie's going to read all three as noise. Cut it down to the single strongest thread and let everything else support that.", quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(1, 15), updatedAt: noteAt(1, 15), category: 'work', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n4', title: "Calvin's table", isEstimatedTitle: false, source: 'opal-bookmark', body: '', quoteText: 'Calvin wants Bestia.', sourceConversationId: 'wc' /* placeholder overwritten below */, sourceSentenceId: 's2', createdAt: noteAt(0, 16), updatedAt: noteAt(0, 16), category: 'people', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n5', title: 'Nine weeks, if we lock it', isEstimatedTitle: false, source: 'opal-bookmark', body: '', quoteText: 'Nine weeks works if we lock the alloy by the 23rd.', sourceConversationId: 'wcv6', sourceSentenceId: 's2', createdAt: noteAt(6, 9), updatedAt: noteAt(6, 9), category: 'work', isEstimatedCategory: true, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n6', title: "Sage's birthday", isEstimatedTitle: false, source: 'manual', body: "Sage's birthday is in April — don't forget a gift this time.", quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(2, 11), updatedAt: noteAt(2, 11), category: 'people', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n7', title: 'This week, in general', isEstimatedTitle: false, source: 'manual', body: "This week felt like it moved faster than usual, mostly good stretches punctuated by two or three moments where I felt completely overwhelmed for no clear reason. Worth noticing that it always happened right after checking messages first thing in the morning, before I'd had coffee or even really woken up.", quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(3, 21), updatedAt: noteAt(3, 21), category: 'reflect', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n8', title: 'Priya, head of design at Loam', isEstimatedTitle: false, source: 'opal-bookmark', body: '', quoteText: 'She introduced Priya Natarajan, head of design at Loam.', sourceConversationId: 'wcv10', sourceSentenceId: 's2', createdAt: noteAt(1, 11), updatedAt: noteAt(1, 11), category: 'people', isEstimatedCategory: true, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n9', title: 'Sunday newsletter, maybe', isEstimatedTitle: false, source: 'manual', body: 'Maybe start a Sunday newsletter, just for the people who already know me.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(5, 20), updatedAt: noteAt(5, 20), category: 'ideas', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n10', title: 'Right before sleep', isEstimatedTitle: false, source: 'manual', body: 'The best ideas always come right before sleep, never at a desk.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(8, 23), updatedAt: noteAt(8, 23), category: 'ideas', isEstimatedCategory: false, isStarred: true, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n11', title: 'Slow mornings', isEstimatedTitle: false, source: 'manual', body: 'Grateful for slow mornings this week, more than I expected to be.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(4, 8), updatedAt: noteAt(4, 8), category: 'reflect', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n12', title: 'Compare the two quotes again', isEstimatedTitle: false, source: 'manual', body: "Compare the Monterrey quote against the second supplier one more time before locking anything in — the eight percent gap matters less than lead time does, and nobody's actually confirmed how long the second shop would take. Get that number before making this a real decision instead of a guess.", quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(12, 14), updatedAt: noteAt(12, 14), category: 'work', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n13', title: 'Pilot moves to October', isEstimatedTitle: false, source: 'opal-bookmark', body: '', quoteText: 'Dad: the school pilot moves to October.', sourceConversationId: 'wcv13', sourceSentenceId: 's1', createdAt: noteAt(3, 8), updatedAt: noteAt(3, 8), category: 'life', isEstimatedCategory: true, isStarred: true, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n14', title: 'Text back', isEstimatedTitle: false, source: 'manual', body: 'Text back — the thing from Tuesday.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(40, 17), updatedAt: noteAt(40, 17), category: 'uncat', isEstimatedCategory: true, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+  { id: 'n15', title: 'Fridays at seven', isEstimatedTitle: false, source: 'manual', body: 'Owen keeps holding me to Fridays at seven. Good. I need that.', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: noteAt(1, 20), updatedAt: noteAt(1, 20), category: 'people', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: null, seed: ntSeed() } },
+];
+NOTE_RECORDS.find(n => n.id === 'n4').sourceConversationId = 'wcv2';
+const NOTE_COLLECTIONS = [
+  { id: 'ntc-trip', name: 'Trip ideas', noteIds: ['n1', 'n9'] },
+  { id: 'ntc-supplier', name: 'Supplier', noteIds: ['n5', 'n12'] },
+];
+NOTE_RECORDS.forEach(n => { if (n.collectionIds.length) return; NOTE_COLLECTIONS.forEach(c => { if (c.noteIds.includes(n.id)) n.collectionIds.push(c.id); }); });
+
+function ntSkinFor(n) {
+  const words = noteWords(noteBodyText(n));
+  if (n.source === 'manual') return words > 40 ? 'report' : 'sticky';
+  return words <= 8 ? 'billboard' : 'evidence';
+}
+const NT_STICKY_PALETTE = ['#f3e6a8', '#f0d9c6', '#d8e8c9', '#cfe3ea', '#f2d8e6'];
+function ntAssignScrapbookPlacement(n) {
+  const seed = n.scrapbook.seed;
+  const placed = NOTE_RECORDS.filter(x => x !== n && x.scrapbook && x.scrapbook.x != null);
+  const cx = placed.length ? placed.reduce((s, x) => s + x.scrapbook.x, 0) / placed.length : 700;
+  const cy = placed.length ? placed.reduce((s, x) => s + x.scrapbook.y, 0) / placed.length : 480;
+  const r1 = ntRand(seed + 1), r2 = ntRand(seed + 2);
+  const radius = 100 + placed.length * 20;
+  n.scrapbook.x = Math.round(cx + (r1 - 0.5) * radius * 2.8);
+  n.scrapbook.y = Math.round(cy + (r2 - 0.5) * radius * 1.8);
+  n.scrapbook.rotation = Math.round((ntRand(seed + 3) - 0.5) * 16 * 10) / 10;
+  n.scrapbook.paletteIdx = Math.floor(ntRand(seed + 4) * NT_STICKY_PALETTE.length);
+  n.scrapbook.skin = n.scrapbook.skin || ntSkinFor(n);
+  n.scrapbook.z = ntNextZ();
+}
+let NT_Z = 10;
+function ntNextZ() { return ++NT_Z; }
+NOTE_RECORDS.forEach(n => { if (n.scrapbook.x == null) ntAssignScrapbookPlacement(n); });
+
+/* ---------- state, lookups, filtering ---------- */
+const ntState = { srcFilter: 'all', sort: 'newest', view: 'grid', collection: null, catFilter: null, railRange: 'month', currentNote: null, pendingDelete: null, inited: false, pan: { x: 0, y: 0, scale: .68 }, panSetup: false, justDragged: false };
+function ntById(id) { return NOTE_RECORDS.find(n => n.id === id) || null; }
+function ntCollById(id) { return NOTE_COLLECTIONS.find(c => c.id === id) || null; }
+function ntFilteredNotes() {
+  let list = NOTE_RECORDS.slice();
+  if (ntState.srcFilter !== 'all') list = list.filter(n => n.source === ntState.srcFilter);
+  if (ntState.collection) { const c = ntCollById(ntState.collection); list = list.filter(n => c && c.noteIds.includes(n.id)); }
+  if (ntState.catFilter) list = list.filter(n => n.category === ntState.catFilter);
+  list.sort((a, b) => ntState.sort === 'newest' ? b.createdAt - a.createdAt : a.createdAt - b.createdAt);
+  return list;
+}
+function ntFmtDate(ts) { const d = new Date(ts); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+
+/* ---------- grid view ---------- */
+const ntProvManual = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2l3 3-8 8-3.5 1 1-3.5z"/></svg>`;
+const ntProvBookmark = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M1.5 8h2.5l1.5-4.5 2 9 1.5-6.5 1 2h4.5"/></svg>`;
+const ntStarSvg = `<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.5l1.9 4.3 4.6.5-3.4 3.1.9 4.6L8 11.7l-4 2.3.9-4.6-3.4-3.1 4.6-.5z"/></svg>`;
+function ntCatChipHTML(n, withGuess) {
+  const cap = withGuess && n.isEstimatedCategory ? `<span class="nt-guess">Opal's guess &middot; tap to change</span>` : '';
+  return `<span class="nt-cat ${n.category}">${esc(NOTE_CAT_LABEL[n.category])}</span>${cap}`;
+}
+function ntSummary(n) { const text = noteBodyText(n) || ''; return text.length > 92 ? text.slice(0, 92).trim() + '…' : text; }
+function ntCardHTML(n) {
+  return `<div class="nt-card" data-note="${n.id}" tabindex="0" role="button" aria-label="${esc(n.title)}">
+    <div class="nt-card-top">
+      <span class="nt-card-prov" title="${n.source === 'manual' ? 'Written by you' : 'Opal bookmark'}">${n.source === 'manual' ? ntProvManual : ntProvBookmark}</span>
+      <button type="button" class="nt-card-star${n.isStarred ? ' on' : ''}" data-notestar="${n.id}" aria-label="${n.isStarred ? 'Unstar' : 'Star'} this note">${ntStarSvg}</button>
+    </div>
+    <div class="nt-card-title">${esc(n.title)}</div>
+    <p class="nt-card-sum">${esc(ntSummary(n))}</p>
+    <div class="nt-card-bottom">${ntCatChipHTML(n, false)}<span class="nt-card-date mono">${ntFmtDate(n.createdAt)}</span></div>
+  </div>`;
+}
+function ntRenderGrid() {
+  const list = ntFilteredNotes(), grid = $('#ntGrid');
+  grid.innerHTML = `<div class="nt-card new" data-newnote tabindex="0" role="button" aria-label="New note"><b>+</b>New Note</div>` +
+    (list.length ? list.map(ntCardHTML).join('') : `<div class="nt-empty">Nothing here yet. Star a moment or write one down.</div>`);
+}
+
+/* ---------- the overview rail: total, this period, a real clickable pie chart ---------- */
+function ntRangeStart(range) {
+  const d = new Date(WG_T0);
+  if (range === 'day') { d.setHours(0, 0, 0, 0); return d.getTime(); }
+  if (range === 'week') { d.setDate(d.getDate() - 6); d.setHours(0, 0, 0, 0); return d.getTime(); }
+  if (range === 'year') { d.setFullYear(d.getFullYear() - 1); return d.getTime(); }
+  d.setDate(d.getDate() - 30); return d.getTime();
+}
+function ntPeriodNotes() { const start = ntRangeStart(ntState.railRange); return NOTE_RECORDS.filter(n => n.createdAt >= start); }
+function ntCatCounts(list) { const c = {}; NOTE_CATS.forEach(k => c[k] = 0); list.forEach(n => c[n.category]++); return c; }
+function ntPieSlicePath(cx, cy, r, r0, a0, a1) {
+  const xy = (a, rad) => [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
+  const [x1, y1] = xy(a0, r), [x2, y2] = xy(a1, r), [x3, y3] = xy(a1, r0), [x4, y4] = xy(a0, r0);
+  const large = (a1 - a0) > Math.PI ? 1 : 0;
+  return `M${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${large} 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${r0},${r0} 0 ${large} 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z`;
+}
+function ntRenderPie() {
+  const list = ntPeriodNotes(), counts = ntCatCounts(list), total = list.length, cx = 75, cy = 75, r = 70, r0 = 44;
+  let ang = -Math.PI / 2, svg = '';
+  if (!total) svg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--wg-surface-3)"></circle>`;
+  else NOTE_CATS.forEach(cat => {
+    const n = counts[cat]; if (!n) return;
+    const slice = n / total * Math.PI * 2, end = ang + slice, dim = ntState.catFilter && ntState.catFilter !== cat ? ' dim' : '';
+    svg += `<path class="nt-pie-slice${dim}" d="${ntPieSlicePath(cx, cy, r, r0, ang, end)}" fill="var(--cat-${cat})" data-notecat="${cat}" tabindex="0" role="button" aria-label="${NOTE_CAT_LABEL[cat]}, ${n} notes"></path>`;
+    ang = end;
+  });
+  svg += `<text x="${cx}" y="${cy - 4}" text-anchor="middle" class="nt-pie-total">${total}</text><text x="${cx}" y="${cy + 14}" text-anchor="middle" class="nt-pie-total-l">NOTE_RECORDS</text>`;
+  $('#ntRailPie').innerHTML = `<svg viewBox="0 0 150 150" aria-hidden="false">${svg}</svg>`;
+}
+function ntRenderLegend() {
+  const counts = ntCatCounts(ntPeriodNotes());
+  $('#ntRailLegend').innerHTML = NOTE_CATS.map(cat => {
+    const dim = ntState.catFilter && ntState.catFilter !== cat ? ' dim' : '';
+    return `<button type="button" class="nt-legend-row${dim}" data-notecat="${cat}"><span class="nt-legend-dot" style="background:var(--cat-${cat})"></span><span>${esc(NOTE_CAT_LABEL[cat])}</span><b>${counts[cat]}</b></button>`;
+  }).join('');
+}
+function ntRenderRail() { $('#ntRailTotal').textContent = NOTE_RECORDS.length; $('#ntRailPeriod').textContent = ntPeriodNotes().length; ntRenderPie(); ntRenderLegend(); }
+function ntSetRailRange(range) {
+  ntState.railRange = range;
+  $('#ntRailRange').querySelectorAll('[data-ntrange]').forEach(b => b.classList.toggle('on', b.dataset.ntrange === range));
+  ntRenderRail();
+}
+function ntSetCatFilter(cat) {
+  ntState.catFilter = ntState.catFilter === cat ? null : cat;
+  $('#ntCatClear').hidden = !ntState.catFilter;
+  $('#ntCatClearLabel').textContent = ntState.catFilter ? NOTE_CAT_LABEL[ntState.catFilter] : '';
+  ntRenderRail(); ntRenderActiveView();
+}
+function ntClearCatFilter() { ntState.catFilter = null; $('#ntCatClear').hidden = true; ntRenderRail(); ntRenderActiveView(); }
+
+/* ---------- collections: a note's own "build my own Pinterest" groupings ---------- */
+function ntRenderCollRow() {
+  const all = `<button type="button" class="nt-coll-chip all${!ntState.collection ? ' on' : ''}" data-ntcoll="">All Notes</button>`;
+  const chips = NOTE_COLLECTIONS.map(c => `<button type="button" class="nt-coll-chip${ntState.collection === c.id ? ' on' : ''}" data-ntcoll="${c.id}">${esc(c.name)} <small>${c.noteIds.length}</small></button>`).join('');
+  $('#ntCollRow').innerHTML = all + chips + `<button type="button" class="nt-coll-new" id="ntCollNewBtn">+ New Collection</button>`;
+}
+function ntSetCollection(id) { ntState.collection = id || null; ntRenderCollRow(); ntRenderRail(); ntRenderActiveView(); }
+function ntCreateCollection(fromNoteId) {
+  const name = prompt('Name this collection'); if (!name || !name.trim()) return null;
+  const id = 'ntc-' + Date.now().toString(36);
+  NOTE_COLLECTIONS.push({ id, name: name.trim(), noteIds: fromNoteId ? [fromNoteId] : [] });
+  if (fromNoteId) { const n = ntById(fromNoteId); if (n && !n.collectionIds.includes(id)) n.collectionIds.push(id); }
+  ntRenderCollRow();
+  return id;
+}
+function ntAddNoteToCollection(noteId, collId) {
+  const n = ntById(noteId), c = ntCollById(collId); if (!n || !c) return;
+  if (!n.collectionIds.includes(collId)) n.collectionIds.push(collId);
+  if (!c.noteIds.includes(noteId)) c.noteIds.push(noteId);
+  ntRenderCollRow(); toast(`Added to ${c.name}`);
+}
+
+/* ---------- scrapbook: an infinite pannable corkboard, one physical skin per note ---------- */
+const NT_SKIN_W = { sticky: 180, report: 230, evidence: 200, billboard: 270 };
+function ntScrapTitle(n, skin) { return skin === 'billboard' ? '' : `<div class="nt-scrap-title">${esc(n.title)}</div>`; }
+function ntScrapBodyText(n) { const t = noteBodyText(n) || ''; return t.length > 220 ? t.slice(0, 220).trim() + '…' : t; }
+function ntScrapCardInnerHTML(n) {
+  const skin = n.scrapbook.skin;
+  const star = n.isStarred ? `<span class="nt-scrap-star-badge">${ntStarSvg}</span>` : '';
+  const clip = (n.collectionIds || []).length ? `<svg class="nt-scrap-clip" viewBox="0 0 18 30" fill="none" stroke="#8a8a7a" stroke-width="2" aria-hidden="true"><path d="M5 4v18a4 4 0 008 0V7a2.5 2.5 0 00-5 0v13"/></svg>` : '';
+  return `${star}${clip}${ntScrapTitle(n, skin)}<div class="nt-scrap-body">${esc(ntScrapBodyText(n))}</div><span class="nt-scrap-cat" style="color:var(--cat-${n.category})">${esc(NOTE_CAT_LABEL[n.category])}</span>`;
+}
+function ntScrapCardStyle(n) {
+  const skin = n.scrapbook.skin;
+  let bg = '';
+  if (skin === 'sticky') bg = `background:${NT_STICKY_PALETTE[n.scrapbook.paletteIdx || 0]};`;
+  return `left:${n.scrapbook.x}px;top:${n.scrapbook.y}px;width:${NT_SKIN_W[skin]}px;transform:rotate(${n.scrapbook.rotation}deg);z-index:${n.scrapbook.z || 1};${bg}`;
+}
+function ntScrapCardHTML(n) {
+  return `<div class="nt-scrap-card nt-skin-${n.scrapbook.skin}" data-note="${n.id}" tabindex="0" role="button" aria-label="${esc(n.title)}" style="${ntScrapCardStyle(n)}">${ntScrapCardInnerHTML(n)}</div>`;
+}
+
+/* extracted lines + hand-drawn connector arrows: a capped, rotating set of the longest and
+   most-recently-starred notes get two or three of their own sentences floated beside them —
+   no rough.js in this codebase, so the "hand-drawn" doubled-stroke line is a small seeded
+   wobble generator instead, deterministic from the same note.scrapbook.seed */
+function ntSplitSentences(text) { return (text || '').match(/[^.!?]+[.!?]*/g)?.map(s => s.trim()).filter(s => noteWords(s) >= 3) || []; }
+function ntEligibleForFragments() {
+  const withLen = NOTE_RECORDS.filter(n => noteWords(noteBodyText(n)) > 40 || (n.isStarred && ntSplitSentences(noteBodyText(n)).length > 1));
+  return withLen.sort((a, b) => (b.isStarred - a.isStarred) || (b.updatedAt - a.updatedAt)).slice(0, 7);
+}
+function ntWobblePath(seed, x1, y1, x2, y2) {
+  const midx = (x1 + x2) / 2 + (ntRand(seed) - .5) * 40, midy = (y1 + y2) / 2 + (ntRand(seed + 1) - .5) * 40;
+  return `M${x1},${y1} Q${midx},${midy} ${x2},${y2}`;
+}
+function ntArrowSvgHTML(seed, x1, y1, x2, y2) {
+  const minX = Math.min(x1, x2) - 6, minY = Math.min(y1, y2) - 6, w = Math.abs(x2 - x1) + 12, h = Math.abs(y2 - y1) + 12;
+  const lx1 = x1 - minX, ly1 = y1 - minY, lx2 = x2 - minX, ly2 = y2 - minY;
+  const p1 = ntWobblePath(seed, lx1, ly1, lx2, ly2), p2 = ntWobblePath(seed + 10, lx1 + 1.2, ly1 - 1, lx2 + 1.2, ly2 - 1);
+  const ang = Math.atan2(ly2 - ly1, lx2 - lx1);
+  const ah1x = lx2 - 9 * Math.cos(ang - .5), ah1y = ly2 - 9 * Math.sin(ang - .5), ah2x = lx2 - 9 * Math.cos(ang + .5), ah2y = ly2 - 9 * Math.sin(ang + .5);
+  return `<svg class="nt-arrow-svg" aria-hidden="true" style="left:${minX}px;top:${minY}px;width:${w}px;height:${h}px" viewBox="0 0 ${w} ${h}">
+    <path class="nt-arrow-path" d="${p1}"></path><path class="nt-arrow-path" d="${p2}"></path>
+    <path class="nt-arrow-path" d="M${ah1x.toFixed(1)},${ah1y.toFixed(1)} L${lx2},${ly2} L${ah2x.toFixed(1)},${ah2y.toFixed(1)}"></path>
+  </svg>`;
+}
+function ntFragmentsHTML(n) {
+  const sentences = ntSplitSentences(noteBodyText(n)).slice(0, 3);
+  if (sentences.length < 2) return '';
+  const skinW = NT_SKIN_W[n.scrapbook.skin], baseX = n.scrapbook.x, baseY = n.scrapbook.y, seed = n.scrapbook.seed;
+  let html = '';
+  sentences.slice(1).forEach((s, i) => {
+    const fx = baseX + skinW + 30 + Math.round((ntRand(seed + 20 + i * 3) - .5) * 30);
+    const fy = baseY + i * 90 + Math.round((ntRand(seed + 21 + i * 3) - .3) * 40);
+    const fromX = baseX + skinW / 2, fromY = baseY + 40, toX = fx + 10, toY = fy + 30;
+    html += ntArrowSvgHTML(seed + 30 + i * 7, fromX, fromY, toX, toY);
+    html += `<div class="nt-frag" data-fragof="${esc(n.title)}" style="left:${fx}px;top:${fy}px">${esc(s)}</div>`;
+  });
+  return html;
+}
+
+/* decorative props: ambient texture only, capped, never blocks interaction with notes */
+function ntPropsHTML() {
+  const bounds = ntBoardBounds(), props = [], count = Math.min(9, Math.max(4, Math.round(NOTE_RECORDS.length / 2)));
+  for (let i = 0; i < count; i++) {
+    const r = ntRand(7000 + i * 13);
+    const x = bounds.minX + r * (bounds.maxX - bounds.minX), y = bounds.minY + ntRand(7001 + i * 13) * (bounds.maxY - bounds.minY);
+    const kind = i % 3;
+    if (kind === 0) props.push(`<svg class="nt-prop nt-prop-clip" style="left:${x}px;top:${y}px;transform:rotate(${Math.round((ntRand(7002+i)-.5)*40)}deg)" viewBox="0 0 18 30" fill="none" stroke="#5c5648" stroke-width="1.6" aria-hidden="true"><path d="M5 4v18a4 4 0 008 0V7a2.5 2.5 0 00-5 0v13"/></svg>`);
+    else if (kind === 1) props.push(`<div class="nt-prop nt-prop-tape" style="left:${x}px;top:${y}px"></div>`);
+    else props.push(`<svg class="nt-prop nt-prop-pencil" style="left:${x}px;top:${y}px;transform:rotate(${Math.round((ntRand(7003+i)-.5)*60)}deg)" viewBox="0 0 70 10" fill="none" aria-hidden="true"><rect x="0" y="3" width="55" height="4" fill="#c9a24a"/><polygon points="55,1 70,5 55,9" fill="#e8c98a"/></svg>`);
+  }
+  return props.join('');
+}
+function ntBoardBounds() {
+  if (!NOTE_RECORDS.length) return { minX: 0, minY: 0, maxX: 1400, maxY: 1000 };
+  const xs = NOTE_RECORDS.map(n => n.scrapbook.x), ys = NOTE_RECORDS.map(n => n.scrapbook.y);
+  return { minX: Math.min(...xs) - 200, minY: Math.min(...ys) - 200, maxX: Math.max(...xs) + 400, maxY: Math.max(...ys) + 400 };
+}
+function ntRenderScrapbook() {
+  const list = ntFilteredNotes(), canvas = $('#ntScrapCanvas');
+  const fragEligible = new Set(ntEligibleForFragments().map(n => n.id));
+  const visibleIds = new Set(list.map(n => n.id));
+  let html = ntPropsHTML();
+  list.forEach(n => {
+    html += ntScrapCardHTML(n);
+    if (fragEligible.has(n.id)) html += ntFragmentsHTML(n);
+  });
+  canvas.innerHTML = html;
+  if (!ntState.panSetup) { ntCenterPan(); ntState.panSetup = true; }
+  ntApplyPan();
+  void visibleIds;
+}
+function ntCenterPan() {
+  const b = ntBoardBounds(), vp = $('#ntScrapViewport');
+  const vw = vp.clientWidth || 900, vh = vp.clientHeight || 560;
+  const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+  const scale = clamp(Math.min(vw / bw, vh / bh, 1), .35, 1);
+  ntState.pan.scale = scale;
+  ntState.pan.x = vw / 2 - (b.minX + bw / 2) * scale;
+  ntState.pan.y = vh / 2 - (b.minY + bh / 2) * scale;
+}
+function ntApplyPan() {
+  $('#ntScrapCanvas').style.transform = `translate(${ntState.pan.x}px,${ntState.pan.y}px) scale(${ntState.pan.scale})`;
+}
+function ntZoomAt(factor, cx, cy) {
+  const p = ntState.pan, newScale = clamp(p.scale * factor, .28, 1.8);
+  const ratio = newScale / p.scale;
+  p.x = cx - (cx - p.x) * ratio; p.y = cy - (cy - p.y) * ratio; p.scale = newScale;
+  ntApplyPan();
+}
+
+/* pan the board on empty canvas, zoom on wheel/pinch — momentum reuses this OS's
+   established lag-follow feel rather than a literal port of Crown's 3D dial */
+function ntWirePanZoom() {
+  const vp = $('#ntScrapViewport');
+  let panning = null;
+  vp.addEventListener('pointerdown', e => {
+    if (e.target.closest('.nt-scrap-card')) return;
+    panning = { x0: e.clientX, y0: e.clientY, px0: ntState.pan.x, py0: ntState.pan.y };
+    vp.classList.add('panning'); vp.setPointerCapture(e.pointerId);
+  });
+  vp.addEventListener('pointermove', e => {
+    if (!panning) return;
+    ntState.pan.x = panning.px0 + (e.clientX - panning.x0); ntState.pan.y = panning.py0 + (e.clientY - panning.y0);
+    ntApplyPan();
+  });
+  const endPan = () => { panning = null; vp.classList.remove('panning'); };
+  vp.addEventListener('pointerup', endPan); vp.addEventListener('pointercancel', endPan);
+  vp.addEventListener('wheel', e => {
+    e.preventDefault(); const r = vp.getBoundingClientRect();
+    ntZoomAt(e.deltaY < 0 ? 1.08 : .93, e.clientX - r.left, e.clientY - r.top);
+  }, { passive: false });
+}
+
+/* dragging a note on the board — identical physics to Conversations' folder-filing drag
+   (8px pickup, 0.35 lag-follow, velocity-proportional tilt) with no drop target: releasing
+   anywhere just commits the new canvas-space position */
+function ntCardDragStart(e, card) {
+  if (e.target.closest('[data-notestar],.nt-scrap-clip')) return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  const id = card.dataset.note, n = ntById(id); if (!n) return;
+  const startX = e.clientX, startY = e.clientY, rect = card.getBoundingClientRect(), scale = ntState.pan.scale;
+  const startCanvasX = n.scrapbook.x, startCanvasY = n.scrapbook.y;
+  let dragging = false, moved = false, lastX = startX, tilt = 0, raf = null;
+  const pos = { x: rect.left, y: rect.top }, target = { x: rect.left, y: rect.top };
+  function tick() {
+    if (!dragging) return;
+    const k = REDUCED ? 1 : .35;
+    pos.x += (target.x - pos.x) * k; pos.y += (target.y - pos.y) * k;
+    card.style.left = (startCanvasX + (pos.x - rect.left) / scale) + 'px';
+    card.style.top = (startCanvasY + (pos.y - rect.top) / scale) + 'px';
+    card.style.transform = `rotate(${n.scrapbook.rotation}deg) scale(1.05) rotate(${REDUCED ? 0 : tilt}deg)`;
+    raf = requestAnimationFrame(tick);
+  }
+  function onMove(ev) {
+    const dx = ev.clientX - startX, dy = ev.clientY - startY;
+    if (!dragging) {
+      if (Math.hypot(dx, dy) < 8) return;
+      dragging = true; moved = true; n.scrapbook.z = ntNextZ(); card.style.zIndex = n.scrapbook.z; card.classList.add('wg-dragging-scrap');
+      tick();
+    }
+    target.x = ev.clientX - rect.width / 2; target.y = ev.clientY - rect.height * .3;
+    const vx = ev.clientX - lastX; lastX = ev.clientX; tilt = clamp(vx * .6, -4, 4);
+  }
+  let ended = false;
+  function onUp() {
+    document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp);
+    if (ended) return; ended = true;
+    if (dragging) { cancelAnimationFrame(raf); card.classList.remove('wg-dragging-scrap'); card.style.transform = `rotate(${n.scrapbook.rotation}deg)`;
+      n.scrapbook.x = parseFloat(card.style.left); n.scrapbook.y = parseFloat(card.style.top);
+      ntRenderScrapbook();
+      // a real drag still fires a click on release (mousedown/mouseup landed on the same element) —
+      // suppress just that one click so releasing a drag never also pops the note open
+      ntState.justDragged = true; setTimeout(() => { ntState.justDragged = false; }, 60);
+    }
+    if (!moved) return;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+  document.addEventListener('pointercancel', onUp);
+}
+function ntOpenMoveMenu(id, anchorEl) {
+  const n = ntById(id); if (!n) return;
+  const r = anchorEl.getBoundingClientRect();
+  const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntMovePop';
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, 190) + 'px'; div.style.left = clamp(r.left - 80, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.innerHTML = `<button type="button" data-ntnudge="up">&uarr; Move up</button><button type="button" data-ntnudge="down">&darr; Move down</button><button type="button" data-ntnudge="left">&larr; Move left</button><button type="button" data-ntnudge="right">&rarr; Move right</button>`;
+  document.body.appendChild(div);
+  div.addEventListener('click', e => {
+    const b = e.target.closest('[data-ntnudge]'); if (!b) return;
+    const step = 40; if (b.dataset.ntnudge === 'up') n.scrapbook.y -= step; if (b.dataset.ntnudge === 'down') n.scrapbook.y += step;
+    if (b.dataset.ntnudge === 'left') n.scrapbook.x -= step; if (b.dataset.ntnudge === 'right') n.scrapbook.x += step;
+    ntRenderScrapbook();
+  });
+  const closeIt = ev => { if (!ev.target.closest('#ntMovePop')) { div.remove(); document.removeEventListener('click', closeIt); } };
+  setTimeout(() => document.addEventListener('click', closeIt), 10);
+}
+
+/* ---------- grid <-> scrapbook: same dataset, two layouts, never a page reload ---------- */
+function ntRenderActiveView() { if (ntState.view === 'scrapbook') ntRenderScrapbook(); else ntRenderGrid(); }
+function ntStaggerGridIn() {
+  $('#ntGrid').querySelectorAll('.nt-card:not(.new)').forEach(el => {
+    el.animate([{ opacity: 0, transform: 'translateY(16px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: Math.random() * 150, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
+  });
+}
+function ntStaggerScrapIn() {
+  $('#ntScrapCanvas').querySelectorAll('.nt-scrap-card').forEach(el => {
+    const rot = el.style.transform;
+    el.animate([{ opacity: 0, transform: `${rot} translateY(-34px) scale(.82)` }, { opacity: 1, transform: rot }], { duration: 680, delay: Math.random() * 150, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
+  });
+}
+function ntSwitchView(view) {
+  if (view === ntState.view) return;
+  ntState.view = view;
+  $('#ntViewSwitch').querySelectorAll('[data-ntview]').forEach(b => b.classList.toggle('on', b.dataset.ntview === view));
+  const gridEl = $('#ntGrid'), scrapEl = $('#ntScrap');
+  if (view === 'scrapbook') {
+    gridEl.hidden = true; scrapEl.hidden = false; ntRenderScrapbook();
+    if (!REDUCED) ntStaggerScrapIn();
+  } else {
+    scrapEl.hidden = true; gridEl.hidden = false; ntRenderGrid();
+    if (!REDUCED) ntStaggerGridIn();
+  }
+}
+
+/* ---------- the note detail page: opens from either view via the same grow-from-clicked-card
+   transition Conversations and the day page already use ---------- */
+function ntDetailCatHTML(n) {
+  const guess = n.isEstimatedCategory ? `<span class="nt-guess" id="ntDetailGuess">Opal&rsquo;s guess &middot; tap to change</span>` : '';
+  return `<div class="nt-detail-cat-wrap"><button type="button" class="nt-cat ${n.category}" id="ntDetailCatBtn">${esc(NOTE_CAT_LABEL[n.category])} &#9662;</button>${guess}</div>`;
+}
+function ntDetailBodyHTML(n) {
+  if (n.source === 'manual') return `<div class="nt-detail-body" id="ntDetailBody" contenteditable="true" data-placeholder="Write something…">${esc(n.body)}</div>`;
+  return `<div class="nt-detail-quotelabel">Captured from a conversation</div>
+    <p class="nt-detail-quote">&ldquo;${esc(n.quoteText)}&rdquo;</p>
+    <div class="nt-detail-annolabel">Your notes</div>
+    <div class="nt-detail-body" id="ntDetailBody" contenteditable="true" data-placeholder="Add context, a follow-up thought, or why this stuck with you…">${esc(n.body || '')}</div>
+    ${n.sourceConversationId ? `<a href="#" class="nt-detail-jump" id="ntDetailJump">Jump to this moment →</a>` : ''}`;
+}
+function ntDetailCollsHTML(n) {
+  const mine = (n.collectionIds || []).map(ntCollById).filter(Boolean);
+  return `<div class="nt-detail-colls"><div class="nt-detail-colls-label">Collections</div><div class="nt-collrow" style="margin-bottom:0;overflow:visible">${mine.length ? mine.map(c => `<span class="nt-coll-chip">${esc(c.name)}</span>`).join('') : `<span class="nt-card-date mono">Not in a collection yet</span>`}</div></div>`;
+}
+function ntDetailHTML(n) {
+  return `<div class="nt-detail-head">
+      <div class="nt-detail-headl"><div class="nt-detail-title" id="ntDetailTitle" contenteditable="true" spellcheck="false">${esc(n.title)}</div></div>
+      <div class="nt-detail-headr">
+        <button type="button" class="nt-detail-star${n.isStarred ? ' on' : ''}" id="ntDetailStar" aria-label="${n.isStarred ? 'Unstar' : 'Star'} this note">${ntStarSvg}</button>
+        <div class="nt-detail-menu-wrap">
+          <button type="button" class="nt-detail-menubtn" id="ntDetailMenuBtn" aria-label="More options">&#8230;</button>
+          <div class="wg-conv-menu" id="ntDetailMenu" hidden><button type="button" data-ntact="collection">Add to collection &#9656;</button><button type="button" data-ntact="copy">Copy</button><button type="button" data-ntact="delete">Delete</button></div>
+        </div>
+      </div>
+    </div>
+    ${ntDetailCatHTML(n)}
+    <div class="nt-detail-meta">${n.source === 'manual' ? 'WRITTEN BY YOU' : 'OPAL BOOKMARK'} &middot; ${esc(ntFmtDate(n.createdAt))}</div>
+    ${ntDetailBodyHTML(n)}
+    ${ntDetailCollsHTML(n)}`;
+}
+function ntRenderDetail(n) { $('#ntDetailContent').innerHTML = ntDetailHTML(n); }
+function ntOpenDetail(id, anchorEl) {
+  const n = ntById(id); if (!n) return;
+  ntState.currentNote = id;
+  const page = $('#ntDetail'), shell = $('#ntShell');
+  ntRenderDetail(n);
+  if (!REDUCED && anchorEl) {
+    const r = anchorEl.getBoundingClientRect();
+    page.animate([{ opacity: 0, transform: `scale(${clamp(r.width / innerWidth, .08, .9)})`, transformOrigin: `${r.left + r.width / 2}px ${r.top + r.height / 2}px` }, { opacity: 1, transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.22,1,.36,1)' });
+    shell.style.transition = 'filter .5s var(--ease),opacity .5s var(--ease)'; shell.style.filter = 'blur(6px)'; shell.style.opacity = '.35';
+  }
+  page.classList.add('show');
+  $('#ntDetailInner').scrollTop = 0;
+}
+function ntCloseDetail() {
+  $('#ntDetail').classList.remove('show'); const shell = $('#ntShell'); shell.style.filter = ''; shell.style.opacity = '';
+  ntState.currentNote = null; $('#ntDetailMenu').hidden = true;
+  ntRenderGrid(); ntRenderRail(); ntRenderCollRow();
+  if (ntState.view === 'scrapbook') ntRenderScrapbook();
+}
+function ntToggleStar(id) {
+  const n = ntById(id); if (!n) return; n.isStarred = !n.isStarred; n.updatedAt = Date.now();
+  if (ntState.currentNote === id) ntRenderDetail(n);
+  ntRenderActiveView();
+}
+function ntSaveTitle(id, text) { const n = ntById(id); if (!n) return; n.title = text.trim() || n.title; n.isEstimatedTitle = false; n.updatedAt = Date.now(); }
+function ntSaveBody(id, text) { const n = ntById(id); if (!n) return; n.body = text; n.updatedAt = Date.now(); }
+function ntOpenCatMenu(id, anchorEl) {
+  const n = ntById(id); if (!n) return;
+  const r = anchorEl.getBoundingClientRect();
+  const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntCatPop';
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, NOTE_CATS.length * 38 + 12) + 'px'; div.style.left = clamp(r.left, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.innerHTML = NOTE_CATS.map(c => `<button type="button" data-ntsetcat="${c}">${c === n.category ? '&check; ' : ''}${NOTE_CAT_LABEL[c]}</button>`).join('');
+  document.body.appendChild(div);
+  div.addEventListener('click', e => {
+    const b = e.target.closest('[data-ntsetcat]'); if (!b) return;
+    n.category = b.dataset.ntsetcat; n.isEstimatedCategory = false; div.remove();
+    if (ntState.currentNote === n.id) ntRenderDetail(n);
+    ntRenderActiveView(); ntRenderRail();
+  });
+  const closeIt = ev => { if (!ev.target.closest('#ntCatPop')) { div.remove(); document.removeEventListener('click', closeIt); } };
+  setTimeout(() => document.addEventListener('click', closeIt), 10);
+}
+function ntOpenAddToCollectionMenu(id, anchorEl) {
+  const n = ntById(id); if (!n) return;
+  const r = anchorEl.getBoundingClientRect();
+  const items = NOTE_COLLECTIONS.map(c => `<button type="button" data-ntaddcoll="${c.id}">${n.collectionIds.includes(c.id) ? '&check; ' : ''}${esc(c.name)}</button>`).join('') + `<button type="button" data-ntaddcoll="__new">+ New collection</button>`;
+  const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'ntAddCollPop';
+  div.style.position = 'fixed'; div.style.top = wgPopTop(r, (NOTE_COLLECTIONS.length + 1) * 38 + 12) + 'px'; div.style.left = clamp(r.left - 160, 12, innerWidth - 196) + 'px'; div.style.zIndex = 20;
+  div.innerHTML = items; document.body.appendChild(div);
+  div.addEventListener('click', e => {
+    const b = e.target.closest('[data-ntaddcoll]'); if (!b) return; div.remove();
+    if (b.dataset.ntaddcoll === '__new') { const cid = ntCreateCollection(id); if (cid) toast('Added to ' + ntCollById(cid).name); }
+    else ntAddNoteToCollection(id, b.dataset.ntaddcoll);
+    if (ntState.currentNote === id) ntRenderDetail(ntById(id));
+  });
+  const closeIt = ev => { if (!ev.target.closest('#ntAddCollPop')) { div.remove(); document.removeEventListener('click', closeIt); } };
+  setTimeout(() => document.addEventListener('click', closeIt), 10);
+}
+function ntCopyNote(n) {
+  if (!n) return;
+  const text = n.source === 'manual' ? `${n.title}\n\n${n.body}` : `${n.title}\n\n"${n.quoteText}"${n.body ? '\n\n' + n.body : ''}`;
+  const done = () => toast('Copied');
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(done); else done();
+}
+function ntOpenConfirm(id) { ntState.pendingDelete = id; $('#ntConfirm').classList.add('show'); }
+function ntCloseConfirm() { $('#ntConfirm').classList.remove('show'); ntState.pendingDelete = null; }
+function ntConfirmDelete() {
+  const id = ntState.pendingDelete; if (!id) return;
+  const idx = NOTE_RECORDS.findIndex(n => n.id === id); if (idx >= 0) NOTE_RECORDS.splice(idx, 1);
+  NOTE_COLLECTIONS.forEach(c => { const i = c.noteIds.indexOf(id); if (i >= 0) c.noteIds.splice(i, 1); });
+  ntCloseConfirm(); ntCloseDetail(); toast('Note deleted');
+}
+function ntJumpToMoment(n) {
+  if (!n.sourceConversationId) return;
+  ntCloseDetail();
+  const btn = document.querySelector('[data-nav="widgets"]'), r = btn ? btn.getBoundingClientRect() : { left: innerWidth / 2, top: 30, width: 0, height: 0 };
+  chatGo('widgets', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  setTimeout(() => {
+    wgConvOpen(n.sourceConversationId, null);
+    setTimeout(() => {
+      const el = document.querySelector(`#wgConvTranscript [data-sent="${n.sourceSentenceId}"]`);
+      if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); }
+    }, 220);
+  }, REDUCED ? 0 : 300);
+}
+function ntAddNote() {
+  const id = 'n-u' + Date.now().toString(36);
+  const n = { id, title: 'Untitled note', isEstimatedTitle: false, source: 'manual', body: '', quoteText: null, sourceConversationId: null, sourceSentenceId: null, createdAt: Date.now(), updatedAt: Date.now(), category: 'uncat', isEstimatedCategory: false, isStarred: false, collectionIds: [], scrapbook: { x: null, y: null, rotation: null, skin: 'sticky', seed: ntSeed() } };
+  NOTE_RECORDS.unshift(n);
+  ntAssignScrapbookPlacement(n);
+  ntRenderActiveView(); ntRenderRail(); ntRenderCollRow();
+  ntOpenDetail(id, null);
+  setTimeout(() => { const t = $('#ntDetailTitle'); if (t) { t.focus(); const sel = getSelection(), range = document.createRange(); range.selectNodeContents(t); sel.removeAllRanges(); sel.addRange(range); } }, REDUCED ? 0 : 320);
+}
+
+/* ---------- boot + wiring ---------- */
+function noteInit() {
+  if (ntState.inited) return; ntState.inited = true;
+  ntRenderCollRow(); ntRenderGrid(); ntRenderRail(); ntWirePanZoom();
+
+  $('#ntAddBtn').addEventListener('click', () => ntAddNote());
+  $('#ntScrapAdd').addEventListener('click', () => ntAddNote());
+  $('#ntSrcFilter').addEventListener('click', e => { const b = e.target.closest('[data-ntsrc]'); if (!b) return; ntState.srcFilter = b.dataset.ntsrc; $('#ntSrcFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); ntRenderActiveView(); });
+  $('#ntSort').addEventListener('click', e => { const b = e.target.closest('[data-ntsort]'); if (!b) return; ntState.sort = b.dataset.ntsort; $('#ntSort').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); ntRenderActiveView(); });
+  $('#ntViewSwitch').addEventListener('click', e => { const b = e.target.closest('[data-ntview]'); if (b) ntSwitchView(b.dataset.ntview); });
+  $('#ntCatClearBtn').addEventListener('click', ntClearCatFilter);
+  $('#ntCollRow').addEventListener('click', e => {
+    const nb = e.target.closest('#ntCollNewBtn'); if (nb) return ntCreateCollection(null);
+    const b = e.target.closest('[data-ntcoll]'); if (b) ntSetCollection(b.dataset.ntcoll);
+  });
+  $('#ntRailRange').addEventListener('click', e => { const b = e.target.closest('[data-ntrange]'); if (b) ntSetRailRange(b.dataset.ntrange); });
+  $('#ntRailPie').addEventListener('click', e => { const b = e.target.closest('[data-notecat]'); if (b) ntSetCatFilter(b.dataset.notecat); });
+  $('#ntRailPie').addEventListener('keydown', e => { if (e.key !== 'Enter') return; const b = e.target.closest('[data-notecat]'); if (b) ntSetCatFilter(b.dataset.notecat); });
+  $('#ntRailLegend').addEventListener('click', e => { const b = e.target.closest('[data-notecat]'); if (b) ntSetCatFilter(b.dataset.notecat); });
+
+  $('#ntGrid').addEventListener('click', e => {
+    const star = e.target.closest('[data-notestar]'); if (star) { e.stopPropagation(); return ntToggleStar(star.dataset.notestar); }
+    const nw = e.target.closest('[data-newnote]'); if (nw) return ntAddNote();
+    const card = e.target.closest('[data-note]'); if (card) return ntOpenDetail(card.dataset.note, card);
+  });
+  $('#ntGrid').addEventListener('keydown', e => { if (e.key !== 'Enter') return; const card = e.target.closest('[data-note]'); if (card && !e.target.closest('[data-notestar]')) ntOpenDetail(card.dataset.note, card); });
+
+  $('#ntScrapCanvas').addEventListener('pointerdown', e => { const card = e.target.closest('.nt-scrap-card'); if (card) ntCardDragStart(e, card); });
+  $('#ntScrapCanvas').addEventListener('click', e => { if (ntState.justDragged) return; const card = e.target.closest('.nt-scrap-card'); if (card) return ntOpenDetail(card.dataset.note, card); });
+  $('#ntScrapCanvas').addEventListener('contextmenu', e => { const card = e.target.closest('.nt-scrap-card'); if (card) { e.preventDefault(); ntOpenMoveMenu(card.dataset.note, card); } });
+
+  $('#ntDetailClose').addEventListener('click', ntCloseDetail);
+  $('#ntDetail').addEventListener('click', e => {
+    if (e.target.id === 'ntDetail') return ntCloseDetail();
+    const star = e.target.closest('#ntDetailStar'); if (star) return ntToggleStar(ntState.currentNote);
+    const menuBtn = e.target.closest('#ntDetailMenuBtn'); if (menuBtn) { e.stopPropagation(); const m = $('#ntDetailMenu'); m.hidden = !m.hidden; return; }
+    const act = e.target.closest('[data-ntact]');
+    if (act) {
+      const id = ntState.currentNote; $('#ntDetailMenu').hidden = true;
+      if (act.dataset.ntact === 'collection') return ntOpenAddToCollectionMenu(id, act);
+      if (act.dataset.ntact === 'copy') return ntCopyNote(ntById(id));
+      if (act.dataset.ntact === 'delete') return ntOpenConfirm(id);
+    }
+    const catBtn = e.target.closest('#ntDetailCatBtn'); if (catBtn) return ntOpenCatMenu(ntState.currentNote, catBtn);
+    const guess = e.target.closest('#ntDetailGuess'); if (guess) { const btn = $('#ntDetailCatBtn'); if (btn) ntOpenCatMenu(ntState.currentNote, btn); return; }
+    const jump = e.target.closest('#ntDetailJump'); if (jump) { e.preventDefault(); const n = ntById(ntState.currentNote); if (n) ntJumpToMoment(n); return; }
+  });
+  $('#ntDetail').addEventListener('blur', e => {
+    const t = e.target.closest && e.target.closest('#ntDetailTitle'); if (t) return ntSaveTitle(ntState.currentNote, t.textContent);
+    const b = e.target.closest && e.target.closest('#ntDetailBody'); if (b) return ntSaveBody(ntState.currentNote, b.textContent);
+  }, true);
+  document.addEventListener('click', e => { if (!e.target.closest('#ntDetailMenu') && !e.target.closest('#ntDetailMenuBtn')) { const m = $('#ntDetailMenu'); if (m) m.hidden = true; } });
+
+  $('#ntConfirmCancel').addEventListener('click', ntCloseConfirm);
+  $('#ntConfirmDelete').addEventListener('click', ntConfirmDelete);
+  $('#ntConfirm').addEventListener('click', e => { if (e.target.id === 'ntConfirm') ntCloseConfirm(); });
+
+  addEventListener('keydown', e => {
+    if (mode !== 'notes') return;
+    if (e.key === 'Escape') { if ($('#ntConfirm').classList.contains('show')) return ntCloseConfirm(); if ($('#ntDetail').classList.contains('show')) return ntCloseDetail(); }
+  });
+  addEventListener('resize', () => { if (mode === 'notes' && ntState.view === 'scrapbook') ntApplyPan(); });
+}
+function noteRefresh() { ntRenderRail(); ntRenderCollRow(); ntRenderActiveView(); }
+
 try {
   wgRenderWelcomePanel(); wgInit(); wgRenderRail();
   if (wgState.viewMode === 'today') wgStartTodayFeed();
