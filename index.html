@@ -571,7 +571,7 @@ body.sheet-open .coord,body.sheet-open .crown{opacity:0;pointer-events:none}
   --wg-bg:#f5f5f0; --wg-surface:#ffffff; --wg-surface-2:#f7f7f2; --wg-surface-3:#eeeee6;
   --wg-border:rgba(31,36,29,.09); --wg-border-2:rgba(31,36,29,.16);
   --wg-ink:#1f241d; --wg-ink-60:rgba(31,36,29,.62); --wg-ink-42:rgba(31,36,29,.44); --wg-ink-28:rgba(31,36,29,.26);
-  --wg-accent:#6f8f4e; --wg-accent-ink:#3c4c2a; --wg-spore:#c3cf3f; --wg-ember:#dd8f45; --wg-yellow:#f3f0b8;
+  --wg-accent:#6f8f4e; --wg-accent-ink:#3c4c2a; --wg-spore:#c3cf3f; --wg-ember:#dd8f45; --wg-yellow:#f3f0b8; --wg-yellow-soft:#faf8e2;
   --wg-shadow-sm:0 1px 2px rgba(31,36,29,.05),0 1px 1px rgba(31,36,29,.03);
   --wg-shadow-md:0 4px 10px rgba(31,36,29,.05),0 14px 32px rgba(31,36,29,.07);
   --wg-shadow-lg:0 20px 44px rgba(31,36,29,.14),0 4px 14px rgba(31,36,29,.08);
@@ -681,14 +681,19 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-grid-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--wg-ink-42);font-size:13px}
 
 /* calendar mode */
-.wg-cal{flex:1;min-width:0;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.wg-cal-cell{position:relative;aspect-ratio:1;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;padding:9px;cursor:pointer;transition:background .2s,box-shadow .2s}
-.wg-cal-cell.has:hover{background:var(--wg-surface-2);box-shadow:var(--wg-shadow-sm)}
-.wg-cal-cell.empty{background:none;border-color:transparent;opacity:.4;cursor:default}
-.wg-cal-cell .n{font:400 11px/1 var(--mono);color:var(--wg-ink-42)}
-.wg-cal-cell .badges{position:absolute;right:7px;bottom:7px;display:flex;gap:2px}
-.wg-cal-cell .badges b{width:12px;height:12px;border-radius:4px;background:var(--c,var(--wg-accent))}
-.wg-cal-cell .cnt{position:absolute;left:9px;bottom:8px;font:400 9px/1 var(--mono);color:var(--wg-accent-ink)}
+.wg-cal{flex:1;min-width:0;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.wg-cal-cell{position:relative;height:122px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;cursor:default;transition:background .18s var(--ease),box-shadow .18s var(--ease),transform .18s var(--ease)}
+.wg-cal-cell.has{cursor:pointer}
+.wg-cal-cell.has:hover{background:var(--wg-yellow-soft);box-shadow:var(--wg-shadow-sm);transform:translateY(-1px)}
+.wg-cal-cell.today{background:var(--wg-yellow);border-color:transparent}
+.wg-cal-cell.today.has:hover{background:var(--wg-yellow);filter:brightness(.96)}
+.wg-cal-cell.empty{background:transparent;border-color:transparent;visibility:hidden}
+.wg-cal-cell .n{font:500 19px/1 var(--sans);color:var(--wg-ink)}
+.wg-cal-cell.today .n{font-weight:700;color:var(--wg-ink)}
+.wg-cal-cell .badges{display:flex;gap:3px;min-height:11px}
+.wg-cal-cell .badges b{width:11px;height:11px;border-radius:3px;background:var(--c,var(--wg-accent))}
+.wg-cal-cell .dot{width:5px;height:5px;border-radius:50%;background:var(--wg-ink-28)}
+.wg-cal-cell.today .dot{background:var(--wg-ink-42)}
 
 /* spreadsheet mode */
 .wg-sheet{flex:1;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:16px;overflow:hidden;box-shadow:var(--wg-shadow-sm)}
@@ -3761,9 +3766,11 @@ function wgRenderCalendarInto(grid) {
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   let html = ''; for (let i = 0; i < startPad; i++) html += `<div class="wg-cal-cell empty"></div>`;
   for (let day = 1; day <= daysInMonth; day++) {
-    const d = new Date(now.getFullYear(), now.getMonth(), day), key = wgKey(d), obj = wgDayByKey(key);
-    if (obj) html += `<div class="wg-cal-cell has" data-flip="${key}" data-day="${key}" role="button" tabindex="0" aria-label="${esc(TITLE(DAYS[d.getDay()]))} ${day}, ${obj.actionCount} actions"><span class="n">${day}</span>${obj.actionCount ? `<span class="cnt">${obj.actionCount}</span>` : ''}<span class="badges">${obj.connectorsTouched.slice(0, 3).map(wgBadge).join('')}</span></div>`;
-    else html += `<div class="wg-cal-cell empty" data-flip="${key}"><span class="n">${day}</span></div>`;
+    const d = new Date(now.getFullYear(), now.getMonth(), day), key = wgKey(d), obj = wgDayByKey(key), isToday = d.getTime() === now.getTime();
+    const hasData = !!(obj && (obj.actionCount || obj.connectorsTouched.length));
+    const indicator = hasData ? `<span class="badges">${obj.connectorsTouched.slice(0, 3).map(wgBadge).join('')}</span>` : `<span class="dot"></span>`;
+    if (obj) html += `<div class="wg-cal-cell${hasData ? ' has' : ''}${isToday ? ' today' : ''}" data-flip="${key}" data-day="${key}" role="button" tabindex="0" aria-label="${esc(TITLE(DAYS[d.getDay()]))} ${day}${isToday ? ', today' : ''}, ${obj.actionCount} actions"><span class="n">${day}</span>${indicator}</div>`;
+    else html += `<div class="wg-cal-cell${isToday ? ' today' : ''}" data-flip="${key}"><span class="n">${day}</span><span class="dot"></span></div>`;
   }
   grid.innerHTML = html;
 }
