@@ -1663,54 +1663,81 @@ body.mode-notes .nt-rail{display:block}
 .nt-legend-row b{font-weight:600;color:var(--wg-ink-60)}
 @media (max-width:1180px){ .nt-shell{padding-right:40px} body.mode-notes .nt-rail{display:none} }
 
-/* scrapbook: an infinite pannable corkboard */
-.nt-scrap{position:relative;height:calc(100vh - 260px);min-height:420px;border-radius:20px;overflow:hidden;border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-sm) inset}
-.nt-scrap-viewport{position:absolute;inset:0;overflow:hidden;background:var(--cork-200);cursor:grab;
-  background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1.4px);background-size:14px 14px}
-.nt-scrap-viewport.panning{cursor:grabbing}
-.nt-scrap-canvas{position:absolute;left:0;top:0;width:1px;height:1px;transform-origin:0 0;will-change:transform}
-.nt-scrap-add{position:absolute;right:20px;bottom:20px;z-index:2;width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;font-size:24px;display:grid;place-items:center;box-shadow:var(--wg-shadow-lg);transition:transform .2s var(--ease)}
+/* scrapbook: a moodboard that grows straight down. No pan, no zoom — you see more of it by
+   scrolling, same as any other collage wall. The canvas is a fixed-design-width board that
+   just scales down uniformly to fit narrow viewports, never a pannable/zoomable camera. */
+#notesRoot{--paper-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.nt-scrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-sm) inset}
+.nt-scrap-viewport{position:relative;width:100%;overflow:hidden;
+  background:
+    var(--paper-noise),
+    radial-gradient(1px 1px at 10px 10px,rgba(0,0,0,.1) 1px,transparent 1.4px),
+    radial-gradient(220px 160px at 20% 10%,rgba(255,255,255,.10),transparent 60%),
+    radial-gradient(260px 200px at 85% 70%,rgba(0,0,0,.08),transparent 60%),
+    var(--cork-200);
+  background-size:auto,16px 16px,auto,auto,auto}
+.nt-scrap-canvas{position:relative;left:0;top:0;transform-origin:0 0}
+.nt-scrap-add{position:fixed;right:24px;bottom:24px;z-index:6;width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;font-size:24px;display:grid;place-items:center;box-shadow:var(--wg-shadow-lg);transition:transform .2s var(--ease)}
 .nt-scrap-add:hover{transform:scale(1.08)}
 
-/* scrapbook cards — skins */
+/* scrapbook cards — physical skins, each with real paper texture and a torn/taped/stamped edge */
 .nt-scrap-card{position:absolute;left:0;top:0;user-select:none;cursor:grab;transition:box-shadow .2s}
+.nt-scrap-card:hover{box-shadow:0 3px 10px rgba(0,0,0,.12)}
 .nt-scrap-card:active{cursor:grabbing}
 .nt-scrap-card.wg-ghost{opacity:0;pointer-events:none}
 .nt-scrap-card.wg-dragging-scrap{z-index:999;pointer-events:none;will-change:transform}
-.nt-scrap-star-badge{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--wg-ember);color:#fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:1}
+.nt-scrap-star-badge{position:absolute;top:-9px;right:-9px;width:25px;height:25px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#f3d27a,var(--wg-ember) 65%,#a9631f);color:#fff;display:grid;place-items:center;box-shadow:0 2px 7px rgba(0,0,0,.35),0 0 0 2px rgba(255,255,255,.5);z-index:3}
 .nt-scrap-star-badge svg{width:12px;height:12px}
-.nt-scrap-clip{position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-8deg);width:18px;height:30px;z-index:2;opacity:.85;pointer-events:none}
+.nt-scrap-clip{position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-6deg);width:20px;height:34px;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35));pointer-events:none}
+.nt-scrap-tape{position:absolute;top:-11px;width:48px;height:20px;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.18);pointer-events:none}
+.nt-scrap-rule{position:absolute;left:0;right:0;top:15px;height:2px;background:rgba(196,64,64,.55);pointer-events:none}
 
-.nt-skin-sticky{width:180px;min-height:170px;padding:18px 16px;box-shadow:0 6px 16px rgba(0,0,0,.16);position:relative}
-.nt-skin-sticky::after{content:'';position:absolute;right:0;bottom:0;width:0;height:0;border-style:solid;border-width:0 0 16px 16px;border-color:transparent transparent rgba(0,0,0,.14) transparent}
-.nt-skin-sticky .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:20px;line-height:1.2;color:#2a2a1f;margin-bottom:6px}
-.nt-skin-sticky .nt-scrap-body{font-family:'Caveat',cursive;font-weight:500;font-size:15px;line-height:1.25;color:#3a3a2c}
+.nt-skin-sticky,.nt-skin-report{position:relative;padding:24px 16px 16px;background-blend-mode:multiply;background-image:var(--paper-noise);background-repeat:repeat}
+.nt-skin-sticky{min-height:170px;box-shadow:0 7px 16px rgba(0,0,0,.2),0 1px 0 rgba(255,255,255,.3) inset}
+.nt-skin-sticky .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:21px;line-height:1.2;color:#26261c;margin-bottom:5px}
+.nt-skin-sticky .nt-scrap-body{font-family:'Caveat',cursive;font-weight:500;font-size:16px;line-height:1.28;color:#2f2f22}
+.nt-skin-sticky::after{content:'';position:absolute;left:0;right:0;top:15px;bottom:0;pointer-events:none;
+  background-image:repeating-linear-gradient(to bottom,transparent,transparent 20px,rgba(40,50,90,.16) 21px);}
 
-.nt-skin-report{width:230px;min-height:200px;padding:20px 18px;background:#fffdf7;border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 20px rgba(0,0,0,.14)}
-.nt-skin-report .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:20px;color:#1f241d;margin-bottom:8px}
-.nt-skin-report .nt-scrap-body{font:400 11px/1.7 var(--mono);letter-spacing:.02em;color:#333228}
+.nt-skin-report{width:250px;min-height:220px;background:#faf6e8;border:1px solid rgba(0,0,0,.07);box-shadow:0 9px 22px rgba(0,0,0,.18)}
+.nt-skin-report .nt-scrap-title{font-family:'Caveat',cursive;font-weight:600;font-size:22px;color:#1f241d;margin-bottom:8px}
+.nt-skin-report .nt-scrap-body{font-family:'Caveat',cursive;font-weight:500;font-size:16px;line-height:1.42;color:#2a2a20}
+.nt-skin-report::after{content:'';position:absolute;left:0;right:0;top:18px;bottom:0;pointer-events:none;
+  background-image:repeating-linear-gradient(to bottom,transparent,transparent 23px,rgba(40,50,90,.14) 24px);}
 
-.nt-skin-evidence{width:200px;min-height:130px;padding:18px 16px 16px;background:#d9c49c;background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);background-size:8px 8px;box-shadow:0 8px 18px rgba(0,0,0,.2);clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%)}
-.nt-skin-evidence .nt-scrap-title{font:600 12px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:#332918;margin-bottom:6px}
-.nt-skin-evidence .nt-scrap-body{font:400 10.5px/1.6 var(--mono);color:#4a4025}
+.nt-skin-evidence{width:210px;min-height:150px;padding:16px 16px 14px 26px;position:relative;
+  background:#c9ad7c;background-blend-mode:multiply;
+  background-image:var(--paper-noise),linear-gradient(155deg,rgba(255,255,255,.14),transparent 40%,rgba(0,0,0,.14));
+  box-shadow:0 8px 20px rgba(0,0,0,.25);clip-path:polygon(16px 0,100% 0,100% 100%,16px 100%,0 50%)}
+.nt-skin-evidence .nt-scrap-title{font:600 12.5px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:#372c17;margin-bottom:6px;margin-top:20px}
+.nt-skin-evidence .nt-scrap-body{font:400 10.5px/1.65 var(--mono);letter-spacing:.01em;color:#4a3c22}
+.nt-evidence-hole{position:absolute;left:2px;top:44%;width:20px;height:20px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.nt-evidence-stamp{position:absolute;right:10px;top:10px;font:400 8px/1.3 var(--mono);letter-spacing:.08em;color:rgba(150,60,50,.68);border:1.3px solid rgba(150,60,50,.55);border-radius:5px;padding:3px 6px;text-align:center}
 
-.nt-skin-billboard{width:270px;min-height:110px;padding:22px 22px;background:#1f241d;box-shadow:0 10px 26px rgba(0,0,0,.3);display:flex;align-items:center}
+.nt-skin-billboard{width:260px;min-height:130px;padding:24px 22px;position:relative;
+  background:#1c1c17;background-blend-mode:overlay;background-image:var(--paper-noise);
+  box-shadow:0 11px 28px rgba(0,0,0,.4);display:flex;align-items:center;
+  clip-path:polygon(0 2.5%,2% 0,98% .8%,100% 3.5%,99.3% 96%,97.5% 100%,2.2% 99%,0 96.5%)}
 .nt-skin-billboard .nt-scrap-title{display:none}
-.nt-skin-billboard .nt-scrap-body{font:700 22px/1.25 var(--sans);letter-spacing:-.01em;color:#f3f0b8}
+.nt-skin-billboard .nt-scrap-body{font:700 23px/1.28 var(--sans);letter-spacing:-.01em;color:#f5f1cf}
 
 .nt-scrap-cat{position:absolute;left:14px;bottom:10px;font:400 8px/1.6 var(--mono);letter-spacing:.05em;text-transform:uppercase}
-.nt-skin-billboard .nt-scrap-cat{color:rgba(243,240,184,.6);position:static;margin-top:8px}
+.nt-skin-billboard .nt-scrap-cat{color:rgba(245,241,207,.55);position:static;margin-top:10px;display:block}
+.nt-skin-evidence .nt-scrap-cat{color:rgba(55,44,23,.6)!important;bottom:8px;left:26px}
 
 /* extracted fragments + hand-drawn connector arrows */
-.nt-frag{position:absolute;left:0;top:0;width:150px;padding:10px 12px;background:#fffdf7;border:1px solid rgba(0,0,0,.08);border-radius:3px;box-shadow:0 4px 12px rgba(0,0,0,.14);font-family:'Caveat',cursive;font-weight:500;font-size:15px;line-height:1.25;color:#3a3a2c;pointer-events:none}
+.nt-frag{position:absolute;left:0;top:0;width:150px;padding:10px 12px;background:#faf6e8;background-image:var(--paper-noise);border:1px solid rgba(0,0,0,.08);box-shadow:0 5px 14px rgba(0,0,0,.18);font-family:'Caveat',cursive;font-weight:500;font-size:16px;line-height:1.28;color:#2f2f22;pointer-events:none;clip-path:polygon(0 2%,3% 0,97% 1%,100% 4%,98% 98%,95% 100%,3% 99%,0 95%)}
 .nt-arrow-svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
 .nt-arrow-path{fill:none;stroke:#4a4638;stroke-width:1.3;stroke-linecap:round}
 
-/* decorative props, ambient only */
-.nt-prop{position:absolute;pointer-events:none;opacity:.5}
-.nt-prop-clip{width:20px;height:34px}
-.nt-prop-pencil{width:70px;height:10px}
-.nt-prop-tape{width:56px;height:22px;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.5);transform:rotate(-6deg)}
+/* decorative props: real ephemera textures, ambient only, never intercept interaction */
+.nt-prop{position:absolute;pointer-events:none;opacity:.62}
+.nt-prop-clip{width:22px;height:36px}
+.nt-prop-pencil{width:72px;height:11px}
+.nt-prop-tape{width:52px;height:20px;border:1px solid rgba(255,255,255,.4);opacity:.55}
+.nt-prop-scrap{width:64px;height:44px;background:#efe6cf;background-image:var(--paper-noise);box-shadow:0 3px 8px rgba(0,0,0,.15);opacity:.5}
+.nt-prop-barcode{width:78px;height:auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+.nt-prop-stamp{width:46px;height:46px;opacity:.55}
 
 /* note detail page */
 .nt-detail{position:fixed;inset:0;z-index:9;background:var(--wg-bg);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
@@ -6465,19 +6492,35 @@ function ntSkinFor(n) {
   if (n.source === 'manual') return words > 40 ? 'report' : 'sticky';
   return words <= 8 ? 'billboard' : 'evidence';
 }
-const NT_STICKY_PALETTE = ['#f3e6a8', '#f0d9c6', '#d8e8c9', '#cfe3ea', '#f2d8e6'];
+const NT_STICKY_PALETTE = ['#f4a9b7', '#f7e07f', '#a9c9e8', '#bcd9a8', '#e3b8e0', '#f5c98a'];
+const NT_BOARD_W = 1180, NT_BOARD_COLS = 4, NT_BOARD_GAP = 26;
+const NT_SKIN_H_EST = { sticky: 200, report: 260, evidence: 190, billboard: 150 };
+const NT_SKIN_W = { sticky: 190, report: 250, evidence: 210, billboard: 260 };
+const NT_TAPE_COLORS = ['rgba(243,230,150,.72)', 'rgba(230,190,150,.68)', 'rgba(180,205,220,.6)', 'rgba(210,210,210,.55)'];
+function ntColW() { return (NT_BOARD_W - NT_BOARD_GAP * (NT_BOARD_COLS - 1)) / NT_BOARD_COLS; }
+/* masonry placement: each new note drops into whichever column is shortest so far, with a
+   little seeded horizontal jitter and tilt — the board grows straight down, never outward,
+   so viewing more of it is always just a scroll, never a pan or a zoom */
 function ntAssignScrapbookPlacement(n) {
   const seed = n.scrapbook.seed;
-  const placed = NOTE_RECORDS.filter(x => x !== n && x.scrapbook && x.scrapbook.x != null);
-  const cx = placed.length ? placed.reduce((s, x) => s + x.scrapbook.x, 0) / placed.length : 700;
-  const cy = placed.length ? placed.reduce((s, x) => s + x.scrapbook.y, 0) / placed.length : 480;
-  const r1 = ntRand(seed + 1), r2 = ntRand(seed + 2);
-  const radius = 100 + placed.length * 20;
-  n.scrapbook.x = Math.round(cx + (r1 - 0.5) * radius * 2.8);
-  n.scrapbook.y = Math.round(cy + (r2 - 0.5) * radius * 1.8);
-  n.scrapbook.rotation = Math.round((ntRand(seed + 3) - 0.5) * 16 * 10) / 10;
-  n.scrapbook.paletteIdx = Math.floor(ntRand(seed + 4) * NT_STICKY_PALETTE.length);
   n.scrapbook.skin = n.scrapbook.skin || ntSkinFor(n);
+  const colW = ntColW();
+  const colBottoms = new Array(NT_BOARD_COLS).fill(6);
+  NOTE_RECORDS.forEach(x => {
+    if (x === n || !x.scrapbook || x.scrapbook.x == null) return;
+    const col = clamp(Math.round(x.scrapbook.x / (colW + NT_BOARD_GAP)), 0, NT_BOARD_COLS - 1);
+    const h = NT_SKIN_H_EST[x.scrapbook.skin] || 190;
+    colBottoms[col] = Math.max(colBottoms[col], x.scrapbook.y + h + NT_BOARD_GAP);
+  });
+  let col = 0, min = Infinity;
+  for (let i = 0; i < NT_BOARD_COLS; i++) if (colBottoms[i] < min) { min = colBottoms[i]; col = i; }
+  const skinW = NT_SKIN_W[n.scrapbook.skin];
+  const jitterX = (ntRand(seed + 1) - 0.5) * Math.max(0, colW - skinW) * 0.7;
+  n.scrapbook.x = Math.round(col * (colW + NT_BOARD_GAP) + Math.max(0, (colW - skinW) / 2) + jitterX);
+  n.scrapbook.y = Math.round(colBottoms[col] + ntRand(seed + 2) * 8);
+  n.scrapbook.rotation = Math.round((ntRand(seed + 3) - 0.5) * 12 * 10) / 10;
+  n.scrapbook.paletteIdx = Math.floor(ntRand(seed + 4) * NT_STICKY_PALETTE.length);
+  n.scrapbook.tornSeed = Math.floor(ntRand(seed + 5) * 1000);
   n.scrapbook.z = ntNextZ();
 }
 let NT_Z = 10;
@@ -6485,7 +6528,7 @@ function ntNextZ() { return ++NT_Z; }
 NOTE_RECORDS.forEach(n => { if (n.scrapbook.x == null) ntAssignScrapbookPlacement(n); });
 
 /* ---------- state, lookups, filtering ---------- */
-const ntState = { srcFilter: 'all', sort: 'newest', view: 'grid', collection: null, catFilter: null, railRange: 'month', currentNote: null, pendingDelete: null, inited: false, pan: { x: 0, y: 0, scale: .68 }, panSetup: false, justDragged: false };
+const ntState = { srcFilter: 'all', sort: 'newest', view: 'grid', collection: null, catFilter: null, railRange: 'month', currentNote: null, pendingDelete: null, inited: false, boardScale: 1, justDragged: false };
 function ntById(id) { return NOTE_RECORDS.find(n => n.id === id) || null; }
 function ntCollById(id) { return NOTE_COLLECTIONS.find(c => c.id === id) || null; }
 function ntFilteredNotes() {
@@ -6596,21 +6639,39 @@ function ntAddNoteToCollection(noteId, collId) {
   ntRenderCollRow(); toast(`Added to ${c.name}`);
 }
 
-/* ---------- scrapbook: an infinite pannable corkboard, one physical skin per note ---------- */
-const NT_SKIN_W = { sticky: 180, report: 230, evidence: 200, billboard: 270 };
+/* ---------- scrapbook: a downward-growing moodboard, one physical skin per note ---------- */
 function ntScrapTitle(n, skin) { return skin === 'billboard' ? '' : `<div class="nt-scrap-title">${esc(n.title)}</div>`; }
 function ntScrapBodyText(n) { const t = noteBodyText(n) || ''; return t.length > 220 ? t.slice(0, 220).trim() + '…' : t; }
+function ntTornClipPath(seed, steps) {
+  const pts = ['0% 0%', '100% 0%', '100% 91%'];
+  for (let i = steps; i >= 0; i--) { const x = (i / steps) * 100, jag = 90 + ntRand(seed + i) * 9; pts.push(`${x.toFixed(1)}% ${jag.toFixed(1)}%`); }
+  return `polygon(${pts.join(',')})`;
+}
 function ntScrapCardInnerHTML(n) {
-  const skin = n.scrapbook.skin;
-  const star = n.isStarred ? `<span class="nt-scrap-star-badge">${ntStarSvg}</span>` : '';
-  const clip = (n.collectionIds || []).length ? `<svg class="nt-scrap-clip" viewBox="0 0 18 30" fill="none" stroke="#8a8a7a" stroke-width="2" aria-hidden="true"><path d="M5 4v18a4 4 0 008 0V7a2.5 2.5 0 00-5 0v13"/></svg>` : '';
-  return `${star}${clip}${ntScrapTitle(n, skin)}<div class="nt-scrap-body">${esc(ntScrapBodyText(n))}</div><span class="nt-scrap-cat" style="color:var(--cat-${n.category})">${esc(NOTE_CAT_LABEL[n.category])}</span>`;
+  const skin = n.scrapbook.skin, seed = n.scrapbook.seed;
+  const star = n.isStarred ? `<span class="nt-scrap-star-badge" title="Starred">${ntStarSvg}</span>` : '';
+  const clip = (n.collectionIds || []).length ? `<svg class="nt-scrap-clip" viewBox="0 0 20 34" aria-hidden="true"><path d="M6 6v20a4.5 4.5 0 009 0V8a2.8 2.8 0 00-5.6 0v15" fill="none" stroke="#7d7462" stroke-width="2.2" stroke-linecap="round"/></svg>` : '';
+  const tapeSeed = ntRand(seed + 40);
+  const tape = (skin === 'sticky' || skin === 'report') && tapeSeed > .5
+    ? `<span class="nt-scrap-tape" style="background:${NT_TAPE_COLORS[Math.floor(ntRand(seed + 41) * NT_TAPE_COLORS.length)]};left:${30 + ntRand(seed + 42) * 40}%;transform:translateX(-50%) rotate(${Math.round((ntRand(seed + 43) - .5) * 14)}deg)"></span>` : '';
+  const ruled = (skin === 'sticky' || skin === 'report') ? `<i class="nt-scrap-rule"></i>` : '';
+  if (skin === 'evidence') {
+    return `${star}${clip}
+      <svg class="nt-evidence-hole" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 15c-4-3-6 0-6 0" fill="none" stroke="#a9885a" stroke-width="1.4" stroke-linecap="round"/><circle cx="13" cy="16" r="3.6" fill="var(--cork-200)" stroke="#7d6640" stroke-width="1.3"/></svg>
+      <div class="nt-evidence-stamp" style="transform:rotate(${Math.round((ntRand(seed + 44) - .5) * 14)}deg)">CAPTURED</div>
+      ${ntScrapTitle(n, skin)}<div class="nt-scrap-body">${esc(ntScrapBodyText(n))}</div>
+      <span class="nt-scrap-cat" style="color:var(--cat-${n.category})">${esc(NOTE_CAT_LABEL[n.category])}</span>`;
+  }
+  if (skin === 'billboard') {
+    return `${star}${clip}<div class="nt-scrap-body">${esc(ntScrapBodyText(n))}</div><span class="nt-scrap-cat">${esc(NOTE_CAT_LABEL[n.category])}</span>`;
+  }
+  return `${tape}${star}${clip}${ruled}${ntScrapTitle(n, skin)}<div class="nt-scrap-body">${esc(ntScrapBodyText(n))}</div><span class="nt-scrap-cat" style="color:var(--cat-${n.category})">${esc(NOTE_CAT_LABEL[n.category])}</span>`;
 }
 function ntScrapCardStyle(n) {
   const skin = n.scrapbook.skin;
-  let bg = '';
-  if (skin === 'sticky') bg = `background:${NT_STICKY_PALETTE[n.scrapbook.paletteIdx || 0]};`;
-  return `left:${n.scrapbook.x}px;top:${n.scrapbook.y}px;width:${NT_SKIN_W[skin]}px;transform:rotate(${n.scrapbook.rotation}deg);z-index:${n.scrapbook.z || 1};${bg}`;
+  let extra = '';
+  if (skin === 'sticky') { extra = `background-color:${NT_STICKY_PALETTE[n.scrapbook.paletteIdx || 0]};clip-path:${ntTornClipPath(n.scrapbook.tornSeed || 1, 7)};`; }
+  return `left:${n.scrapbook.x}px;top:${n.scrapbook.y}px;width:${NT_SKIN_W[skin]}px;transform:rotate(${n.scrapbook.rotation}deg);z-index:${n.scrapbook.z || 1};${extra}`;
 }
 function ntScrapCardHTML(n) {
   return `<div class="nt-scrap-card nt-skin-${n.scrapbook.skin}" data-note="${n.id}" tabindex="0" role="button" aria-label="${esc(n.title)}" style="${ntScrapCardStyle(n)}">${ntScrapCardInnerHTML(n)}</div>`;
@@ -6656,77 +6717,57 @@ function ntFragmentsHTML(n) {
 }
 
 /* decorative props: ambient texture only, capped, never blocks interaction with notes */
-function ntPropsHTML() {
-  const bounds = ntBoardBounds(), props = [], count = Math.min(9, Math.max(4, Math.round(NOTE_RECORDS.length / 2)));
+/* decorative props: real ephemera-flavored textures, ambient only, capped, ordinary-flow
+   scattered across the board's own content height rather than an unbounded pan canvas */
+function ntPropClipSvg(seed) {
+  const wire = ntRand(seed) > .4;
+  if (wire) return `<svg viewBox="0 0 20 34" fill="none" stroke="#8a8a80" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6v22a4.5 4.5 0 009 0V9a2.8 2.8 0 00-5.6 0v16"/></svg>`;
+  const c = ['#c65b5b', '#3f6b52', '#c9a13a', '#2f2f2f'][Math.floor(ntRand(seed + 1) * 4)];
+  return `<svg viewBox="0 0 26 20" aria-hidden="true"><rect x="1" y="1" width="24" height="9" rx="2" fill="${c}"/><circle cx="13" cy="14.5" r="4.6" fill="none" stroke="${c}" stroke-width="2.6"/></svg>`;
+}
+function ntPropBarcodeSvg(seed) {
+  let bars = '', x = 0;
+  for (let i = 0; i < 16; i++) { const w = 1 + Math.round(ntRand(seed + i) * 2); bars += `<rect x="${x}" y="2" width="${w}" height="16" fill="#1f241d"/>`; x += w + 1; }
+  return `<svg class="nt-prop-barcode" viewBox="0 0 ${x} 22" aria-hidden="true"><rect x="0" y="0" width="${x}" height="22" fill="#f2ead2"/>${bars}<text x="${x / 2}" y="21" font-size="4" text-anchor="middle" fill="#1f241d">${Math.floor(ntRand(seed + 20) * 90000 + 10000)}</text></svg>`;
+}
+function ntPropStampSvg(seed) {
+  return `<svg class="nt-prop-stamp" viewBox="0 0 46 46" fill="none" stroke="#8a3a3a" stroke-width="1" aria-hidden="true"><circle cx="23" cy="23" r="20" stroke-dasharray="2.2 2.2"/><circle cx="23" cy="23" r="14"/><text x="23" y="20" font-size="5.5" text-anchor="middle" fill="#8a3a3a" font-family="var(--mono)">OPAL</text><text x="23" y="29" font-size="4" text-anchor="middle" fill="#8a3a3a" font-family="var(--mono)">HEARD IT</text></svg>`;
+}
+function ntPropsHTML(boardHeight) {
+  const props = [], count = Math.min(14, Math.max(6, Math.round(NOTE_RECORDS.length * .7)));
   for (let i = 0; i < count; i++) {
-    const r = ntRand(7000 + i * 13);
-    const x = bounds.minX + r * (bounds.maxX - bounds.minX), y = bounds.minY + ntRand(7001 + i * 13) * (bounds.maxY - bounds.minY);
-    const kind = i % 3;
-    if (kind === 0) props.push(`<svg class="nt-prop nt-prop-clip" style="left:${x}px;top:${y}px;transform:rotate(${Math.round((ntRand(7002+i)-.5)*40)}deg)" viewBox="0 0 18 30" fill="none" stroke="#5c5648" stroke-width="1.6" aria-hidden="true"><path d="M5 4v18a4 4 0 008 0V7a2.5 2.5 0 00-5 0v13"/></svg>`);
-    else if (kind === 1) props.push(`<div class="nt-prop nt-prop-tape" style="left:${x}px;top:${y}px"></div>`);
-    else props.push(`<svg class="nt-prop nt-prop-pencil" style="left:${x}px;top:${y}px;transform:rotate(${Math.round((ntRand(7003+i)-.5)*60)}deg)" viewBox="0 0 70 10" fill="none" aria-hidden="true"><rect x="0" y="3" width="55" height="4" fill="#c9a24a"/><polygon points="55,1 70,5 55,9" fill="#e8c98a"/></svg>`);
+    const seed = 7000 + i * 37;
+    const x = ntRand(seed) * (NT_BOARD_W - 60), y = 20 + ntRand(seed + 1) * Math.max(200, boardHeight - 60);
+    const rot = Math.round((ntRand(seed + 2) - .5) * 40);
+    const kind = i % 6;
+    if (kind === 0) props.push(`<span class="nt-prop nt-prop-clip" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg)">${ntPropClipSvg(seed + 3)}</span>`);
+    else if (kind === 1) props.push(`<span class="nt-prop nt-prop-tape" style="left:${x}px;top:${y}px;background:${NT_TAPE_COLORS[i % NT_TAPE_COLORS.length]};transform:rotate(${rot}deg)"></span>`);
+    else if (kind === 2) props.push(`<svg class="nt-prop nt-prop-pencil" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg)" viewBox="0 0 70 10" fill="none" aria-hidden="true"><rect x="0" y="3" width="52" height="4" fill="#c9a24a"/><rect x="0" y="3" width="52" height="1.3" fill="#e8c98a" opacity=".6"/><polygon points="52,1 70,5 52,9" fill="#e8c98a"/><rect x="60" y="3.2" width="5" height="3.6" fill="#d8c39a"/></svg>`);
+    else if (kind === 3) props.push(`<span class="nt-prop nt-prop-scrap" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg);clip-path:${ntTornClipPath(seed + 5, 6)}"></span>`);
+    else if (kind === 4) props.push(`<span class="nt-prop" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg)">${ntPropBarcodeSvg(seed + 6)}</span>`);
+    else props.push(`<span class="nt-prop" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg)">${ntPropStampSvg(seed + 7)}</span>`);
   }
   return props.join('');
 }
-function ntBoardBounds() {
-  if (!NOTE_RECORDS.length) return { minX: 0, minY: 0, maxX: 1400, maxY: 1000 };
-  const xs = NOTE_RECORDS.map(n => n.scrapbook.x), ys = NOTE_RECORDS.map(n => n.scrapbook.y);
-  return { minX: Math.min(...xs) - 200, minY: Math.min(...ys) - 200, maxX: Math.max(...xs) + 400, maxY: Math.max(...ys) + 400 };
+function ntBoardHeight() {
+  if (!NOTE_RECORDS.length) return 600;
+  return Math.max(...NOTE_RECORDS.filter(n => n.scrapbook && n.scrapbook.y != null).map(n => n.scrapbook.y + (NT_SKIN_H_EST[n.scrapbook.skin] || 190))) + 160;
 }
 function ntRenderScrapbook() {
-  const list = ntFilteredNotes(), canvas = $('#ntScrapCanvas');
+  const list = ntFilteredNotes(), canvas = $('#ntScrapCanvas'), viewport = $('#ntScrapViewport');
   const fragEligible = new Set(ntEligibleForFragments().map(n => n.id));
-  const visibleIds = new Set(list.map(n => n.id));
-  let html = ntPropsHTML();
+  const boardH = ntBoardHeight();
+  let html = ntPropsHTML(boardH);
   list.forEach(n => {
     html += ntScrapCardHTML(n);
     if (fragEligible.has(n.id)) html += ntFragmentsHTML(n);
   });
   canvas.innerHTML = html;
-  if (!ntState.panSetup) { ntCenterPan(); ntState.panSetup = true; }
-  ntApplyPan();
-  void visibleIds;
-}
-function ntCenterPan() {
-  const b = ntBoardBounds(), vp = $('#ntScrapViewport');
-  const vw = vp.clientWidth || 900, vh = vp.clientHeight || 560;
-  const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
-  const scale = clamp(Math.min(vw / bw, vh / bh, 1), .35, 1);
-  ntState.pan.scale = scale;
-  ntState.pan.x = vw / 2 - (b.minX + bw / 2) * scale;
-  ntState.pan.y = vh / 2 - (b.minY + bh / 2) * scale;
-}
-function ntApplyPan() {
-  $('#ntScrapCanvas').style.transform = `translate(${ntState.pan.x}px,${ntState.pan.y}px) scale(${ntState.pan.scale})`;
-}
-function ntZoomAt(factor, cx, cy) {
-  const p = ntState.pan, newScale = clamp(p.scale * factor, .28, 1.8);
-  const ratio = newScale / p.scale;
-  p.x = cx - (cx - p.x) * ratio; p.y = cy - (cy - p.y) * ratio; p.scale = newScale;
-  ntApplyPan();
-}
-
-/* pan the board on empty canvas, zoom on wheel/pinch — momentum reuses this OS's
-   established lag-follow feel rather than a literal port of Crown's 3D dial */
-function ntWirePanZoom() {
-  const vp = $('#ntScrapViewport');
-  let panning = null;
-  vp.addEventListener('pointerdown', e => {
-    if (e.target.closest('.nt-scrap-card')) return;
-    panning = { x0: e.clientX, y0: e.clientY, px0: ntState.pan.x, py0: ntState.pan.y };
-    vp.classList.add('panning'); vp.setPointerCapture(e.pointerId);
-  });
-  vp.addEventListener('pointermove', e => {
-    if (!panning) return;
-    ntState.pan.x = panning.px0 + (e.clientX - panning.x0); ntState.pan.y = panning.py0 + (e.clientY - panning.y0);
-    ntApplyPan();
-  });
-  const endPan = () => { panning = null; vp.classList.remove('panning'); };
-  vp.addEventListener('pointerup', endPan); vp.addEventListener('pointercancel', endPan);
-  vp.addEventListener('wheel', e => {
-    e.preventDefault(); const r = vp.getBoundingClientRect();
-    ntZoomAt(e.deltaY < 0 ? 1.08 : .93, e.clientX - r.left, e.clientY - r.top);
-  }, { passive: false });
+  canvas.style.width = NT_BOARD_W + 'px';
+  canvas.style.height = boardH + 'px';
+  ntState.boardScale = clamp((viewport.clientWidth || NT_BOARD_W) / NT_BOARD_W, .32, 1);
+  canvas.style.transform = `scale(${ntState.boardScale})`;
+  viewport.style.height = (boardH * ntState.boardScale) + 'px';
 }
 
 /* dragging a note on the board — identical physics to Conversations' folder-filing drag
@@ -6736,7 +6777,7 @@ function ntCardDragStart(e, card) {
   if (e.target.closest('[data-notestar],.nt-scrap-clip')) return;
   if (e.pointerType === 'mouse' && e.button !== 0) return;
   const id = card.dataset.note, n = ntById(id); if (!n) return;
-  const startX = e.clientX, startY = e.clientY, rect = card.getBoundingClientRect(), scale = ntState.pan.scale;
+  const startX = e.clientX, startY = e.clientY, rect = card.getBoundingClientRect(), scale = ntState.boardScale;
   const startCanvasX = n.scrapbook.x, startCanvasY = n.scrapbook.y;
   let dragging = false, moved = false, lastX = startX, tilt = 0, raf = null;
   const pos = { x: rect.left, y: rect.top }, target = { x: rect.left, y: rect.top };
@@ -6953,7 +6994,7 @@ function ntAddNote() {
 /* ---------- boot + wiring ---------- */
 function noteInit() {
   if (ntState.inited) return; ntState.inited = true;
-  ntRenderCollRow(); ntRenderGrid(); ntRenderRail(); ntWirePanZoom();
+  ntRenderCollRow(); ntRenderGrid(); ntRenderRail();
 
   $('#ntAddBtn').addEventListener('click', () => ntAddNote());
   $('#ntScrapAdd').addEventListener('click', () => ntAddNote());
@@ -7011,7 +7052,7 @@ function noteInit() {
     if (mode !== 'notes') return;
     if (e.key === 'Escape') { if ($('#ntConfirm').classList.contains('show')) return ntCloseConfirm(); if ($('#ntDetail').classList.contains('show')) return ntCloseDetail(); }
   });
-  addEventListener('resize', () => { if (mode === 'notes' && ntState.view === 'scrapbook') ntApplyPan(); });
+  addEventListener('resize', () => { if (mode === 'notes' && ntState.view === 'scrapbook') ntRenderScrapbook(); });
 }
 function noteRefresh() { ntRenderRail(); ntRenderCollRow(); ntRenderActiveView(); }
 
