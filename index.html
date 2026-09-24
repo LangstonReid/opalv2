@@ -1161,13 +1161,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-title{flex:1;min-width:0;font:400 30px/1.15 var(--sans);color:var(--wg-ink);outline:none;border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wg-conv-title:focus{white-space:normal;background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
 .wg-conv-meta{margin-top:8px;color:var(--wg-ink-42)}
-.wg-conv-jumpbar{position:sticky;top:0;z-index:var(--z-elevated);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:18px -4px 0;padding:12px 4px;background:linear-gradient(var(--wg-bg,#f5f5f0) 70%,transparent)}
-.wg-conv-jumpbar::-webkit-scrollbar{display:none}
-.wg-conv-jumppill{flex:none;font:400 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);padding:9px 14px;border-radius:999px;transition:color .2s,background .2s,border-color .2s}
-.wg-conv-jumppill:hover{color:var(--wg-ink)}
-.wg-conv-jumppill.on{color:#fff;background:var(--wg-accent-ink);border-color:var(--wg-accent-ink)}
 .wg-conv-body{margin-top:14px;padding-bottom:60px}
-.wg-conv-sec{padding:22px 0;border-top:1px solid var(--wg-border);scroll-margin-top:56px}
+.wg-conv-sec{padding:22px 0;border-top:1px solid var(--wg-border)}
 .wg-conv-sec:first-child{border-top:0;padding-top:0}
 .wg-conv-sec-label{display:flex;align-items:center;gap:8px;font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
 .wg-conv-sec-count{font:400 11px/1.5 var(--mono);color:var(--wg-ink-42)}
@@ -2318,7 +2313,6 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           </div>
         </div>
         <div class="mono wg-conv-meta" id="wgConvMeta"></div>
-        <nav class="wg-conv-jumpbar" id="wgConvJumpbar" aria-label="Jump to section"></nav>
         <div class="wg-conv-body" id="wgConvBody"></div>
       </div>
     </div>
@@ -5559,8 +5553,7 @@ function wgSec(label, inner, opts) {
   opts = opts || {};
   const count = opts.count != null ? `<span class="wg-conv-sec-count">${opts.count}</span>` : '';
   const labelHtml = label ? `<div class="wg-conv-sec-label">${esc(label.toUpperCase())}${count}</div>` : '';
-  const idAttr = opts.anchor ? ` id="wgConvSec-${opts.anchor}"` : '';
-  return `<div class="wg-conv-sec"${idAttr}>${labelHtml}${inner}</div>`;
+  return `<div class="wg-conv-sec">${labelHtml}${inner}</div>`;
 }
 function wgClusterPrimaryStatus(cl) {
   if (cl.humanTaskId) { const t = wgTodoById(cl.humanTaskId); if (t) return t.status; }
@@ -5605,25 +5598,17 @@ function wgCiteRow(cites, sentences) {
 function wgConvBodyHTML(c) {
   const sents = c.transcriptSentences;
   const summaryCite = wgCiteRow(c.summaryCites, sents);
-  let html = wgSec(null, `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>${summaryCite ? `<div class="wg-cite-summary-row"><span class="wg-cite-label">Sourced from</span>${summaryCite}</div>` : ''}`, { anchor: 'summary' });
+  let html = wgSec(null, `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>${summaryCite ? `<div class="wg-cite-summary-row"><span class="wg-cite-label">Sourced from</span>${summaryCite}</div>` : ''}`);
   if (c.decisions.length) html += wgSec('Decisions', `<ul>${c.decisions.map(d => `<li>${esc(d.text)}${wgCiteRow(d.cites, sents)}</li>`).join('')}</ul>`);
-  if (c.actionClusterIds.length) html += wgSec('Key actions', `<div class="wg-conv-sec-actions">${c.actionClusterIds.map(wgConvActionItemHTML).join('')}</div>`, { anchor: 'actions', count: c.actionClusterIds.length });
-  html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t.text)}${wgCiteRow(t.cites, sents)}</li>`).join('')}</ul>`, { anchor: 'points' });
-  html += wgSec('People', wgConvPeopleHTML(c), { anchor: 'people' });
-  if (sents.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`, { anchor: 'transcript' });
+  if (c.actionClusterIds.length) html += wgSec('Key actions', `<div class="wg-conv-sec-actions">${c.actionClusterIds.map(wgConvActionItemHTML).join('')}</div>`, { count: c.actionClusterIds.length });
+  html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t.text)}${wgCiteRow(t.cites, sents)}</li>`).join('')}</ul>`);
+  html += wgSec('People', wgConvPeopleHTML(c));
+  if (sents.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`);
   const related = (c.relatedConversationIds || []).map(wgConvById).filter(Boolean);
   const footLinks = related.map(r => `<button type="button" data-convjump="${r.id}">Part of a longer thread &rarr; ${esc(r.title)}</button>`);
   footLinks.push(`<button type="button" data-convfootjump>See other conversations from this day &rarr;</button>`);
   html += `<div class="wg-conv-foot">${footLinks.join('')}</div>`;
   return html;
-}
-function wgConvJumpbarHTML(c) {
-  const items = [{ key: 'summary', label: 'Summary' }];
-  if (c.actionClusterIds.length) items.push({ key: 'actions', label: 'Actions' });
-  items.push({ key: 'points', label: 'Points' });
-  items.push({ key: 'people', label: 'People' });
-  if (c.transcriptSentences.length) items.push({ key: 'transcript', label: 'Transcript' });
-  return items.map((it, i) => `<button type="button" class="wg-conv-jumppill${i === 0 ? ' on' : ''}" data-convjumpto="${it.key}">${esc(it.label)}</button>`).join('');
 }
 function wgRenderConvDetail(c) {
   const page = $('#wgConvPage');
@@ -5633,7 +5618,6 @@ function wgRenderConvDetail(c) {
   $('#wgConvStar').classList.toggle('on', c.isStarred);
   $('#wgConvMeta').textContent = wgFmtMeta(c);
   $('#wgConvBody').innerHTML = wgConvBodyHTML(c);
-  $('#wgConvJumpbar').innerHTML = wgConvJumpbarHTML(c);
   wgConvUpdateNav();
   wgConvOnScroll();
 }
@@ -5726,7 +5710,7 @@ function wgOpenConvShortcuts() {
 }
 function wgCloseConvShortcuts() { $('#wgConvShortcuts').classList.remove('show'); }
 
-/* transcript reading aids: hover/near-center highlight, progress rail, next-flagged jump, quick-jump tracking, Aa size */
+/* transcript reading aids: hover/near-center highlight, next-flagged jump, Aa size */
 function wgConvOnScroll() {
   const page = $('#wgConvPage'); if (!page.classList.contains('show')) return;
   const rows = [...document.querySelectorAll('.wg-conv-sentrow')];
@@ -5735,21 +5719,7 @@ function wgConvOnScroll() {
     rows.forEach(el => { el.classList.remove('near'); const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const d = Math.abs((r.top + r.bottom) / 2 - centerY); if (d < nearestD) { nearestD = d; nearest = el; } });
     if (nearest) nearest.classList.add('near');
   }
-  const inner = $('#wgConvInner');
   $('#wgConvNextFlag').classList.toggle('show', !!document.querySelector('#wgConvTranscript .wg-span'));
-  const secs = [...document.querySelectorAll('#wgConvBody .wg-conv-sec[id^="wgConvSec-"]')];
-  if (secs.length) {
-    let current = secs[0];
-    const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 4;
-    if (atBottom) current = secs[secs.length - 1];
-    else for (const el of secs) { if (el.getBoundingClientRect().top - inner.getBoundingClientRect().top < 140) current = el; else break; }
-    const key = current.id.replace('wgConvSec-', '');
-    $('#wgConvJumpbar').querySelectorAll('.wg-conv-jumppill').forEach(p => p.classList.toggle('on', p.dataset.convjumpto === key));
-  }
-}
-function wgConvJumpToSection(key) {
-  const el = $('#wgConvSec-' + key); if (!el) return;
-  el.scrollIntoView({ block: 'start', behavior: REDUCED ? 'auto' : 'smooth', inline: 'nearest' });
 }
 function wgConvJumpNextFlag() {
   const flags = [...document.querySelectorAll('#wgConvTranscript .wg-span')].map(s => s.closest('.wg-conv-sentence')).filter(Boolean);
@@ -6569,7 +6539,6 @@ function wgInit() {
     else if (b.dataset.convact === 'archive') wgArchiveConv(c.id);
   });
   $('#wgConvTitle').addEventListener('blur', () => { const c = wgConvById(wgState.currentConv); if (!c) return; c.title = $('#wgConvTitle').textContent.trim() || c.title; c.isEstimatedTitle = false; $('#wgConvTitle').textContent = c.title; });
-  $('#wgConvJumpbar').addEventListener('click', e => { const b = e.target.closest('[data-convjumpto]'); if (b) wgConvJumpToSection(b.dataset.convjumpto); });
   $('#wgConvConfirmCancel').addEventListener('click', wgCloseConvConfirm);
   $('#wgConvConfirmDelete').addEventListener('click', wgConvConfirmDelete);
   $('#wgConvConfirm').addEventListener('click', e => { if (e.target.id === 'wgConvConfirm') wgCloseConvConfirm(); });
