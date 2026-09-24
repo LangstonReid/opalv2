@@ -1246,7 +1246,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 #widgetsRoot{--wg-rail-gap:296px}
 body.wg-rail-collapsed #widgetsRoot{--wg-rail-gap:92px}
 .wg-shell,.wg-day-inner,.wg-conv-inner{padding-right:var(--wg-rail-gap);transition:padding-right .3s var(--ease)}
-.wg-rail{position:fixed;right:12px;top:12px;bottom:12px;z-index:var(--z-nav);width:clamp(200px,14.28vw,280px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s var(--ease),background .4s}
+.wg-rail{position:fixed;right:12px;top:74px;bottom:12px;z-index:var(--z-nav);width:clamp(200px,14.28vw,280px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s var(--ease),background .4s}
 .wg-rail.dim{background:var(--wg-paper-dim,#e8e6dc)}
 body.wg-rail-collapsed .wg-rail{width:56px}
 .wg-rail-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px}
@@ -1321,7 +1321,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-toast-action{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-spore);text-decoration:underline;text-underline-offset:2px}
 @media (max-width:899px){
   #widgetsRoot{--wg-rail-gap:0px!important}
-  .wg-rail{right:0;top:0;bottom:0;border-radius:24px 0 0 24px;width:min(320px,86vw)!important;transform:translateX(104%);transition:transform .35s var(--ease)}
+  .wg-rail{right:0;top:70px;bottom:0;border-radius:24px 0 0 24px;width:min(320px,86vw)!important;transform:translateX(104%);transition:transform .35s var(--ease)}
   .wg-rail.drawer-open{transform:none}
   .wg-rail-strip{display:none!important}
   .wg-rail-body{display:flex!important}
@@ -1695,7 +1695,7 @@ body.sheet-open.mode-notes #notesRoot{filter:blur(14px) brightness(.97)}
 .nt-empty{grid-column:1/-1;padding:60px 24px;text-align:center;color:var(--wg-ink-42);font-size:13px;background:var(--wg-surface);border-radius:18px;border:1px solid var(--wg-border)}
 
 /* the overview rail — same floating-panel language as the Command Rail, belongs to Notes alone */
-.nt-rail{position:fixed;right:12px;top:12px;bottom:12px;z-index:var(--z-nav);width:clamp(220px,15vw,296px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);padding:18px 16px;overflow-y:auto;scrollbar-width:thin;display:none}
+.nt-rail{position:fixed;right:12px;top:74px;bottom:12px;z-index:var(--z-nav);width:clamp(220px,15vw,296px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);padding:18px 16px;overflow-y:auto;scrollbar-width:thin;display:none}
 body.mode-notes .nt-rail{display:block}
 .nt-rail-stat{margin-bottom:14px}
 .nt-rail-stat .l{display:block;font:400 9px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42)}
