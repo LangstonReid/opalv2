@@ -1051,8 +1051,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 /* ---------- the command rail: a permanent left-edge instrument panel ---------- */
 #widgetsRoot{--wg-rail-gap:296px}
 body.wg-rail-collapsed #widgetsRoot{--wg-rail-gap:92px}
-.wg-shell,.wg-day-inner,.wg-conv-inner{padding-left:var(--wg-rail-gap);transition:padding-left .3s var(--ease)}
-.wg-rail{position:fixed;left:12px;top:12px;bottom:12px;z-index:8;width:clamp(200px,14.28vw,280px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s var(--ease),background .4s}
+.wg-shell,.wg-day-inner,.wg-conv-inner{padding-right:var(--wg-rail-gap);transition:padding-right .3s var(--ease)}
+.wg-rail{position:fixed;right:12px;top:12px;bottom:12px;z-index:8;width:clamp(200px,14.28vw,280px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s var(--ease),background .4s}
 .wg-rail.dim{background:var(--wg-paper-dim,#e8e6dc)}
 body.wg-rail-collapsed .wg-rail{width:56px}
 .wg-rail-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px}
@@ -1099,7 +1099,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-rail-stripicon:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
 .wg-rail-stripicon b{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--wg-accent-ink);color:#fff;font:400 8.5px/15px var(--mono);text-align:center}
 .wg-rail-stripicon b:empty{display:none}
-.wg-rail-fab{display:none;position:fixed;left:16px;bottom:16px;z-index:8;width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;box-shadow:var(--wg-shadow-lg);align-items:center;justify-content:center}
+.wg-rail-fab{display:none;position:fixed;right:16px;bottom:88px;z-index:8;width:52px;height:52px;border-radius:50%;background:var(--wg-ink);color:#fff;box-shadow:var(--wg-shadow-lg);align-items:center;justify-content:center}
 .wg-rail-fab b{font:400 12px/1 var(--mono)}
 .wg-rail-fab b:empty::before{content:'0'}
 .wg-rail-drawerscrim{position:fixed;inset:0;z-index:7;background:rgba(31,36,29,.3);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
@@ -1110,7 +1110,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-toast-action{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-spore);text-decoration:underline;text-underline-offset:2px}
 @media (max-width:899px){
   #widgetsRoot{--wg-rail-gap:0px!important}
-  .wg-rail{left:0;top:0;bottom:0;border-radius:0 24px 24px 0;width:min(320px,86vw)!important;transform:translateX(-104%);transition:transform .35s var(--ease)}
+  .wg-rail{right:0;top:0;bottom:0;border-radius:24px 0 0 24px;width:min(320px,86vw)!important;transform:translateX(104%);transition:transform .35s var(--ease)}
   .wg-rail.drawer-open{transform:none}
   .wg-rail-strip{display:none!important}
   .wg-rail-body{display:flex!important}
@@ -1611,7 +1611,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <aside class="wg-rail" id="wgRail">
     <div class="wg-rail-head">
       <span class="wg-rail-title mono">Rail</span>
-      <button type="button" class="wg-rail-collapse" id="wgRailCollapse" aria-label="Collapse rail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" class="wg-rail-collapse" id="wgRailCollapse" aria-label="Collapse rail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div class="wg-rail-body" id="wgRailBody">
       <div class="wg-rail-sec">
@@ -4034,6 +4034,7 @@ const WG_CLUSTERS = [
       preview: 'A formal RFQ covering the titanium clasp, alloy spec, and pilot-run quantity, addressed to the Monterrey shop. Requests pricing and lead time in writing.', deliverableTag: '→ PDF' }] },
 ];
 function wgOpalTaskById(id) { for (const c of WG_CLUSTERS) { const t = c.opalTasks.find(x => x.id === id); if (t) return { cluster: c, task: t }; } return null; }
+const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." } };
 function wgClustersFor(dayKey) { return WG_CLUSTERS.filter(c => c.day === dayKey); }
 
 const WG_PEOPLE = [
@@ -4838,7 +4839,6 @@ function wgNavigateDay(dir) {
 
 /* actions: a persistent 2:1 grid, per-task run state, prepares vs commits */
 const wgWarnSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.6l6.9 12H1.1z"/><path d="M8 6.4v3.2M8 11.6h.01" stroke-linecap="round"/></svg>`;
-const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." } };
 function wgRunStatusFor(t) {
   const msgs = { notion: 'WRITING THE NOTION PAGE…', pinterest: 'SEARCHING PINTEREST…', gmail: 'DRAFTING THE EMAIL…', calendar: 'HOLDING THE RESERVATION…' };
   return msgs[t.connector] || 'OPAL IS ON IT';
