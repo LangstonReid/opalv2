@@ -1128,6 +1128,9 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-page.size-s .wg-conv-transcript{--wg-conv-fs:12px}
 .wg-conv-page.size-m .wg-conv-transcript{--wg-conv-fs:13.5px}
 .wg-conv-page.size-l .wg-conv-transcript{--wg-conv-fs:16px}
+.wg-daytx.size-s .wg-conv-transcript{--wg-conv-fs:12px}
+.wg-daytx.size-m .wg-conv-transcript{--wg-conv-fs:13.5px}
+.wg-daytx.size-l .wg-conv-transcript{--wg-conv-fs:16px}
 .wg-conv-sentence{font-size:var(--wg-conv-fs);line-height:1.6;color:var(--wg-ink-42);transition:color .2s}
 .wg-conv-sentence.near,.wg-conv-sentence:hover{color:#000}
 .wg-conv-sentence .wg-span{color:var(--wg-accent-ink)}
@@ -1139,6 +1142,24 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 @media (max-width:1180px){.wg-conv-rail{display:none}}
 .wg-conv-nextflag{position:fixed;right:26px;bottom:26px;z-index:3;font:400 10px/1.6 var(--mono);letter-spacing:.08em;color:#fff;background:var(--wg-ink);padding:11px 16px;border-radius:999px;box-shadow:var(--wg-shadow-lg);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 .wg-conv-nextflag.show{opacity:1;transform:none;pointer-events:auto}
+
+/* day transcription: every sentence said this day, embedded below the day's conversation cards */
+.wg-daytx{margin-top:28px;padding-top:22px;border-top:1px solid var(--wg-border);max-width:720px}
+.wg-daytx-headrow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.wg-daytx-title{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink)}
+.wg-daytx-tools{display:flex;align-items:center;gap:10px}
+.wg-daytx-nextflag{font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);padding:7px 12px;border-radius:999px;background:var(--wg-surface-3);transition:color .2s,background .2s}
+.wg-daytx-nextflag:hover{color:var(--wg-ink);background:var(--wg-surface-2)}
+.wg-daytx-nextflag[hidden]{display:none}
+.wg-daytx-progress-track{height:2px;border-radius:2px;background:var(--wg-border);margin-bottom:16px;overflow:hidden}
+.wg-daytx-progress-fill{height:100%;width:0;background:var(--wg-accent);border-radius:2px;transition:width .1s linear}
+.wg-daytx-scroll{max-height:56vh;overflow-y:auto;scrollbar-width:thin;padding-right:6px}
+.wg-daytx-block{margin-bottom:22px}
+.wg-daytx-block:last-child{margin-bottom:0}
+.wg-daytx-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:8px 10px;margin-bottom:8px;border-radius:10px;background:var(--wg-surface-2);transition:background .15s}
+.wg-daytx-head:hover{background:var(--wg-yellow-soft)}
+.wg-daytx-head span{font:500 12px/1.4 var(--sans);color:var(--wg-ink)}
+.wg-daytx-head small{flex:none;font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
 
 /* delete confirmation */
 
@@ -5124,16 +5145,15 @@ function wgConvPeopleHTML(c) {
     return `<button type="button" class="wg-conv-chip" data-person="${p.id}"><i></i>${esc(label)}${p.isEstimated && !(state.wgNames && state.wgNames[p.id]) ? `<small>GUESS</small>` : ''}</button>`;
   }).join('')}</div>`;
 }
-function wgConvTranscriptHTML(c) {
-  return c.transcriptSentences.map(s => {
-    let inner = esc(s.text);
-    if (s.isActionable) {
-      const cl = WG_CLUSTERS.find(x => x.id === s.actionClusterId), conn = (cl && cl.opalTasks[0] && cl.opalTasks[0].connector) || 'notion';
-      inner = `<span class="wg-span" tabindex="0" role="button" data-span-conn="${conn}" data-span-conf="0.85" data-span-cluster="${s.actionClusterId}">${esc(s.text)}</span>`;
-    }
-    return `<p class="wg-conv-sentence" data-sent="${s.id}">${inner}</p>`;
-  }).join('');
+function wgSentenceHTML(s, sentKey) {
+  let inner = esc(s.text);
+  if (s.isActionable) {
+    const cl = WG_CLUSTERS.find(x => x.id === s.actionClusterId), conn = (cl && cl.opalTasks[0] && cl.opalTasks[0].connector) || 'notion';
+    inner = `<span class="wg-span" tabindex="0" role="button" data-span-conn="${conn}" data-span-conf="0.85" data-span-cluster="${s.actionClusterId}">${esc(s.text)}</span>`;
+  }
+  return `<p class="wg-conv-sentence" data-sent="${sentKey}">${inner}</p>`;
 }
+function wgConvTranscriptHTML(c) { return c.transcriptSentences.map(s => wgSentenceHTML(s, s.id)).join(''); }
 /* citations: tie a claim back to the exact transcript line(s) it came from — never a bare summary */
 function wgCiteChip(sentId, idx) { return `<button type="button" class="wg-cite-chip" data-cite="${sentId}" aria-label="Source: transcript line ${idx}">${idx}</button>`; }
 function wgCiteRow(cites, sentences) {
@@ -5219,6 +5239,8 @@ function wgSetAaSize(size) {
   wgState.aaSize = size; state.wgAaSize = size; save();
   const page = $('#wgConvPage'); page.classList.remove('size-s', 'size-m', 'size-l'); page.classList.add('size-' + size);
   $('#wgAaSize').querySelectorAll('[data-aa]').forEach(b => b.classList.toggle('on', b.dataset.aa === size));
+  const daytx = $('.wg-daytx');
+  if (daytx) { daytx.classList.remove('size-s', 'size-m', 'size-l'); daytx.classList.add('size-' + size); $('#wgDayTxAaSize').querySelectorAll('[data-aa]').forEach(b => b.classList.toggle('on', b.dataset.aa === size)); }
 }
 
 /* star, title, menu, copy/export/archive/delete */
@@ -5671,7 +5693,59 @@ function wgCommitTask(taskId) {
 function wgRenderDayConversations(dateKey) {
   const pane = $('#wgPaneConversations');
   const list = WG_CONVERSATIONS.filter(c => c.day === dateKey && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
-  pane.innerHTML = list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-actions-empty">No conversations this day.</p>`;
+  pane.innerHTML = (list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-actions-empty">No conversations this day.</p>`) + wgDayTxSectionHTML(dateKey);
+  const scrollEl = $('#wgDayTxScroll');
+  if (scrollEl) { scrollEl.addEventListener('scroll', wgDayTxOnScroll); wgDayTxOnScroll(); }
+}
+
+/* day transcription: every sentence said this day, all of that day's conversations stitched in the order they happened —
+   the same reading experience (hover-darken, actionable-line jump, text size, "next flagged") as a single conversation's
+   transcript, just spanning the whole day, so triaging a day doesn't mean opening every conversation on it one by one */
+function wgDayTranscriptConvs(dateKey) { return WG_CONVERSATIONS.filter(c => c.day === dateKey && !c.isArchived && c.transcriptSentences.length).sort((a, b) => a.startAt - b.startAt); }
+function wgDayTxBlockHTML(c) {
+  const t = c.startAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  return `<div class="wg-daytx-block">
+    <button type="button" class="wg-daytx-head" data-conv="${c.id}"><span>${esc(t)} &middot; ${esc(c.title)}</span><small>OPEN &rarr;</small></button>
+    ${c.transcriptSentences.map(s => wgSentenceHTML(s, `${c.id}-${s.id}`)).join('')}
+  </div>`;
+}
+function wgDayTranscriptHTML(dateKey) { return wgDayTranscriptConvs(dateKey).map(wgDayTxBlockHTML).join(''); }
+function wgDayTxSectionHTML(dateKey) {
+  const convs = wgDayTranscriptConvs(dateKey);
+  if (!convs.length) return '';
+  const size = wgState.aaSize;
+  return `<div class="wg-daytx size-${size}">
+    <div class="wg-daytx-headrow">
+      <div class="wg-daytx-title">Transcription</div>
+      <div class="wg-daytx-tools">
+        <div class="wg-aa" id="wgDayTxAaSize">${['s', 'm', 'l'].map(sz => `<button type="button" data-aa="${sz}"${sz === size ? ' class="on"' : ''}>Aa</button>`).join('')}</div>
+        <button type="button" class="wg-daytx-nextflag" id="wgDayTxNextFlag" aria-label="Jump to next flagged line">Next flagged &darr;</button>
+      </div>
+    </div>
+    <div class="wg-daytx-progress-track"><div class="wg-daytx-progress-fill" id="wgDayTxProgress"></div></div>
+    <div class="wg-daytx-scroll" id="wgDayTxScroll"><div class="wg-conv-transcript wg-daytx-transcript" id="wgDayTxTranscript">${wgDayTranscriptHTML(dateKey)}</div></div>
+  </div>`;
+}
+function wgDayTxOnScroll() {
+  const wrap = $('#wgDayTxScroll'); if (!wrap) return;
+  const sentences = [...wrap.querySelectorAll('.wg-conv-sentence')], wrapRect = wrap.getBoundingClientRect(), centerY = wrapRect.top + wrapRect.height / 2;
+  let nearest = null, nearestD = Infinity;
+  sentences.forEach(el => {
+    el.classList.remove('near'); const r = el.getBoundingClientRect();
+    if (r.bottom < wrapRect.top || r.top > wrapRect.bottom) return;
+    const d = Math.abs((r.top + r.bottom) / 2 - centerY); if (d < nearestD) { nearestD = d; nearest = el; }
+  });
+  if (nearest) nearest.classList.add('near');
+  const scrollable = wrap.scrollHeight - wrap.clientHeight, fill = $('#wgDayTxProgress');
+  if (fill) fill.style.width = (scrollable > 0 ? clamp(wrap.scrollTop / scrollable, 0, 1) : 0) * 100 + '%';
+  const nf = $('#wgDayTxNextFlag'); if (nf) nf.hidden = !wrap.querySelector('.wg-span');
+}
+function wgDayTxJumpNextFlag() {
+  const wrap = $('#wgDayTxScroll'); if (!wrap) return;
+  const flags = [...wrap.querySelectorAll('.wg-span')].map(s => s.closest('.wg-conv-sentence')).filter(Boolean); if (!flags.length) return;
+  const wrapRect = wrap.getBoundingClientRect(), next = flags.find(el => el.getBoundingClientRect().top > wrapRect.top + 40) || flags[0];
+  next.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' });
+  next.classList.add('wg-highlight'); setTimeout(() => next.classList.remove('wg-highlight'), 1400);
 }
 
 /* today: the default landing view — today's action items, talking points, conversations, and a live-updating transcript feed */
@@ -5878,6 +5952,8 @@ function wgInit() {
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
     const cconv = e.target.closest('[data-conv]'); if (cconv) return wgConvOpen(cconv.dataset.conv, cconv);
     const span = e.target.closest('.wg-span'); if (span) return wgOpenPop(span);
+    const daytxaa = e.target.closest('#wgDayTxAaSize [data-aa]'); if (daytxaa) return wgSetAaSize(daytxaa.dataset.aa);
+    const daytxnext = e.target.closest('#wgDayTxNextFlag'); if (daytxnext) return wgDayTxJumpNextFlag();
   });
   $('#wgFilm').addEventListener('keydown', e => { if (e.key !== 'Enter') return; const span = e.target.closest('.wg-span'); if (span) wgOpenPop(span); });
   $('#wgFilm').addEventListener('blur', e => {
