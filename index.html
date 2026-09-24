@@ -1123,6 +1123,17 @@ body.wg-rail-collapsed .wg-rail-body{display:none}
 .wg-rail-done-row small{display:block;margin-top:2px;font:400 8.5px/1.6 var(--mono);color:var(--wg-ink-42)}
 .wg-rail-loadmore{margin-top:6px;width:100%;text-align:center;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-60);padding:9px;border-radius:10px;background:var(--wg-surface-2);transition:background .2s}
 .wg-rail-loadmore:hover{background:var(--wg-surface-3)}
+.wg-rail-stats .stat-period{display:flex;gap:4px;margin-bottom:10px}
+.wg-rail-stats .stat-period button{flex:1;font:400 8.5px/1.6 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--wg-ink-42);padding:6px 2px;border-radius:8px;background:var(--wg-surface-3);transition:color .2s,background .2s}
+.wg-rail-stats .stat-period button.on{color:#fff;background:var(--wg-ink)}
+.wg-rail-stats .stat-period button:not(.on):hover{color:var(--wg-ink)}
+.wg-rail-stats .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wg-rail-stats .stat-tile{background:var(--wg-surface-2);border-radius:12px;padding:10px 11px}
+.wg-rail-stats .stat-label{font:400 8.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-rail-stats .stat-value{margin-top:4px;font:600 15px/1.15 var(--sans);color:var(--wg-ink)}
+.wg-rail-stats .stat-delta{display:inline-block;margin-top:5px;font:400 9px/1.5 var(--mono);letter-spacing:.02em;cursor:default}
+.wg-rail-stats .stat-delta.up{color:var(--wg-accent-ink)}
+.wg-rail-stats .stat-delta.down{color:var(--wg-ink-42)}
 .wg-rail-strip{display:none;flex-direction:column;align-items:center;gap:14px;padding:10px 0}
 body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-rail-stripicon{position:relative;width:36px;height:36px;border-radius:50%;background:var(--wg-surface-2);color:var(--wg-ink-60);display:grid;place-items:center;transition:background .2s,color .2s}
@@ -1440,6 +1451,19 @@ body.paused .c-wave i{animation-play-state:paused;height:10%!important;backgroun
 .c-ctile svg path{fill:#fff}
 .c-ctile b{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--black);color:#fff;font:400 8px/15px var(--mono);text-align:center}
 
+.c-stats{background:var(--board)}
+.c-stats .stat-period{display:flex;gap:4px;margin-bottom:10px}
+.c-stats .stat-period button{flex:1;font:400 8.5px/1.6 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-42);padding:6px 2px;border-radius:8px;background:rgba(31,36,29,.06);transition:color .2s,background .2s}
+.c-stats .stat-period button.on{color:#fff;background:var(--ink)}
+.c-stats .stat-period button:not(.on):hover{color:var(--ink)}
+.c-stats .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.c-stats .stat-tile{background:#fff;border-radius:12px;padding:10px 11px}
+.c-stats .stat-label{font:400 8.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--ink-42)}
+.c-stats .stat-value{margin-top:4px;font:600 15px/1.15 var(--sans);color:var(--ink)}
+.c-stats .stat-delta{display:inline-block;margin-top:5px;font:400 9px/1.5 var(--mono);letter-spacing:.02em;cursor:default}
+.c-stats .stat-delta.up{color:var(--moss)}
+.c-stats .stat-delta.down{color:var(--ink-42)}
+
 .c-foot{display:flex;justify-content:space-between;padding:2px 6px}
 .c-foot button{font:400 9.5px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-42);transition:color .2s}
 .c-foot button:hover{color:var(--ink)}
@@ -1721,6 +1745,11 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         <div class="wg-rail-done" id="wgRailDone"></div>
         <button type="button" class="wg-rail-loadmore" id="wgRailLoadMore" hidden>Load more</button>
       </div>
+      <div class="wg-rail-sec wg-rail-stats">
+        <div class="wg-rail-sec-label">Opal's health</div>
+        <div class="stat-period" id="wgStatsPeriod"></div>
+        <div class="stat-grid" id="wgStatsGrid"></div>
+      </div>
     </div>
     <div class="wg-rail-strip" id="wgRailStrip">
       <button type="button" class="wg-rail-stripicon" data-railexpand="1" aria-label="Expand: you have to do this"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg><b id="wgRailStripMust"></b></button>
@@ -1867,6 +1896,11 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         <div class="c-wcap"><span>Connected</span></div>
         <div class="c-cgrid" id="cGrid"></div>
       </div>
+      <div class="c-widget c-stats" id="cStatsWidget">
+        <div class="c-wcap"><span>Opal's health</span></div>
+        <div class="stat-period" id="cStatsPeriod"></div>
+        <div class="stat-grid" id="cStatsGrid"></div>
+      </div>
       <div class="c-foot"><button type="button" data-cf="memory">Memory</button><button type="button" data-cf="settings">Settings</button></div>
     </aside>
     <div id="cDrawerScrim"></div>
@@ -1969,6 +2003,37 @@ const NOTES = [
   { id: 'pilot', nudge: "It's twelve students, their parents, and a principal who asked about privacy on day one.", title: 'Westside school pilot', heard: 'HEARD · SUN 13 SEP 11:05 · WITH DAD, MARCUS BELL', bullets: ['Twelve students, October', 'Marcus wants a privacy sheet for parents', 'Dad to introduce the board in person'], page: 'Personal / Family' },
 ];
 const PAGES = ['Opal / Product', 'Opal / Hardware', 'Opal / Brand', 'Personal / Family', 'Inbox'];
+const OPAL_STATS = {
+  today: { saved: 38, savedPrev: 52, tasks: 4, tasksPrev: 6, recorded: 210, recordedPrev: 185, convs: 3, convsPrev: 5 },
+  week: { saved: 312, savedPrev: 275, tasks: 21, tasksPrev: 18, recorded: 1180, recordedPrev: 1340, convs: 19, convsPrev: 16 },
+  month: { saved: 1240, savedPrev: 980, tasks: 86, tasksPrev: 74, recorded: 4920, recordedPrev: 4510, convs: 71, convsPrev: 63 },
+  year: { saved: 14300, savedPrev: 11800, tasks: 940, tasksPrev: 810, recorded: 58900, recordedPrev: 51200, convs: 812, convsPrev: 705 },
+};
+let opalStatsPeriod = 'month';
+const STAT_PERIODS = [['today', 'Today'], ['week', 'Week'], ['month', 'Month'], ['year', 'Year']];
+const fmtMin = m => m >= 60 ? `${Math.floor(m / 60)}h ${pad(m % 60)}m` : `${m}m`;
+function opalStatTiles(period) {
+  const d = OPAL_STATS[period];
+  const trend = (cur, prev) => ({ up: cur >= prev, pct: prev ? Math.round(Math.abs(cur - prev) / prev * 100) : 0 });
+  return [
+    { label: 'Minutes saved', value: fmtMin(d.saved), t: trend(d.saved, d.savedPrev) },
+    { label: 'Tasks completed', value: d.tasks.toLocaleString(), t: trend(d.tasks, d.tasksPrev) },
+    { label: 'Minutes recorded', value: fmtMin(d.recorded), t: trend(d.recorded, d.recordedPrev) },
+    { label: 'Conversations', value: d.convs.toLocaleString(), t: trend(d.convs, d.convsPrev) },
+  ];
+}
+function opalStatTileHTML(t) { return `<div class="stat-tile"><p class="stat-label">${esc(t.label)}</p><p class="stat-value">${esc(t.value)}</p><span class="stat-delta ${t.t.up ? 'up' : 'down'}" title="vs the period before this one">${t.t.up ? '▲' : '▼'} ${t.t.pct}%</span></div>`; }
+function opalStatsGridHTML(period) { return opalStatTiles(period).map(opalStatTileHTML).join(''); }
+function opalStatsPeriodHTML(period) { return STAT_PERIODS.map(([p, label]) => `<button type="button" class="${p === period ? 'on' : ''}" data-statperiod="${p}">${label}</button>`).join(''); }
+function opalSetStatsPeriod(p) { opalStatsPeriod = p; wgRenderStats(); chatRenderStats(); }
+function wgRenderStats() {
+  const grid = $('#wgStatsGrid'); if (grid) grid.innerHTML = opalStatsGridHTML(opalStatsPeriod);
+  const per = $('#wgStatsPeriod'); if (per) per.innerHTML = opalStatsPeriodHTML(opalStatsPeriod);
+}
+function chatRenderStats() {
+  const grid = $('#cStatsGrid'); if (grid) grid.innerHTML = opalStatsGridHTML(opalStatsPeriod);
+  const per = $('#cStatsPeriod'); if (per) per.innerHTML = opalStatsPeriodHTML(opalStatsPeriod);
+}
 const TIMELINE = [
   { time: '07:04', place: 'HOME', who: 'OWEN', text: 'Gym Friday at seven. You said not to let you skip it.', live: true },
   { time: '08:15', place: 'CAR', who: 'DAD', text: 'School pilot moves to October. You said you would call back Wednesday.', live: true },
@@ -4126,7 +4191,7 @@ function chatInit() {
   const cs = chatS(); if (!cs.active) cs.active = 'today';
   cRootEl = chatRoot; cCanvasEl = $('#cFx');
   chatSelectThread(cs.active, true);
-  chatRenderSuggest(); chatRenderListen(); chatRenderNext(); chatRenderTasksWidget(); chatRenderConnect();
+  chatRenderSuggest(); chatRenderListen(); chatRenderNext(); chatRenderTasksWidget(); chatRenderConnect(); chatRenderStats();
   $('#cComposer').addEventListener('submit', e => { e.preventDefault(); const v = $('#cInput').value; if (!v.trim()) return; $('#cInput').value = ''; chatAutoGrow(); chatSend(v); });
   $('#cInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#cComposer').requestSubmit(); } });
   $('#cInput').addEventListener('input', chatAutoGrow);
@@ -4159,6 +4224,7 @@ function chatInit() {
     const a = e.target.closest('[data-accept]'); if (a) return chatHandleAccept(a);
     const tile = e.target.closest('[data-conn]'); if (tile) { chatOpenFrom(tile, tile.dataset.conn); const r = tile.getBoundingClientRect(); chatBurst(r.left + r.width / 2, r.top + r.height / 2, { n: 14 }); return; }
     const foot = e.target.closest('[data-cf]'); if (foot) return chatOpenFrom(foot, foot.dataset.cf === 'memory' ? 'opal' : 'settings');
+    const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
   });
   $('#cThreadsToggle').addEventListener('click', () => chatToggleDrawer('side'));
   $('#cWidgetsToggle').addEventListener('click', () => chatToggleDrawer('right'));
@@ -4544,7 +4610,7 @@ function wgRenderRailDone() {
   $('#wgRailStripDone').textContent = all.length ? String(Math.min(all.length, 99)) : '';
 }
 function wgRenderRail() {
-  wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone();
+  wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone(); wgRenderStats();
   const h = new Date().getHours();
   $('#wgRail').classList.toggle('dim', h >= 18 || h < 6);
   document.body.classList.toggle('wg-rail-collapsed', wgState.railCollapsed);
@@ -5536,6 +5602,7 @@ function wgInit() {
     const more = e.target.closest('#wgRailLoadMore'); if (more) { wgState.railCompletedShown += 20; return wgRenderRailDone(); }
     const doneRow = e.target.closest('[data-raildonerow]'); if (doneRow) return wgOpenDebrief(doneRow.dataset.raildonerow);
     const readyTitle = e.target.closest('.wg-rail-ready-title'); if (readyTitle) { const row = readyTitle.closest('[data-railrow]'); const found = row && wgOpalTaskById(row.dataset.railrow); if (found) wgRailJumpToTask(found.cluster.id, found.cluster.day); return; }
+    const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
   });
   $('#wgRailBody').addEventListener('contextmenu', e => { const row = e.target.closest('[data-todo]'); if (row) { e.preventDefault(); wgOpenRailSnooze(row.dataset.todo, e.clientX, e.clientY); } });
   let wgRailPressT = 0, wgRailPressId = null;
