@@ -1206,9 +1206,6 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-foot{margin-top:8px;padding-top:18px;border-top:1px solid var(--wg-border);display:flex;flex-direction:column;gap:8px}
 .wg-conv-foot button{align-self:flex-start;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42);transition:color .2s}
 .wg-conv-foot button:hover{color:var(--wg-accent-ink)}
-.wg-conv-rail{position:fixed;left:calc(50% - 420px);top:180px;bottom:120px;width:2px;background:var(--wg-border);border-radius:2px;z-index:var(--z-elevated)}
-.wg-conv-rail i{position:absolute;left:0;top:0;width:2px;background:var(--wg-accent);border-radius:2px;transition:height .1s linear}
-@media (max-width:1180px){.wg-conv-rail{display:none}}
 .wg-conv-nextflag{position:fixed;right:26px;bottom:26px;z-index:var(--z-tooltip);font:400 10px/1.6 var(--mono);letter-spacing:.08em;color:#fff;background:var(--wg-ink);padding:11px 16px;border-radius:999px;box-shadow:var(--wg-shadow-lg);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 .wg-conv-nextflag.show{opacity:1;transform:none;pointer-events:auto}
 .wg-conv-confirm{position:fixed;inset:0;z-index:var(--z-confirm);background:rgba(31,36,29,.4);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
@@ -2325,7 +2322,6 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         <div class="wg-conv-body" id="wgConvBody"></div>
       </div>
     </div>
-    <div class="wg-conv-rail" id="wgConvRail"><i id="wgConvProgress"></i></div>
     <button type="button" class="wg-conv-nextflag" id="wgConvNextFlag">&darr; NEXT FLAGGED LINE</button>
     <div class="wg-conv-confirm" id="wgConvConfirm" role="alertdialog" aria-modal="true" aria-label="Confirm delete">
       <div class="wg-conv-confirm-card">
@@ -5739,9 +5735,7 @@ function wgConvOnScroll() {
     rows.forEach(el => { el.classList.remove('near'); const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const d = Math.abs((r.top + r.bottom) / 2 - centerY); if (d < nearestD) { nearestD = d; nearest = el; } });
     if (nearest) nearest.classList.add('near');
   }
-  const inner = $('#wgConvInner'), fill = $('#wgConvProgress');
-  const scrollable = inner.scrollHeight - inner.clientHeight;
-  fill.style.height = (scrollable > 0 ? clamp(inner.scrollTop / scrollable, 0, 1) : 0) * 100 + '%';
+  const inner = $('#wgConvInner');
   $('#wgConvNextFlag').classList.toggle('show', !!document.querySelector('#wgConvTranscript .wg-span'));
   const secs = [...document.querySelectorAll('#wgConvBody .wg-conv-sec[id^="wgConvSec-"]')];
   if (secs.length) {
