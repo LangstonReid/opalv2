@@ -663,23 +663,11 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-todo-body small.carried{color:var(--wg-ember)}
 .wg-todos-empty{padding:16px 4px;font-size:12px;color:var(--wg-ink-42)}
 
-/* the day grid: fanned card stacks, bookshelf style */
-.wg-grid{flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,1fr);gap:26px 20px}
-@media (max-width:1180px){.wg-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:860px){.wg-grid{grid-template-columns:repeat(2,1fr)}}
-.wg-day-cell{position:relative}
-.wg-stack{position:relative;height:var(--sh,150px);cursor:pointer}
-.wg-stack i{position:absolute;inset:0;border-radius:16px;background:var(--wg-surface-2);border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-sm);transform-origin:bottom center}
-.wg-stack .front{background:linear-gradient(160deg,#fff,var(--wg-surface-2) 130%);z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:14px;box-shadow:var(--wg-shadow-md);transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
-.wg-day-cell:hover .wg-stack .front{transform:translateY(-3px);box-shadow:var(--wg-shadow-lg)}
+/* the day grid: connector badges, shared by the calendar cells and the day page header */
 .wg-badges{display:flex;gap:4px}
 .wg-badges b{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:var(--c,var(--wg-accent));box-shadow:0 1px 2px rgba(31,36,29,.12)}
 .wg-badges b svg{width:9px;height:9px}
 .wg-badges b svg path{fill:#fff}
-.wg-day-num{font:400 30px/1 var(--sans);color:var(--wg-ink)}
-.wg-day-cap{margin-top:8px;font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42)}
-.wg-grid-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--wg-ink-42);font-size:13px}
-
 /* calendar mode */
 .wg-cal{flex:1;min-width:0;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
 .wg-cal-cell{position:relative;height:122px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;cursor:default;transition:background .18s var(--ease),box-shadow .18s var(--ease),transform .18s var(--ease)}
@@ -1316,8 +1304,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </div>
       <div class="wg-welcome" id="wgWelcomePanel"></div>
       <div class="wg-filters" id="wgFilters">
-        <button type="button" data-wgmode="widget" class="on">Widget</button>
-        <button type="button" data-wgmode="calendar">Calendar</button>
+        <button type="button" data-wgmode="calendar" class="on">Calendar</button>
         <button type="button" data-wgmode="spreadsheet">Spreadsheet</button>
       </div>
       <div class="wg-body">
@@ -3720,7 +3707,7 @@ const wgCheckSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" s
 const wgLockSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>`;
 function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = WG_BADGE_COLOR[id] || (o && o.brand) || '#7a9a5a'; const icon = o ? markSvg(o.logo, '#fff') : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/></svg>`; return `<b style="--c:${color}" title="${esc((o && o.name) || id)}">${icon}</b>`; }
 
-const wgState = { viewMode: 'widget', currentDay: null, tab: 'actions', transcriptMode: 'summary', hourOverride: {}, todoScope: 'day' };
+const wgState = { viewMode: 'calendar', currentDay: null, tab: 'actions', transcriptMode: 'summary', hourOverride: {}, todoScope: 'day' };
 
 function wgTodosFor(scope) {
   if (scope === 'global') return WG_TODOS.filter(t => t.status === 'open').sort((a, b) => a.createdOnDay.localeCompare(b.createdOnDay));
@@ -3746,20 +3733,7 @@ function wgRenderWelcomePanel() {
     <div class="wg-band">BAND ${w.band.battery}% · ${state.listening ? 'SYNCED' : 'PAUSED'}</div></div>`;
 }
 
-/* the day grid, three renderers over one dataset */
-function wgDayCellHTML(day) {
-  const d = new Date(day.date + 'T00:00:00');
-  const fan = clamp(1 + Math.round(day.actionCount / 2), 1, 4);
-  const sh = Math.round(clamp(96 + (day.talkTimeSeconds / 3600) * 42 + day.actionCount * 9, 96, 210));
-  const layers = Array.from({ length: fan }, (_, i) => `<i style="transform:translateY(${-(fan - i) * 3}px) rotate(${(i - fan / 2) * 1.6}deg);opacity:${.45 + i * .09}"></i>`).join('');
-  return `<div class="wg-day-cell"><button type="button" class="wg-stack" style="--sh:${sh}px" data-day="${day.date}" data-flip="${day.date}" aria-label="${esc(TITLE(DAYS[d.getDay()]))} ${esc(MONTHS[d.getMonth()])} ${d.getDate()}, ${day.actionCount} actions, ${wgHM(day.talkTimeSeconds)}">${layers}<i class="front"><span class="wg-badges">${day.connectorsTouched.slice(0, 4).map(wgBadge).join('')}</span><span class="wg-day-num">${d.getDate()}</span></i></button>
-    <div class="wg-day-cap">${esc(TITLE(DAYS[d.getDay()]))} ${d.getDate()} ${esc(MONTHS[d.getMonth()])} · ${day.actionCount} ACTION${day.actionCount === 1 ? '' : 'S'} · ${wgHM(day.talkTimeSeconds)}</div></div>`;
-}
-function wgRenderWidgetInto(grid) {
-  grid.className = 'wg-grid';
-  if (!WG_DAYS.length) { grid.innerHTML = `<div class="wg-grid-empty">Opal is listening. Your first day will show up here tonight.</div>`; return; }
-  grid.innerHTML = WG_DAYS.slice().sort((a, b) => b.date.localeCompare(a.date)).map(wgDayCellHTML).join('');
-}
+/* the day grid, two renderers over one dataset */
 function wgRenderCalendarInto(grid) {
   grid.className = 'wg-cal';
   const now = WG_T0, first = new Date(now.getFullYear(), now.getMonth(), 1), startPad = (first.getDay() + 6) % 7;
@@ -3784,9 +3758,8 @@ function wgRenderSpreadsheetInto(grid) {
 }
 function wgRenderGrid() {
   const grid = $('#wgGrid');
-  if (wgState.viewMode === 'calendar') wgRenderCalendarInto(grid);
-  else if (wgState.viewMode === 'spreadsheet') wgRenderSpreadsheetInto(grid);
-  else wgRenderWidgetInto(grid);
+  if (wgState.viewMode === 'spreadsheet') wgRenderSpreadsheetInto(grid);
+  else wgRenderCalendarInto(grid);
 }
 function wgSwitchViewMode(newMode) {
   if (newMode === wgState.viewMode) return;
