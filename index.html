@@ -55,13 +55,9 @@ body.sheet-open #chrome{opacity:.35}
 .spaced{position:absolute;top:22px;left:50%;transform:translateX(-50%);text-transform:none;letter-spacing:.42em;color:var(--bone-35);pointer-events:none!important}
 .hdr{position:absolute;top:28px;left:32px;max-width:min(560px,calc(100% - 64px))}
 .hdr .display{margin-top:10px;color:var(--bone)}
-.hdr .cap{color:var(--bone-60)}
+.hdr .cap{color:var(--bone-60);display:flex;align-items:center;gap:9px}
+.cap-logo{height:18px;width:auto;display:block;border-radius:5px;box-shadow:0 1px 6px rgba(0,0,0,.25)}
 .hdr-right{position:absolute;top:28px;right:32px;display:flex;align-items:center;gap:14px}
-.brandbar{display:none;align-items:center;gap:10px;padding:6px 14px 6px 8px;border-radius:999px;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-body.mode-chat .brandbar,body.mode-widgets .brandbar{display:flex}
-.brandbar-logo{height:26px;width:auto;display:block;border-radius:6px}
-.brandbar-meta{display:flex;flex-direction:column;line-height:1.35;font-size:9px;letter-spacing:.1em;color:var(--bone-60)}
-.brandbar-meta span:first-child{color:var(--bone)}
 .chip{position:relative;display:flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:999px;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-60);transition:transform .35s var(--ease),border-color .5s var(--ease)}
 .chip:active{transform:scale(.97)}
 .chip .track{position:relative;width:22px;height:10px;border-radius:999px;border:1px solid var(--bone-25);transition:border-color .5s var(--ease)}
@@ -599,9 +595,6 @@ body.mode-widgets .hdr .cap{color:rgba(31,36,29,.48)}
 body.mode-widgets #chrome::before,body.mode-widgets #chrome::after{opacity:0}
 body.mode-widgets .chip{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-widgets .chip .track{border-color:rgba(31,36,29,.26)}
-body.mode-widgets .brandbar,body.mode-chat .brandbar{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10)}
-body.mode-widgets .brandbar-meta,body.mode-chat .brandbar-meta{color:rgba(31,36,29,.5)}
-body.mode-widgets .brandbar-meta span:first-child,body.mode-chat .brandbar-meta span:first-child{color:rgba(31,36,29,.75)}
 body.mode-widgets.paused .chip{color:rgba(31,36,29,.34)}
 body.mode-widgets #toast{background:rgba(255,255,255,.9);border-color:rgba(31,36,29,.10);color:var(--wg-ink,#1f241d)}
 body.mode-widgets .pills{background:rgba(255,255,255,.72);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
@@ -654,7 +647,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 /* body: left todos + grid */
 .wg-body{display:flex;align-items:flex-start;gap:22px}
 .wg-todos-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.wg-todos-head span{font:400 10px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-todos-head span{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink)}
 .wg-seg{display:flex;gap:2px;padding:2px;border-radius:999px;background:var(--wg-surface-3)}
 .wg-seg button{font:400 8.5px/1.6 var(--mono);letter-spacing:.08em;padding:5px 9px;border-radius:999px;color:var(--wg-ink-42)}
 .wg-seg button.on{background:var(--wg-ink);color:#fff}
@@ -743,10 +736,10 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 /* actions: a persistent 2:1 grid, one row per cluster, the divider always drawn */
 .wg-actions-empty{color:var(--wg-ink-42);font-size:13px;padding:20px 0}
 .wg-actions-head{display:grid;grid-template-columns:2fr 1fr;padding-bottom:12px;border-bottom:1px solid var(--wg-border-2);margin-bottom:4px}
-.wg-actions-head div{display:flex;align-items:center;gap:8px;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-actions-head div{display:flex;align-items:center;gap:8px;font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink)}
 .wg-actions-head div:first-child{padding-right:28px}
 .wg-actions-head div:last-child{padding-left:28px}
-.wg-actions-head b{color:var(--wg-accent-ink);font-weight:600}
+.wg-actions-head b{color:var(--wg-accent-ink);font-weight:700}
 .wg-actions-list{display:flex;flex-direction:column}
 .wg-cluster-row{display:grid;grid-template-columns:2fr 1fr;padding:24px 0;border-bottom:1px solid var(--wg-border)}
 .wg-cluster-row:first-child{padding-top:0}
@@ -793,6 +786,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-loading-orb{display:inline-block;width:17px;height:17px;border-radius:50%;flex:none;background-image:url('assets/brand/loading-orb.webp');background-size:cover;background-position:center;animation:wgOrbPulse 1.3s ease-in-out infinite;box-shadow:0 0 6px rgba(111,143,78,.25)}
 @keyframes wgOrbPulse{0%,100%{opacity:.55;transform:scale(.82)}50%{opacity:1;transform:scale(1)}}
 .wg-spin{width:15px;height:15px;border-radius:50%;flex:none;background-image:url('assets/brand/loading-orb.webp');background-size:cover;background-position:center;animation:wgOrbPulse 1.3s ease-in-out infinite}
+.wg-otask-open{font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-accent-ink);background:var(--wg-yellow-soft);padding:8px 14px;border-radius:999px;transition:background .2s,color .2s}
+.wg-otask-open:hover{background:var(--wg-yellow);color:var(--wg-ink)}
 .wg-done-check{width:30px;height:30px;border-radius:50%;background:var(--wg-accent);color:#fff;display:grid;place-items:center;opacity:.9;transition:opacity .2s,box-shadow .2s,transform .2s;cursor:pointer}
 .wg-done-check svg{width:14px;height:14px}
 .wg-done-check:hover{opacity:1;transform:translateY(-2px);box-shadow:0 0 0 6px rgba(111,143,78,.16)}
@@ -865,8 +860,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 /* today: the default landing view */
 .wg-today{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;width:100%}
 .wg-today-col{display:flex;flex-direction:column;gap:26px;min-width:0}
-.wg-today-sec-label{font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:10px}
-.wg-today-subhead{font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin:16px 0 10px}
+.wg-today-sec-label{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
+.wg-today-subhead{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin:24px 0 14px}
 .wg-today-subhead:first-child{margin-top:0}
 .wg-today-list{display:flex;flex-direction:column;gap:9px}
 .wg-today-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;box-shadow:var(--wg-shadow-sm);transition:background .3s var(--ease)}
@@ -876,6 +871,11 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-today-row.opal .wg-today-go:hover{background:var(--wg-accent-ink)}
 .wg-today-row.opal .wg-today-skip{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--wg-border-2);color:var(--wg-ink-42);display:grid;place-items:center;font-size:11px;transition:color .2s,border-color .2s}
 .wg-today-row.opal .wg-today-skip:hover{color:var(--wg-ink);border-color:var(--wg-ink-28)}
+.wg-today-row.opal.done{cursor:pointer}
+.wg-today-row.opal.done:hover{background:var(--wg-surface-2);border-color:var(--wg-border-2)}
+.wg-today-row.opal.done:focus-visible{outline:2px solid var(--wg-accent);outline-offset:2px}
+.wg-today-openbtn{flex:none;font:400 10px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-accent-ink);background:var(--wg-yellow-soft);padding:7px 12px;border-radius:999px;transition:background .2s,color .2s}
+.wg-today-openbtn:hover{background:var(--wg-yellow);color:var(--wg-ink)}
 .wg-today-state{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff}
 .wg-today-state svg{width:12px;height:12px}
 .wg-today-state.done{background:var(--wg-accent)}
@@ -1015,7 +1015,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-body{margin-top:28px;padding-bottom:60px}
 .wg-conv-sec{padding:22px 0;border-top:1px solid var(--wg-border)}
 .wg-conv-sec:first-child{border-top:0;padding-top:0}
-.wg-conv-sec-label{font:400 9.5px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:12px}
+.wg-conv-sec-label{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
 .wg-conv-sec-p{font-size:14px;line-height:1.65;color:var(--wg-ink)}
 .wg-conv-sec-p[contenteditable]{outline:none;border-radius:6px;padding:2px 4px;margin:-2px -4px}
 .wg-conv-sec-p[contenteditable]:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
@@ -1051,7 +1051,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 
 /* folders, left panel */
 .wg-folder-group{margin-bottom:16px}
-.wg-folder-group-label{display:flex;align-items:center;justify-content:space-between;font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:6px}
+.wg-folder-group-label{display:flex;align-items:center;justify-content:space-between;font:700 11.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:10px}
 .wg-folder-row{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:9px 10px;border-radius:11px;font-size:12.5px;color:var(--wg-ink);transition:background .15s}
 .wg-folder-row:hover{background:var(--wg-surface-2)}
 .wg-folder-row.active{background:var(--wg-yellow-soft)}
@@ -1095,7 +1095,7 @@ body.wg-rail-collapsed .wg-rail-title{display:none}
 body.wg-rail-collapsed .wg-rail-collapse{transform:rotate(180deg)}
 .wg-rail-body{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;padding:4px 16px 16px;display:flex;flex-direction:column;gap:22px}
 body.wg-rail-collapsed .wg-rail-body{display:none}
-.wg-rail-sec-label{font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:8px}
+.wg-rail-sec-label{font:700 11px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:12px}
 .wg-rail-mustdo .wg-todo-row{padding:10px 0;align-items:center}
 .wg-rail-mustdo .wg-check,.wg-rail-ready-row .wg-check{width:22px;height:22px}
 .wg-rail-pill{flex:none;font:400 8px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink);background:var(--wg-yellow);padding:3px 7px;border-radius:999px;white-space:nowrap}
@@ -1115,7 +1115,7 @@ body.wg-rail-collapsed .wg-rail-body{display:none}
 .wg-rail-review{flex:none;width:11px;height:11px;border-radius:50%;background:var(--wg-ember);margin-left:auto}
 .wg-rail-err{flex:none;width:11px;height:11px;border-radius:50%;background:#b0452f;margin-left:auto}
 .wg-rail-empty{padding:8px 0;font-size:11.5px;color:var(--wg-ink-42)}
-.wg-rail-done-header{position:sticky;top:0;background:var(--wg-surface);font:400 9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:6px 0}
+.wg-rail-done-header{position:sticky;top:0;background:var(--wg-surface);font:700 11px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink);padding:8px 0}
 .wg-rail-done-row{width:100%;text-align:left;display:flex;align-items:flex-start;gap:8px;padding:7px 0}
 .wg-rail-done-row b{flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;background:var(--wg-accent);color:#fff;display:grid;place-items:center}
 .wg-rail-done-row b svg{width:9px;height:9px}
@@ -1369,6 +1369,65 @@ body.paused .c-wave i{animation-play-state:paused;height:10%!important;backgroun
 .c-next-empty{font-size:12px;color:var(--ink-42);margin-top:2px}
 .c-next.empty small{color:var(--ink-60)}
 
+/* ---------- agenda hyper-page: everything coming up, opened from "Next up" ---------- */
+.cag-page{position:fixed;inset:0;z-index:3;background:var(--board);opacity:0;transform:scale(.97);pointer-events:none;transition:opacity .45s var(--ease),transform .5s var(--ease);overflow:hidden}
+.cag-page.show{opacity:1;transform:scale(1);pointer-events:auto}
+.cag-list{position:relative;width:100%;max-width:640px;height:100%;margin:0 auto;padding:56px 32px 40px;overflow-y:auto;transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.cag-page.detail .cag-list{opacity:0;transform:translateX(-16px);pointer-events:none}
+.cag-detail{position:absolute;inset:0;width:100%;max-width:640px;margin:0 auto;padding:56px 32px 40px;overflow-y:auto;opacity:0;transform:translateX(16px);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.cag-page.detail .cag-detail{opacity:1;transform:translateX(0);pointer-events:auto}
+.cag-head{display:flex;align-items:center;gap:16px;margin-bottom:30px}
+.cag-back{width:38px;height:38px;border-radius:50%;background:var(--card);color:var(--ink);display:grid;place-items:center;flex:none;transition:background .2s}
+.cag-back:hover{background:var(--yellow)}
+.cag-back svg{width:16px;height:16px}
+.cag-head h2{font:400 24px/1.15 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.cag-filters{display:flex;gap:8px;margin-bottom:26px;overflow-x:auto}
+.cag-filters button{flex:none;font:400 11px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-42);padding:9px 16px;border-radius:999px;background:var(--card);white-space:nowrap;transition:color .2s,background .2s}
+.cag-filters button.on{color:#fff;background:var(--ink)}
+.cag-filters button:not(.on):hover{color:var(--ink);background:rgba(31,36,29,.08)}
+.cag-rows{display:flex;flex-direction:column;gap:10px}
+.cag-row{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:16px 18px;border-radius:18px;background:#fff;box-shadow:0 1px 0 rgba(31,36,29,.05),0 10px 24px rgba(31,36,29,.05);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.cag-row:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(31,36,29,.05),0 16px 30px rgba(31,36,29,.09)}
+.cag-row-time{flex:none;width:58px;display:flex;flex-direction:column;align-items:flex-start}
+.cag-row-time b{font:500 16px/1.2 var(--sans);color:var(--ink)}
+.cag-row-time small{font:400 8.5px/1.6 var(--mono);letter-spacing:.08em;color:var(--ink-42);margin-top:1px}
+.cag-row-body{flex:1;min-width:0}
+.cag-row-title{font-size:13.5px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cag-row-sub{font-size:11.5px;color:var(--ink-42);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cag-empty{color:var(--ink-42);font-size:13px;padding:20px 4px}
+.cag-kind-tag{flex:none;display:inline-flex;align-items:center;gap:5px;font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:999px}
+.cag-kind-tag svg{width:11px;height:11px}
+.cag-kind-tag.k-call{color:#9a5420;background:rgba(232,160,74,.18)}
+.cag-kind-tag.k-in-person{color:#4c6435;background:rgba(122,154,90,.16)}
+.cag-kind-tag.k-virtual{color:#9c5570;background:rgba(233,183,201,.28)}
+.cag-kind-tag.k-task{color:var(--ink-60);background:var(--card)}
+.cag-back2{display:inline-flex;align-items:center;gap:6px;font:400 10.5px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-42);margin-bottom:24px;transition:color .2s}
+.cag-back2:hover{color:var(--ink)}
+.cag-back2 svg{width:14px;height:14px}
+.cag-detail-title{font:400 27px/1.2 var(--sans);letter-spacing:-.01em;color:var(--ink);margin-top:12px}
+.cag-detail-time{font-size:13px;color:var(--ink-60);margin-top:8px}
+.cag-gcal{display:inline-block;margin-top:22px;font:400 11px/1.6 var(--mono);letter-spacing:.06em;color:#fff;background:var(--ink);padding:12px 20px;border-radius:999px;transition:background .2s}
+.cag-gcal:hover{background:#000}
+.cag-attendees{display:flex;align-items:center;gap:12px;margin-top:28px;padding-top:22px;border-top:1px solid var(--ink-14)}
+.cag-avatars{display:flex}
+.cag-avatars>*{width:32px;height:32px;border-radius:50%;border:2px solid var(--board);object-fit:cover;margin-left:-10px;background:var(--ink);color:#fff;display:grid;place-items:center;font:400 10px/1 var(--mono)}
+.cag-avatars>*:first-child{margin-left:0}
+.cag-attendee-count{font-size:12px;color:var(--ink-42)}
+.cag-detail-desc{margin-top:16px;font-size:13.5px;line-height:1.6;color:var(--ink-60)}
+.cag-notes{margin-top:30px;padding-top:22px;border-top:1px solid var(--ink-14)}
+.cag-notes-head{font:700 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:14px}
+.cag-notes-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cag-note{font-size:13px;line-height:1.5;color:var(--ink);background:#fff;border-radius:12px;padding:10px 13px}
+.cag-notes-empty{font-size:12px;color:var(--ink-42)}
+.cag-notes-form{display:flex;gap:8px}
+.cag-notes-form input{flex:1;background:#fff;border:1px solid var(--ink-14);border-radius:999px;padding:11px 16px;font-size:12.5px;color:var(--ink)}
+.cag-notes-form input:focus{outline:none;border-color:var(--moss)}
+.cag-notes-form button{font:400 11px/1.6 var(--mono);letter-spacing:.06em;color:var(--ink);background:var(--yellow);padding:11px 18px;border-radius:999px;transition:background .2s}
+.cag-notes-form button:hover{background:#e8ec8c}
+@media (max-width:640px){
+  .cag-list,.cag-detail{padding:44px 20px 32px}
+}
+
 .c-tasks-w{background:var(--board)}
 .c-tasks-w .c-task{background:#fff}
 .c-tasks-w .c-more{display:block;text-align:center;margin-top:8px;font:400 9.5px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-42)}
@@ -1409,6 +1468,7 @@ body.paused .c-wave i{animation-play-state:paused;height:10%!important;backgroun
   .c-wave i{animation:none;height:24%!important}
   .c-typing i{animation:none}
   .c-card,.c-row{animation:none}
+  .cag-page,.cag-list,.cag-detail,.cag-row{transition:none!important;transform:none!important}
 }
 /* ---------- welcome widget ---------- */
 #welcome{--putty:#dfe1d3;--card:#d0d3c2;--ink:#1f241d;--ink-60:rgba(31,36,29,.60);--ink-42:rgba(31,36,29,.42);--spore:#e4e64a;--band-ok:#6c8a3a;
@@ -1598,17 +1658,9 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
 <div id="chrome">
   <div class="spaced mono" id="spaced" aria-hidden="true">O p e n</div>
   <header class="hdr">
-    <div class="cap" id="cap">OPAL OS · WED 16 SEP · 08:41</div>
+    <div class="cap" id="cap"><img src="assets/brand/opal-wordmark.webp" alt="Opal OS" class="cap-logo"><span id="capMeta"></span></div>
   </header>
   <div class="hdr-right" id="hdrRight">
-    <div class="brandbar" id="brandBar">
-      <img src="assets/brand/opal-wordmark.webp" alt="Opal" class="brandbar-logo">
-      <div class="brandbar-meta mono">
-        <span id="brandDate"></span>
-        <span id="brandTime"></span>
-        <span id="brandCity">LOS ANGELES</span>
-      </div>
-    </div>
     <button class="chip" id="chip" aria-pressed="true" aria-label="Listening. Press to pause.">
       <span class="track"><span class="cdot"></span></span>
       <span id="chipText">Listening · 14h 22m today</span>
@@ -1818,6 +1870,22 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div class="c-foot"><button type="button" data-cf="memory">Memory</button><button type="button" data-cf="settings">Settings</button></div>
     </aside>
     <div id="cDrawerScrim"></div>
+    <div class="cag-page" id="cAgendaPage" role="dialog" aria-modal="true" aria-label="Your calendar">
+      <div class="cag-list">
+        <div class="cag-head">
+          <button type="button" class="cag-back" id="cAgendaClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          <h2>Your calendar</h2>
+        </div>
+        <div class="cag-filters" id="cAgendaFilters">
+          <button type="button" class="on" data-cagf="all">All</button>
+          <button type="button" data-cagf="call">Calls</button>
+          <button type="button" data-cagf="in-person">In person</button>
+          <button type="button" data-cagf="virtual">Virtual</button>
+        </div>
+        <div class="cag-rows" id="cAgendaRows"></div>
+      </div>
+      <div class="cag-detail" id="cAgendaDetail"></div>
+    </div>
   </div>
 </div>
 
@@ -1858,7 +1926,7 @@ const fmtDate = d => `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}
 
 /* ---------- persistence ---------- */
 const KEY = 'opal-os-garden-v1';
-const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS', navZoom: 60 });
+const defaults = () => ({ cal: {}, contacts: {}, gmail: {}, notion: {}, misc: {}, li: { status: {}, remind: {}, ask: {}, imported: null }, listening: true, added: [], retention: '90 DAYS', navZoom: 60, eventNotes: {} });
 function load() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') return Object.assign(defaults(), s); } catch (e) {}
   return defaults();
@@ -1868,12 +1936,12 @@ const state = load();
 
 /* ---------- mock data ---------- */
 const PROMISES = [
-  { id: 1, evidence: `let's grab coffee tomorrow`, tool: 'imessage', act: 'Get coffee with Maya', to: 'Maya', quote: "Let's grab coffee tomorrow, I'll text you a place.", with: 'MAYA CHEN', title: 'Coffee with Maya Chen', dueIn: [1, '10:00'], heardAgo: [2, '17:12'], dur: '45 min', note: 'location open', conf: 84 },
-  { id: 2, evidence: `we're doing dinner a week from Saturday`, tool: 'calendar', act: 'Book dinner for Calvin', to: 'Calvin', quote: "Your birthday dinner, a week from Saturday. I'll book it.", with: 'CALVIN ANDERSON', title: "Calvin's birthday dinner", dueIn: ['sat+7', '19:30'], heardAgo: [3, '21:40'], dur: '2 h', note: 'place open', conf: 92 },
-  { id: 3, evidence: `I'll call you this evening`, tool: 'calendar', act: 'Call Dad about the pilot', to: 'Dad', quote: "I'll call you this evening about the school pilot.", with: 'DAD', title: 'Call Dad about the pilot', dueIn: [0, '18:00'], heardAgo: [4, '11:05'], dur: '30 min', note: 'phone', conf: 71 },
-  { id: 4, evidence: `before your review`, tool: 'gmail', act: 'Send Ellie the brand deck', to: 'Ellie', quote: "You'll have the brand deck before your review.", with: 'ELLIE', title: 'Send Ellie the brand deck', dueIn: [0, '16:00'], heardAgo: [2, '14:30'], dur: '15 min', note: 'deadline block', conf: 88 },
-  { id: 5, evidence: `next week, in the morning`, tool: 'slack', act: "Join Rylan's supplier call", to: 'Rylan', quote: "Let's get the supplier on a call next week, morning.", with: 'RYLAN', title: "Rylan's supplier call", dueIn: [5, '09:00'], heardAgo: [3, '09:15'], dur: '60 min', note: 'Rylan sends the dial-in', conf: 66 },
-  { id: 6, evidence: `tomorrow at seven`, tool: 'calendar', act: 'Meet Owen at the gym', to: 'Owen', quote: "Tomorrow, seven, I'm in. Don't let me skip it.", with: 'OWEN', title: 'Gym with Owen', dueIn: [1, '07:00'], heardAgo: [2, '19:50'], dur: '60 min', note: 'Equinox, Venice', conf: 79 },
+  { id: 1, evidence: `let's grab coffee tomorrow`, tool: 'imessage', act: 'Get coffee with Maya', to: 'Maya', quote: "Let's grab coffee tomorrow, I'll text you a place.", with: 'MAYA CHEN', title: 'Coffee with Maya Chen', dueIn: [1, '10:00'], heardAgo: [2, '17:12'], dur: '45 min', note: 'location open', conf: 84, kind: 'in-person' },
+  { id: 2, evidence: `we're doing dinner a week from Saturday`, tool: 'calendar', act: 'Book dinner for Calvin', to: 'Calvin', quote: "Your birthday dinner, a week from Saturday. I'll book it.", with: 'CALVIN ANDERSON', title: "Calvin's birthday dinner", dueIn: ['sat+7', '19:30'], heardAgo: [3, '21:40'], dur: '2 h', note: 'place open', conf: 92, kind: 'in-person' },
+  { id: 3, evidence: `I'll call you this evening`, tool: 'calendar', act: 'Call Dad about the pilot', to: 'Dad', quote: "I'll call you this evening about the school pilot.", with: 'DAD', title: 'Call Dad about the pilot', dueIn: [0, '18:00'], heardAgo: [4, '11:05'], dur: '30 min', note: 'phone', conf: 71, kind: 'call' },
+  { id: 4, evidence: `before your review`, tool: 'gmail', act: 'Send Ellie the brand deck', to: 'Ellie', quote: "You'll have the brand deck before your review.", with: 'ELLIE', title: 'Send Ellie the brand deck', dueIn: [0, '16:00'], heardAgo: [2, '14:30'], dur: '15 min', note: 'deadline block', conf: 88, kind: 'virtual' },
+  { id: 5, evidence: `next week, in the morning`, tool: 'slack', act: "Join Rylan's supplier call", to: 'Rylan', quote: "Let's get the supplier on a call next week, morning.", with: 'RYLAN', title: "Rylan's supplier call", dueIn: [5, '09:00'], heardAgo: [3, '09:15'], dur: '60 min', note: 'Rylan sends the dial-in', conf: 66, kind: 'call' },
+  { id: 6, evidence: `tomorrow at seven`, tool: 'calendar', act: 'Meet Owen at the gym', to: 'Owen', quote: "Tomorrow, seven, I'm in. Don't let me skip it.", with: 'OWEN', title: 'Gym with Owen', dueIn: [1, '07:00'], heardAgo: [2, '19:50'], dur: '60 min', note: 'Equinox, Venice', conf: 79, kind: 'in-person' },
 ];
 const TITLE = w => w[0] + w.slice(1).toLowerCase();
 for (const p of PROMISES) {
@@ -2533,10 +2601,7 @@ crownRail.addEventListener('pointerup', crownEnd); crownRail.addEventListener('p
 
 /* ---------- header / chip / clock ---------- */
 function tickClock() {
-  const d = new Date(); $('#cap').textContent = `${NARROW() ? 'OPAL' : 'OPAL OS'} · ${fmtDate(d)} · ${fmtTime(d)}`;
-  const bd = $('#brandDate'), bt = $('#brandTime');
-  if (bd) bd.textContent = fmtDate(d).toUpperCase();
-  if (bt) bt.textContent = fmtTime(d);
+  const d = new Date(); $('#capMeta').textContent = ` · ${fmtDate(d)} · ${fmtTime(d)}`;
 }
 const hm12 = d => { const h = d.getHours(), m = d.getMinutes(); return `${h % 12 || 12}${m ? ':' + pad(m) : ''} ${h < 12 ? 'AM' : 'PM'}`; };
 function duePill(iso) {
@@ -3908,6 +3973,78 @@ function chatRenderNext() {
   const { p, start } = next;
   el.innerHTML = `<div class="c-wcap"><span>Next up</span></div><div class="c-next-row"><b>${fmtTime(start)}</b><div class="c-next-info"><p>${esc(p.act)}</p><small>${esc(fmtDate(start))}</small></div></div>`;
 }
+
+/* ---------- agenda hyper-page: opened from "Next up" — everything coming up, filterable, with a detail view ---------- */
+const cagState = { filter: 'all', openId: null };
+const CAG_AVATAR_FILES = ['ak', 'mc', 'jr', 'ev', 'sp', 'hl'];
+function cagAgendaItems() {
+  return PROMISES.map(p => { const rec = state.cal[p.id]; return rec && rec.state === 'accepted' ? { p, start: new Date(rec.start) } : null; }).filter(Boolean).sort((a, b) => a.start - b.start);
+}
+function cagKindLabel(k) { return k === 'call' ? 'Call' : k === 'in-person' ? 'In person' : k === 'virtual' ? 'Virtual' : 'Task'; }
+function cagKindIcon(k) {
+  if (k === 'call') return `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3.3c0 6.2 3.5 9.7 9.7 9.7l1.3-2.7-3.3-1.1-.9 1.2a7.2 7.2 0 01-3.7-3.7l1.2-.9-1.1-3.3z"/></svg>`;
+  if (k === 'virtual') return `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="4" width="9" height="8" rx="1.6"/><path d="M14.5 5.6l-3.5 2 3.5 2z"/></svg>`;
+  if (k === 'in-person') return `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14.5s5-4.2 5-8.2a5 5 0 10-10 0c0 4 5 8.2 5 8.2z"/><circle cx="8" cy="6.2" r="1.7"/></svg>`;
+  return `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10v8H3z"/><path d="M3 6.5h10"/></svg>`;
+}
+function cagDayLabel(d) {
+  const a = new Date(); a.setHours(0, 0, 0, 0); const b = new Date(d); b.setHours(0, 0, 0, 0); const days = Math.round((b - a) / 864e5);
+  return days === 0 ? 'TODAY' : days === 1 ? 'TOMORROW' : days === -1 ? 'YESTERDAY' : `${DAYS[d.getDay()]} ${d.getDate()}`;
+}
+function cagRowHTML(x) {
+  const { p, start } = x;
+  return `<button type="button" class="cag-row" data-cagopen="${p.id}">
+    <div class="cag-row-time"><b>${fmtTime(start)}</b><small>${cagDayLabel(start)}</small></div>
+    <div class="cag-row-body"><p class="cag-row-title">${esc(p.act)}</p><p class="cag-row-sub">${esc(p.note)}</p></div>
+    <span class="cag-kind-tag k-${p.kind}">${cagKindIcon(p.kind)}${esc(cagKindLabel(p.kind))}</span>
+  </button>`;
+}
+function cagListHTML() {
+  const all = cagAgendaItems(), items = all.filter(x => cagState.filter === 'all' || x.p.kind === cagState.filter);
+  if (!items.length) return `<p class="cag-empty">${all.length ? 'Nothing matches this filter.' : "Nothing on your calendar yet — accept something Opal's heard and it'll show up here."}</p>`;
+  return `<div class="cag-rows">${items.map(cagRowHTML).join('')}</div>`;
+}
+function cagRenderList() { const el = $('#cAgendaRows'); if (el) el.innerHTML = cagListHTML(); }
+function cagAvatarFile(p) { return `assets/people/${CAG_AVATAR_FILES[p.id % CAG_AVATAR_FILES.length]}.jpg`; }
+function cagDetailHTML(p, start) {
+  const notes = (state.eventNotes && state.eventNotes[p.id]) || [];
+  return `<button type="button" class="cag-back2" id="cAgendaBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Your calendar</button>
+    <span class="cag-kind-tag k-${p.kind}">${cagKindIcon(p.kind)}${esc(cagKindLabel(p.kind))}</span>
+    <h2 class="cag-detail-title">${esc(p.act)}</h2>
+    <p class="cag-detail-time">${esc(fmtDate(start))} · ${fmtTime(start)} · ${esc(p.dur)}</p>
+    <button type="button" class="cag-gcal" data-caggcal="${p.id}">Open in Google Calendar →</button>
+    <div class="cag-attendees">
+      <div class="cag-avatars"><span>YOU</span><img src="${cagAvatarFile(p)}" alt="" loading="lazy"></div>
+      <span class="cag-attendee-count">You &amp; ${esc(p.with)} · 2 people</span>
+    </div>
+    <p class="cag-detail-desc">${esc(p.note)}</p>
+    <div class="cag-notes">
+      <div class="cag-notes-head">Opal notes for this event</div>
+      <div class="cag-notes-list" id="cAgendaNotesList">${notes.length ? notes.map(n => `<p class="cag-note">${esc(n.text)}</p>`).join('') : '<p class="cag-notes-empty">No notes yet — add one below and Opal will keep it with this event.</p>'}</div>
+      <form class="cag-notes-form" data-cagnoteform="${p.id}"><input type="text" id="cAgendaNoteInput" placeholder="Add a note tied to this event…" aria-label="Add a note tied to this event"><button type="submit">Add</button></form>
+    </div>`;
+}
+function cagAddNote(eventId, text) {
+  if (!text || !text.trim()) return;
+  state.eventNotes = state.eventNotes || {}; state.eventNotes[eventId] = state.eventNotes[eventId] || [];
+  state.eventNotes[eventId].push({ text: text.trim(), at: Date.now() }); save();
+  const x = cagAgendaItems().find(x => x.p.id === +eventId); if (x) $('#cAgendaDetail').innerHTML = cagDetailHTML(x.p, x.start);
+}
+function cagOpenDetail(id) {
+  const x = cagAgendaItems().find(x => x.p.id === +id); if (!x) return;
+  cagState.openId = x.p.id; $('#cAgendaDetail').innerHTML = cagDetailHTML(x.p, x.start); $('#cAgendaPage').classList.add('detail');
+}
+function cagBack() { cagState.openId = null; $('#cAgendaPage').classList.remove('detail'); }
+function cagSetFilter(f) {
+  cagState.filter = f; $('#cAgendaFilters').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.cagf === f)); cagRenderList();
+}
+function cagOpenPage() {
+  cagState.filter = 'all'; cagState.openId = null;
+  $('#cAgendaFilters').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.cagf === 'all'));
+  cagRenderList();
+  $('#cAgendaPage').classList.remove('detail'); $('#cAgendaPage').classList.add('show');
+}
+function cagClosePage() { $('#cAgendaPage').classList.remove('show', 'detail'); }
 function chatRenderTasksWidget() {
   const el = $('#cTasksWidget'), open = calWaiting(), shown = open.slice(0, 4);
   el.innerHTML = `<div class="c-wcap"><span>Tasks · ${open.length}</span></div><div class="c-tasks-list">${shown.map(chatTaskRow).join('') || `<p style="font-size:12px;color:var(--ink-60)">Nothing open.</p>`}</div>${open.length > 4 ? `<span class="c-more" role="button" tabindex="0">+${open.length - 4} more · open Calendar</span>` : ''}`;
@@ -4004,7 +4141,19 @@ function chatInit() {
     const a = e.target.closest('[data-accept]'); if (a) return chatHandleAccept(a);
   });
   $('#cListenBtn').addEventListener('click', () => { toggleListening(); chatRenderListen(); });
-  $('#cNext').addEventListener('click', e => chatOpenFrom(e.currentTarget, 'calendar'));
+  $('#cNext').addEventListener('click', () => cagOpenPage());
+  $('#cAgendaClose').addEventListener('click', () => cagClosePage());
+  $('#cAgendaFilters').addEventListener('click', e => { const b = e.target.closest('[data-cagf]'); if (b) cagSetFilter(b.dataset.cagf); });
+  $('#cAgendaRows').addEventListener('click', e => { const row = e.target.closest('[data-cagopen]'); if (row) cagOpenDetail(row.dataset.cagopen); });
+  $('#cAgendaDetail').addEventListener('click', e => {
+    if (e.target.closest('#cAgendaBack')) return cagBack();
+    if (e.target.closest('[data-caggcal]')) return toast('Opening this event in Google Calendar…');
+  });
+  $('#cAgendaDetail').addEventListener('submit', e => {
+    const form = e.target.closest('[data-cagnoteform]'); if (!form) return; e.preventDefault();
+    const input = $('#cAgendaNoteInput'); cagAddNote(form.dataset.cagnoteform, input.value); input.value = '';
+  });
+  addEventListener('keydown', e => { if (e.key !== 'Escape' || !$('#cAgendaPage').classList.contains('show')) return; if ($('#cAgendaPage').classList.contains('detail')) cagBack(); else cagClosePage(); });
   $('#cRight').addEventListener('click', e => {
     const more = e.target.closest('.c-more'); if (more) return chatOpenFrom(more, 'calendar');
     const a = e.target.closest('[data-accept]'); if (a) return chatHandleAccept(a);
@@ -4967,7 +5116,7 @@ function wgOtaskControls(t, locked) {
   if (t.status === 'running') return `<span class="wg-running-row"><i class="wg-spin"></i>${esc(t.runStatus || 'OPAL IS ON IT')}</span>`;
   if (t.status === 'done') return t.commitment === 'commits'
     ? `<button type="button" class="wg-review" data-debrief="${t.id}">REVIEW &amp; ${esc((t.deliverable && t.deliverable.commitVerb) || 'SEND')} →</button>`
-    : `<button type="button" class="wg-done-check" data-debrief="${t.id}" aria-label="View result">${wgCheckSvg}</button>`;
+    : `<button type="button" class="wg-otask-open" data-debrief="${t.id}">Open</button><button type="button" class="wg-done-check" data-debrief="${t.id}" aria-label="View result">${wgCheckSvg}</button>`;
   if (t.status === 'error') return (t.retryCount || 0) >= 2
     ? `<span class="wg-err">${wgWarnSvg} COULDN'T FINISH</span><button type="button" class="wg-move" data-move="${t.id}">MOVE TO YOUR LIST →</button>`
     : `<span class="wg-err">${wgWarnSvg} COULDN'T FINISH</span><button type="button" class="wg-retry" data-retry="${t.id}">RETRY</button>`;
@@ -5091,10 +5240,11 @@ function wgTodayYouItems() {
 function wgTodayOpalRowHTML(t) {
   let right;
   if (t.status === 'running') right = `<span class="wg-loading-orb" aria-label="Opal is working on it"></span>`;
-  else if (t.status === 'done') right = `<span class="wg-today-state done" aria-label="Done">${wgCheckSvg}</span>`;
+  else if (t.status === 'done') right = `<button type="button" class="wg-today-openbtn" data-debrief="${t.id}">Open</button><span class="wg-today-state done" aria-label="Done">${wgCheckSvg}</span>`;
   else if (t.status === 'error') right = `<button type="button" class="wg-today-state error" data-todayretry="${t.id}">Retry</button>`;
   else right = `<button type="button" class="wg-today-go" data-todaygo="${t.id}">GO</button><button type="button" class="wg-today-skip" data-todayskip="${t.id}" aria-label="Skip">✕</button>`;
-  return `<div class="wg-today-row opal" data-todayopalrow="${t.id}"><span class="tag">OPAL</span><p>${esc(t.text)}</p>${right}</div>`;
+  const doneAttrs = t.status === 'done' ? ` data-debrief="${t.id}" tabindex="0" role="button" aria-label="View what Opal produced for ${esc(t.text)}"` : '';
+  return `<div class="wg-today-row opal${t.status === 'done' ? ' done' : ''}" data-todayopalrow="${t.id}"${doneAttrs}><span class="tag">OPAL</span><p>${esc(t.text)}</p>${right}</div>`;
 }
 function wgTodayYouRowHTML(todo) {
   return `<div class="wg-today-row you${todo.status === 'done' ? ' done' : ''}" data-todo="${todo.id}"><button type="button" class="wg-check" data-check="${todo.id}" aria-label="Mark ${esc(todo.text)} done">${wgCheckSvg}</button><p>${esc(todo.text)}</p></div>`;
@@ -5403,6 +5553,7 @@ function wgInit() {
     const go = e.target.closest('[data-todaygo]'); if (go) return wgAcceptTask(go.dataset.todaygo);
     const skip = e.target.closest('[data-todayskip]'); if (skip) return wgSkipTask(skip.dataset.todayskip);
     const retry = e.target.closest('[data-todayretry]'); if (retry) return wgRetryTask(retry.dataset.todayretry);
+    const debrief = e.target.closest('[data-debrief]'); if (debrief) return wgOpenDebrief(debrief.dataset.debrief);
     if (e.target.closest('[data-convtitle]')) return;
     const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
