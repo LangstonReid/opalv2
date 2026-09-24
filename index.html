@@ -1128,8 +1128,16 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-page.show{opacity:1;pointer-events:auto}
 .wg-conv-inner{position:absolute;inset:0;overflow-y:auto;padding:calc(var(--nav-height) + var(--space-2)) 40px 80px;scrollbar-width:thin}
 .wg-conv-content{max-width:760px;margin:0 auto;position:relative}
-.wg-conv-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:24px}
-.wg-conv-head-r{display:flex;align-items:center;gap:8px}
+.wg-conv-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}
+.wg-conv-back{min-height:44px}
+.wg-conv-navrow{display:flex;align-items:center;gap:10px}
+.wg-conv-navbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 6px;font:400 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-60);transition:color .2s}
+.wg-conv-navbtn svg{width:13px;height:13px}
+.wg-conv-navbtn:hover{color:var(--wg-ink)}
+.wg-conv-navbtn:disabled{color:var(--wg-ink-28);pointer-events:none;cursor:default}
+.wg-conv-navpos{font-size:10px;letter-spacing:.08em;color:var(--wg-ink-42);white-space:nowrap}
+.wg-conv-head2{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
+.wg-conv-head-r{flex:none;display:flex;align-items:center;gap:8px;margin-top:4px}
 .wg-aa{display:flex;gap:2px;padding:2px;border-radius:999px;background:var(--wg-surface-3);margin-right:2px}
 .wg-aa button{font:400 9px/1 var(--sans);color:var(--wg-ink-42);padding:6px 9px;border-radius:999px}
 .wg-aa button[data-aa="l"]{font-size:12px}
@@ -1142,22 +1150,27 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-menu-wrap{position:relative}
 .wg-menu-btn{width:34px;height:34px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);font-size:16px;line-height:1;color:var(--wg-ink-60);box-shadow:var(--wg-shadow-sm)}
 .wg-menu-btn:hover{color:var(--wg-ink)}
-.wg-conv-menu{position:absolute;right:0;top:calc(100% + 6px);width:180px;border-radius:12px;padding:6px;z-index:var(--z-dropdown)}
+.wg-conv-menu{position:absolute;right:0;top:calc(100% + 6px);width:200px;border-radius:12px;padding:6px;z-index:var(--z-dropdown)}
 .wg-conv-menu{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-conv-menu{backdrop-filter:none;background:rgba(255,255,255,.92)}}
 @media (prefers-reduced-transparency:reduce){.wg-conv-menu{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.94)}}
 .wg-conv-menu button{display:block;width:100%;text-align:left;padding:9px 11px;font-size:12.5px;color:var(--wg-ink);border-radius:9px;transition:background .15s}
 .wg-conv-menu button:hover{background:var(--wg-surface-2)}
-.wg-conv-title{font:400 30px/1.15 var(--sans);color:var(--wg-ink);outline:none;border-radius:8px}
-.wg-conv-title:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
+.wg-conv-menu button.danger{color:#a9431f}
+.wg-conv-menu hr{border:0;border-top:1px solid var(--wg-border);margin:5px 2px}
+.wg-conv-title{flex:1;min-width:0;font:400 30px/1.15 var(--sans);color:var(--wg-ink);outline:none;border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wg-conv-title:focus{white-space:normal;background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
 .wg-conv-meta{margin-top:8px;color:var(--wg-ink-42)}
-.wg-conv-thread{margin-top:12px}
-.wg-conv-thread button{font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink);background:rgba(111,143,78,.1);padding:7px 12px;border-radius:999px}
-.wg-conv-thread button:hover{background:rgba(111,143,78,.18)}
-.wg-conv-body{margin-top:28px;padding-bottom:60px}
-.wg-conv-sec{padding:22px 0;border-top:1px solid var(--wg-border)}
+.wg-conv-jumpbar{position:sticky;top:0;z-index:var(--z-elevated);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:18px -4px 0;padding:12px 4px;background:linear-gradient(var(--wg-bg,#f5f5f0) 70%,transparent)}
+.wg-conv-jumpbar::-webkit-scrollbar{display:none}
+.wg-conv-jumppill{flex:none;font:400 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);padding:9px 14px;border-radius:999px;transition:color .2s,background .2s,border-color .2s}
+.wg-conv-jumppill:hover{color:var(--wg-ink)}
+.wg-conv-jumppill.on{color:#fff;background:var(--wg-accent-ink);border-color:var(--wg-accent-ink)}
+.wg-conv-body{margin-top:14px;padding-bottom:60px}
+.wg-conv-sec{padding:22px 0;border-top:1px solid var(--wg-border);scroll-margin-top:56px}
 .wg-conv-sec:first-child{border-top:0;padding-top:0}
-.wg-conv-sec-label{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
+.wg-conv-sec-label{display:flex;align-items:center;gap:8px;font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
+.wg-conv-sec-count{font:400 11px/1.5 var(--mono);color:var(--wg-ink-42)}
 .wg-conv-sec-p{font-size:14px;line-height:1.65;color:var(--wg-ink)}
 .wg-conv-sec-p[contenteditable]{outline:none;border-radius:6px;padding:2px 4px;margin:-2px -4px}
 .wg-conv-sec-p[contenteditable]:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
@@ -1165,32 +1178,61 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-sec ul{display:flex;flex-direction:column;gap:9px}
 .wg-conv-sec li{font-size:13.5px;line-height:1.5;color:var(--wg-ink);padding-left:16px;position:relative}
 .wg-conv-sec li::before{content:'';position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--wg-accent)}
-.wg-conv-action-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font-size:13.5px;color:var(--wg-ink);background:var(--wg-surface-2);border:1px solid var(--wg-border);border-radius:12px;padding:11px 14px;transition:background .15s}
+.wg-conv-action-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-size:13.5px;color:var(--wg-ink);background:var(--wg-surface-2);border:1px solid var(--wg-border);border-radius:12px;padding:11px 12px;transition:background .15s}
 .wg-conv-action-item:hover{background:var(--wg-yellow-soft)}
-.wg-conv-action-item small{flex:none;font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
+.wg-conv-action-chips{flex:none;display:flex;gap:5px}
+.wg-conv-action-chip{display:inline-flex;align-items:center;gap:4px;font:600 8.5px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:999px;padding:4px 8px 4px 6px}
+.wg-conv-action-chip svg{width:10px;height:10px}
+.wg-conv-action-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wg-conv-action-status{flex:none;font:400 9.5px/1.6 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-42)}
 .wg-conv-people{display:flex;flex-wrap:wrap;gap:8px}
 .wg-conv-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px 7px 7px;background:var(--wg-surface-2);border:1px solid var(--wg-border);border-radius:999px;font-size:12px;font-weight:500;color:var(--wg-ink);transition:background .15s}
 .wg-conv-chip:hover{background:var(--wg-surface-3)}
 .wg-conv-chip i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 65%,#54713a);flex:none}
 .wg-conv-chip small{font:400 8px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ember)}
-.wg-conv-transcript{--wg-conv-fs:13.5px;display:flex;flex-direction:column;gap:10px}
+.wg-conv-transcript{--wg-conv-fs:13.5px;display:flex;flex-direction:column;gap:2px}
 .wg-conv-page.size-s .wg-conv-transcript{--wg-conv-fs:12px}
 .wg-conv-page.size-m .wg-conv-transcript{--wg-conv-fs:13.5px}
 .wg-conv-page.size-l .wg-conv-transcript{--wg-conv-fs:16px}
 .wg-daytx.size-s .wg-conv-transcript{--wg-conv-fs:12px}
 .wg-daytx.size-m .wg-conv-transcript{--wg-conv-fs:13.5px}
 .wg-daytx.size-l .wg-conv-transcript{--wg-conv-fs:16px}
-.wg-conv-sentence{font-size:var(--wg-conv-fs);line-height:1.6;color:var(--wg-ink-42);transition:color .2s}
-.wg-conv-sentence.near,.wg-conv-sentence:hover{color:#000}
+.wg-conv-sentrow{display:flex;gap:14px;padding:6px 10px;margin:0 -10px;border-radius:10px;transition:background .25s var(--ease)}
+.wg-conv-sentrow:hover,.wg-conv-sentrow.near{background:rgba(111,143,78,.06)}
+.wg-conv-t{flex:none;width:44px;padding-top:.15em;font:400 10px/1.6 var(--mono);color:var(--wg-ink-42);text-align:right}
+.wg-conv-sentence{font-size:var(--wg-conv-fs);line-height:1.6;color:var(--wg-ink-42);transition:color .25s var(--ease),text-shadow .25s var(--ease)}
+.wg-conv-sentrow.near .wg-conv-sentence,.wg-conv-sentrow:hover .wg-conv-sentence{color:#000;text-shadow:0 0 18px rgba(111,143,78,.35)}
 .wg-conv-sentence .wg-span{color:var(--wg-accent-ink)}
-.wg-conv-foot{margin-top:8px;padding-top:18px;border-top:1px solid var(--wg-border)}
-.wg-conv-foot button{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42);transition:color .2s}
+.wg-conv-foot{margin-top:8px;padding-top:18px;border-top:1px solid var(--wg-border);display:flex;flex-direction:column;gap:8px}
+.wg-conv-foot button{align-self:flex-start;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42);transition:color .2s}
 .wg-conv-foot button:hover{color:var(--wg-accent-ink)}
 .wg-conv-rail{position:fixed;left:calc(50% - 420px);top:180px;bottom:120px;width:2px;background:var(--wg-border);border-radius:2px;z-index:var(--z-elevated)}
 .wg-conv-rail i{position:absolute;left:0;top:0;width:2px;background:var(--wg-accent);border-radius:2px;transition:height .1s linear}
 @media (max-width:1180px){.wg-conv-rail{display:none}}
 .wg-conv-nextflag{position:fixed;right:26px;bottom:26px;z-index:var(--z-tooltip);font:400 10px/1.6 var(--mono);letter-spacing:.08em;color:#fff;background:var(--wg-ink);padding:11px 16px;border-radius:999px;box-shadow:var(--wg-shadow-lg);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 .wg-conv-nextflag.show{opacity:1;transform:none;pointer-events:auto}
+.wg-conv-confirm{position:fixed;inset:0;z-index:var(--z-confirm);background:rgba(31,36,29,.4);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+.wg-conv-confirm.show{opacity:1;pointer-events:auto}
+.wg-conv-confirm-card{width:min(360px,calc(100% - 32px));background:var(--wg-surface);border-radius:20px;padding:22px;box-shadow:var(--wg-shadow-lg);text-align:center}
+.wg-conv-confirm-card p{font-size:14px;line-height:1.5;color:var(--wg-ink)}
+.wg-conv-confirm-actions{display:flex;gap:10px;margin-top:18px}
+.wg-conv-confirm-actions button{flex:1;padding:11px;border-radius:999px;font-size:13px;font-weight:500;transition:opacity .2s}
+.wg-conv-confirm-actions button:not(.danger){background:var(--wg-surface-2);color:var(--wg-ink)}
+.wg-conv-confirm-actions button.danger{background:#a9431f;color:#fff}
+.wg-conv-confirm-actions button:hover{opacity:.85}
+.wg-conv-shortcuts{position:fixed;z-index:var(--z-dropdown);top:80px;right:32px;width:240px;border-radius:14px;padding:14px;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.wg-conv-shortcuts.show{opacity:1;transform:none;pointer-events:auto}
+.wg-conv-shortcuts{backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));background:var(--glass-light-tint);border:1px solid var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.wg-conv-shortcuts{backdrop-filter:none;background:rgba(255,255,255,.92)}}
+.wg-conv-shortcuts-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;font-size:12px;color:var(--wg-ink)}
+.wg-conv-shortcuts-row kbd{font:600 10px/1.6 var(--mono);color:var(--wg-ink-60);background:var(--wg-surface-3);border-radius:5px;padding:2px 6px}
+@media (max-width:700px){
+  .wg-conv-head{flex-wrap:wrap}
+  .wg-conv-navrow{order:3;width:100%;justify-content:space-between}
+  .wg-conv-navword{display:none}
+  .wg-conv-head2{flex-wrap:wrap}
+  .wg-conv-title{white-space:normal}
+}
 
 /* day transcription: every sentence said this day, embedded below the day's conversation cards */
 .wg-daytx{margin-top:28px;padding-top:22px;border-top:1px solid var(--wg-border);max-width:720px}
@@ -2260,28 +2302,38 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     <div class="wg-conv-inner" id="wgConvInner">
       <div class="wg-conv-content" id="wgConvContent">
         <div class="wg-conv-head">
-          <button type="button" class="wg-alldays" id="wgConvBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg>Conversations</button>
+          <button type="button" class="wg-alldays wg-conv-back" id="wgConvBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg><span id="wgConvBackLabel">Conversations</span></button>
+          <div class="wg-conv-navrow" id="wgConvNavRow">
+            <button type="button" class="wg-conv-navbtn" id="wgConvPrevBtn" aria-label="Previous conversation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg><span class="wg-conv-navword">Prev</span></button>
+            <span class="wg-conv-navpos mono" id="wgConvNavPos"></span>
+            <button type="button" class="wg-conv-navbtn" id="wgConvNextBtn" aria-label="Next conversation"><span class="wg-conv-navword">Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="wg-conv-head2">
+          <h2 class="wg-conv-title" id="wgConvTitle" contenteditable="true"></h2>
           <div class="wg-conv-head-r">
-            <div class="wg-aa" id="wgAaSize"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
+            <div class="wg-aa" id="wgAaSize"><button type="button" data-aa="s" aria-label="Small text">Aa</button><button type="button" data-aa="m" class="on" aria-label="Medium text">Aa</button><button type="button" data-aa="l" aria-label="Large text">Aa</button></div>
             <button type="button" class="wg-star-btn" id="wgConvStar" aria-label="Star this conversation"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.6l1.9 4.1 4.5.5-3.3 3 .9 4.4L8 11.4l-4 2.2.9-4.4-3.3-3 4.5-.5z"/></svg></button>
             <div class="wg-conv-menu-wrap">
               <button type="button" class="wg-menu-btn" id="wgConvMenuBtn" aria-label="More">&#8230;</button>
-              <div class="wg-conv-menu" id="wgConvMenu" hidden>
-                <button type="button" data-convact="copy">Copy</button>
-                <button type="button" data-convact="notion">Export to Notion</button>
-                <button type="button" data-convact="archive">Archive</button>
-              </div>
+              <div class="wg-conv-menu" id="wgConvMenu" hidden></div>
             </div>
           </div>
         </div>
-        <h2 class="wg-conv-title" id="wgConvTitle" contenteditable="true"></h2>
         <div class="mono wg-conv-meta" id="wgConvMeta"></div>
-        <div class="wg-conv-thread" id="wgConvThread"></div>
+        <nav class="wg-conv-jumpbar" id="wgConvJumpbar" aria-label="Jump to section"></nav>
         <div class="wg-conv-body" id="wgConvBody"></div>
       </div>
     </div>
     <div class="wg-conv-rail" id="wgConvRail"><i id="wgConvProgress"></i></div>
     <button type="button" class="wg-conv-nextflag" id="wgConvNextFlag">&darr; NEXT FLAGGED LINE</button>
+    <div class="wg-conv-confirm" id="wgConvConfirm" role="alertdialog" aria-modal="true" aria-label="Confirm delete">
+      <div class="wg-conv-confirm-card">
+        <p>This deletes the transcript permanently. This can&rsquo;t be undone.</p>
+        <div class="wg-conv-confirm-actions"><button type="button" id="wgConvConfirmCancel">Cancel</button><button type="button" id="wgConvConfirmDelete" class="danger">Delete</button></div>
+      </div>
+    </div>
+    <div class="wg-conv-shortcuts" id="wgConvShortcuts" role="dialog" aria-label="Keyboard shortcuts"></div>
   </div>
   <div class="wg-dragghost" id="wgDragGhost" hidden></div>
   <div id="wgScrim"></div>
@@ -5507,10 +5559,28 @@ function wgRenderConvGrid() {
 }
 
 /* the conversation detail page */
-function wgSec(label, inner) { return `<div class="wg-conv-sec"><div class="wg-conv-sec-label">${esc(label.toUpperCase())}</div>${inner}</div>`; }
+function wgSec(label, inner, opts) {
+  opts = opts || {};
+  const count = opts.count != null ? `<span class="wg-conv-sec-count">${opts.count}</span>` : '';
+  const labelHtml = label ? `<div class="wg-conv-sec-label">${esc(label.toUpperCase())}${count}</div>` : '';
+  const idAttr = opts.anchor ? ` id="wgConvSec-${opts.anchor}"` : '';
+  return `<div class="wg-conv-sec"${idAttr}>${labelHtml}${inner}</div>`;
+}
+function wgClusterPrimaryStatus(cl) {
+  if (cl.humanTaskId) { const t = wgTodoById(cl.humanTaskId); if (t) return t.status; }
+  if (cl.opalTasks[0]) return cl.opalTasks[0].status;
+  return 'open';
+}
+const wgActionBoltSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>';
+const wgActionPersonSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>';
 function wgConvActionItemHTML(clusterId) {
   const cl = WG_CLUSTERS.find(x => x.id === clusterId); if (!cl) return '';
-  return `<button type="button" class="wg-conv-action-item" data-convaction="${cl.id}" data-convactionday="${cl.day}"><span>${esc(cl.title)}</span><small>JUMP &rarr;</small></button>`;
+  const chips = [];
+  if (cl.opalTasks.length) chips.push(`<span class="wg-conv-action-chip">${wgActionBoltSvg}OPAL</span>`);
+  if (cl.humanTaskId) chips.push(`<span class="wg-conv-action-chip">${wgActionPersonSvg}YOU</span>`);
+  const status = wgClusterPrimaryStatus(cl);
+  const who = cl.opalTasks.length && cl.humanTaskId ? 'Opal and you' : cl.opalTasks.length ? 'Opal' : 'You';
+  return `<button type="button" class="wg-conv-action-item" data-convaction="${cl.id}" data-convactionday="${cl.day}" aria-label="${esc(who)}: ${esc(cl.title)}, ${esc(status)}"><span class="wg-conv-action-chips">${chips.join('')}</span><span class="wg-conv-action-title">${esc(cl.title)}</span><span class="wg-conv-action-status">${esc(status)}</span></button>`;
 }
 function wgConvPeopleHTML(c) {
   if (!c.personIds.length) return `<div class="wg-conv-people"><span class="wg-conv-chip"><i></i>Just you</span></div>`;
@@ -5519,13 +5589,14 @@ function wgConvPeopleHTML(c) {
     return `<button type="button" class="wg-conv-chip" data-person="${p.id}"><i></i>${esc(label)}${p.isEstimated && !(state.wgNames && state.wgNames[p.id]) ? `<small>GUESS</small>` : ''}</button>`;
   }).join('')}</div>`;
 }
+function wgFmtElapsed(sec) { sec = Math.max(0, Math.round(sec || 0)); const m = Math.floor(sec / 60), s = sec % 60; return `${m}:${pad(s)}`; }
 function wgSentenceHTML(s, sentKey) {
   let inner = esc(s.text);
   if (s.isActionable) {
     const cl = WG_CLUSTERS.find(x => x.id === s.actionClusterId), conn = (cl && cl.opalTasks[0] && cl.opalTasks[0].connector) || 'notion';
     inner = `<span class="wg-span" tabindex="0" role="button" data-span-conn="${conn}" data-span-conf="0.85" data-span-cluster="${s.actionClusterId}">${esc(s.text)}</span>`;
   }
-  return `<p class="wg-conv-sentence" data-sent="${sentKey}">${inner}</p>`;
+  return `<div class="wg-conv-sentrow" data-sentrow="${sentKey}"><span class="wg-conv-t">${wgFmtElapsed(s.startAt)}</span><p class="wg-conv-sentence" data-sent="${sentKey}">${inner}</p></div>`;
 }
 function wgConvTranscriptHTML(c) { return c.transcriptSentences.map(s => wgSentenceHTML(s, s.id)).join(''); }
 /* citations: tie a claim back to the exact transcript line(s) it came from — never a bare summary */
@@ -5538,14 +5609,25 @@ function wgCiteRow(cites, sentences) {
 function wgConvBodyHTML(c) {
   const sents = c.transcriptSentences;
   const summaryCite = wgCiteRow(c.summaryCites, sents);
-  let html = wgSec('Summary', `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>${summaryCite ? `<div class="wg-cite-summary-row"><span class="wg-cite-label">Sourced from</span>${summaryCite}</div>` : ''}`);
+  let html = wgSec(null, `<p class="wg-conv-sec-p" id="wgConvSummaryEdit" contenteditable="true" data-placeholder="Write what happened…">${esc(c.summary)}</p>${summaryCite ? `<div class="wg-cite-summary-row"><span class="wg-cite-label">Sourced from</span>${summaryCite}</div>` : ''}`, { anchor: 'summary' });
   if (c.decisions.length) html += wgSec('Decisions', `<ul>${c.decisions.map(d => `<li>${esc(d.text)}${wgCiteRow(d.cites, sents)}</li>`).join('')}</ul>`);
-  if (c.talkingPoints.length) html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t.text)}${wgCiteRow(t.cites, sents)}</li>`).join('')}</ul>`);
-  if (c.actionClusterIds.length) html += wgSec('Action items', c.actionClusterIds.map(wgConvActionItemHTML).join(''));
-  html += wgSec('People', wgConvPeopleHTML(c));
-  if (sents.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`);
-  html += `<div class="wg-conv-foot"><button type="button" data-convfootjump>See other conversations from this day &rarr;</button></div>`;
+  if (c.actionClusterIds.length) html += wgSec('Key actions', `<div class="wg-conv-sec-actions">${c.actionClusterIds.map(wgConvActionItemHTML).join('')}</div>`, { anchor: 'actions', count: c.actionClusterIds.length });
+  html += wgSec('Talking points', `<ul>${c.talkingPoints.map(t => `<li>${esc(t.text)}${wgCiteRow(t.cites, sents)}</li>`).join('')}</ul>`, { anchor: 'points' });
+  html += wgSec('People', wgConvPeopleHTML(c), { anchor: 'people' });
+  if (sents.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`, { anchor: 'transcript' });
+  const related = (c.relatedConversationIds || []).map(wgConvById).filter(Boolean);
+  const footLinks = related.map(r => `<button type="button" data-convjump="${r.id}">Part of a longer thread &rarr; ${esc(r.title)}</button>`);
+  footLinks.push(`<button type="button" data-convfootjump>See other conversations from this day &rarr;</button>`);
+  html += `<div class="wg-conv-foot">${footLinks.join('')}</div>`;
   return html;
+}
+function wgConvJumpbarHTML(c) {
+  const items = [{ key: 'summary', label: 'Summary' }];
+  if (c.actionClusterIds.length) items.push({ key: 'actions', label: 'Actions' });
+  items.push({ key: 'points', label: 'Points' });
+  items.push({ key: 'people', label: 'People' });
+  if (c.transcriptSentences.length) items.push({ key: 'transcript', label: 'Transcript' });
+  return items.map((it, i) => `<button type="button" class="wg-conv-jumppill${i === 0 ? ' on' : ''}" data-convjumpto="${it.key}">${esc(it.label)}</button>`).join('');
 }
 function wgRenderConvDetail(c) {
   const page = $('#wgConvPage');
@@ -5554,16 +5636,23 @@ function wgRenderConvDetail(c) {
   $('#wgConvTitle').textContent = c.title;
   $('#wgConvStar').classList.toggle('on', c.isStarred);
   $('#wgConvMeta').textContent = wgFmtMeta(c);
-  const related = (c.relatedConversationIds || []).map(wgConvById).filter(Boolean);
-  $('#wgConvThread').innerHTML = related.map(r => `<button type="button" data-convjump="${r.id}">Part of a longer thread &rarr; ${esc(r.title)}</button>`).join('');
   $('#wgConvBody').innerHTML = wgConvBodyHTML(c);
+  $('#wgConvJumpbar').innerHTML = wgConvJumpbarHTML(c);
+  wgConvUpdateNav();
   wgConvOnScroll();
 }
-function wgConvOpen(id, cardEl) {
-  const c = wgConvById(id); if (!c) return;
-  wgState.currentConv = id;
+/* navigation origin: where "back" returns to, and what ordered list prev/next walks —
+   client-side only, never stored on the conversation record. wgConvHistory is a small
+   stack of conversation ids to unwind through when following "part of a longer thread"
+   links without losing the real origin underneath. */
+let wgConvNavOrigin = null;
+let wgConvHistory = [];
+function wgConvDefaultOrigin() { return { type: 'grid', label: 'All Conversations', listContext: [] }; }
+function wgConvOpenInternal(c, cardEl) {
+  wgState.currentConv = c.id;
   const page = $('#wgConvPage'), shell = $('#wgShell');
   wgRenderConvDetail(c);
+  $('#wgConvBackLabel').textContent = (wgConvNavOrigin || wgConvDefaultOrigin()).label;
   if (!REDUCED && cardEl) {
     const r = cardEl.getBoundingClientRect();
     page.animate([{ opacity: 0, transform: `scale(${clamp(r.width / innerWidth, .08, .9)})`, transformOrigin: `${r.left + r.width / 2}px ${r.top + r.height / 2}px` }, { opacity: 1, transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.22,1,.36,1)' });
@@ -5572,9 +5661,44 @@ function wgConvOpen(id, cardEl) {
   page.classList.add('show');
   $('#wgConvInner').scrollTop = 0;
 }
+function wgConvOpen(id, cardEl, origin) {
+  const c = wgConvById(id); if (!c) return;
+  wgConvNavOrigin = origin || wgConvDefaultOrigin();
+  wgConvHistory = [];
+  wgConvOpenInternal(c, cardEl);
+}
+/* prev/next between conversations: steps wgConvNavOrigin.listContext without touching
+   the origin itself, so the back arrow still returns to the real entry point no matter
+   how many times you've stepped */
+function wgConvGoTo(id) { const c = wgConvById(id); if (c) wgConvOpenInternal(c, null); }
+function wgConvUpdateNav() {
+  const list = (wgConvNavOrigin && wgConvNavOrigin.listContext) || [];
+  const idx = list.indexOf(wgState.currentConv);
+  const prevBtn = $('#wgConvPrevBtn'), nextBtn = $('#wgConvNextBtn'), pos = $('#wgConvNavPos');
+  if (idx < 0 || list.length < 2) { prevBtn.disabled = true; nextBtn.disabled = true; pos.textContent = ''; return; }
+  pos.textContent = `${idx + 1} of ${list.length}`;
+  prevBtn.disabled = idx <= 0; nextBtn.disabled = idx >= list.length - 1;
+}
+function wgConvGoPrev() { const list = (wgConvNavOrigin && wgConvNavOrigin.listContext) || []; const idx = list.indexOf(wgState.currentConv); if (idx > 0) wgConvGoTo(list[idx - 1]); }
+function wgConvGoNext() { const list = (wgConvNavOrigin && wgConvNavOrigin.listContext) || []; const idx = list.indexOf(wgState.currentConv); if (idx >= 0 && idx < list.length - 1) wgConvGoTo(list[idx + 1]); }
+/* "part of a longer thread" — a real new entrance (its own origin type), but one that
+   remembers the conversation you followed it from so the back arrow can unwind one hop
+   at a time instead of jumping straight past it to the original grid/day */
+function wgConvOpenRelated(id) {
+  if (!wgState.currentConv) return wgConvOpen(id, null, { type: 'related', label: 'Back', listContext: [] });
+  wgConvHistory.push(wgState.currentConv);
+  const c = wgConvById(id); if (c) { wgConvOpenInternal(c, null); $('#wgConvBackLabel').textContent = 'Back'; }
+}
 function wgConvClose() {
   $('#wgConvPage').classList.remove('show'); const shell = $('#wgShell'); shell.style.filter = ''; shell.style.opacity = '';
-  wgState.currentConv = null; $('#wgConvMenu').hidden = true; wgCloseMoveMenu(); wgCloseCardMenu(); wgCloseCitePop();
+  wgState.currentConv = null; $('#wgConvMenu').hidden = true; wgCloseMoveMenu(); wgCloseCardMenu(); wgCloseCitePop(); wgCloseConvConfirm(); wgCloseConvShortcuts();
+}
+function wgConvGoBack() {
+  if (wgConvHistory.length) { wgConvGoTo(wgConvHistory.pop()); return; }
+  const origin = wgConvNavOrigin || wgConvDefaultOrigin();
+  wgConvClose();
+  if (origin.type === 'annotationJump') chatGo('notes', null);
+  wgConvNavOrigin = null; wgConvHistory = [];
 }
 function wgConvJumpToActionDay(clusterId, day) {
   wgConvClose();
@@ -5587,20 +5711,51 @@ function wgConvFootJump(c) {
     setTimeout(() => { const el = document.querySelector(`#wgPaneConversations [data-conv="${c.id}"]`); if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 100);
   }, REDUCED ? 0 : 260);
 }
+/* delete: the one hard, destructive confirmation on this whole page */
+function wgOpenConvConfirm() { $('#wgConvConfirm').classList.add('show'); }
+function wgCloseConvConfirm() { $('#wgConvConfirm').classList.remove('show'); }
+function wgConvConfirmDelete() {
+  const id = wgState.currentConv; const idx = WG_CONVERSATIONS.findIndex(c => c.id === id); if (idx < 0) return;
+  WG_CONVERSATIONS.splice(idx, 1);
+  wgCloseConvConfirm(); wgConvGoBack(); wgRenderConvGrid(); wgShowToast('Deleted');
+}
+/* keyboard-shortcuts popover, reachable from the ··· menu */
+const WG_CONV_SHORTCUTS = [
+  { keys: ['[', ']'], label: 'Previous / next conversation' },
+  { keys: ['Esc'], label: 'Back' },
+];
+function wgOpenConvShortcuts() {
+  $('#wgConvShortcuts').innerHTML = WG_CONV_SHORTCUTS.map(s => `<div class="wg-conv-shortcuts-row"><span>${esc(s.label)}</span><span>${s.keys.map(k => `<kbd>${esc(k)}</kbd>`).join(' ')}</span></div>`).join('');
+  $('#wgConvShortcuts').classList.add('show');
+}
+function wgCloseConvShortcuts() { $('#wgConvShortcuts').classList.remove('show'); }
 
-/* transcript reading aids: hover/near-center highlight, progress rail, next-flagged jump, Aa size */
+/* transcript reading aids: hover/near-center highlight, progress rail, next-flagged jump, quick-jump tracking, Aa size */
 function wgConvOnScroll() {
   const page = $('#wgConvPage'); if (!page.classList.contains('show')) return;
-  const sentences = [...document.querySelectorAll('.wg-conv-sentence')];
-  if (sentences.length) {
+  const rows = [...document.querySelectorAll('.wg-conv-sentrow')];
+  if (rows.length) {
     const centerY = innerHeight / 2; let nearest = null, nearestD = Infinity;
-    sentences.forEach(el => { el.classList.remove('near'); const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const d = Math.abs((r.top + r.bottom) / 2 - centerY); if (d < nearestD) { nearestD = d; nearest = el; } });
+    rows.forEach(el => { el.classList.remove('near'); const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const d = Math.abs((r.top + r.bottom) / 2 - centerY); if (d < nearestD) { nearestD = d; nearest = el; } });
     if (nearest) nearest.classList.add('near');
   }
   const inner = $('#wgConvInner'), fill = $('#wgConvProgress');
   const scrollable = inner.scrollHeight - inner.clientHeight;
   fill.style.height = (scrollable > 0 ? clamp(inner.scrollTop / scrollable, 0, 1) : 0) * 100 + '%';
   $('#wgConvNextFlag').classList.toggle('show', !!document.querySelector('#wgConvTranscript .wg-span'));
+  const secs = [...document.querySelectorAll('#wgConvBody .wg-conv-sec[id^="wgConvSec-"]')];
+  if (secs.length) {
+    let current = secs[0];
+    const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 4;
+    if (atBottom) current = secs[secs.length - 1];
+    else for (const el of secs) { if (el.getBoundingClientRect().top - inner.getBoundingClientRect().top < 140) current = el; else break; }
+    const key = current.id.replace('wgConvSec-', '');
+    $('#wgConvJumpbar').querySelectorAll('.wg-conv-jumppill').forEach(p => p.classList.toggle('on', p.dataset.convjumpto === key));
+  }
+}
+function wgConvJumpToSection(key) {
+  const el = $('#wgConvSec-' + key); if (!el) return;
+  el.scrollIntoView({ block: 'start', behavior: REDUCED ? 'auto' : 'smooth', inline: 'nearest' });
 }
 function wgConvJumpNextFlag() {
   const flags = [...document.querySelectorAll('#wgConvTranscript .wg-span')].map(s => s.closest('.wg-conv-sentence')).filter(Boolean);
@@ -5625,7 +5780,7 @@ function wgToggleConvStar(id) {
   if (wgState.viewMode === 'conversations' && wgState.convFilter === 'starred') wgRenderConvGrid();
 }
 function wgRenderConvMenuDefault() {
-  $('#wgConvMenu').innerHTML = `<button type="button" data-convact="copy">Copy</button><button type="button" data-convact="notion">Export to Notion</button><button type="button" data-convact="movefolder">Move to folder &#9656;</button><button type="button" data-convact="archive">Archive</button>`;
+  $('#wgConvMenu').innerHTML = `<button type="button" data-convact="copy">Copy</button><button type="button" data-convact="notion">Export to Notion</button><button type="button" data-convact="movefolder">Move to folder &#9656;</button><button type="button" data-convact="archive">Archive</button><hr><button type="button" data-convact="shortcuts">Keyboard shortcuts</button><button type="button" data-convact="delete" class="danger">Delete</button>`;
 }
 function wgToggleConvMenu() { const m = $('#wgConvMenu'); if (m.hidden) { wgRenderConvMenuDefault(); m.hidden = false; } else m.hidden = true; }
 function wgConvCopy(c) { try { navigator.clipboard && navigator.clipboard.writeText(c.summary || c.title); } catch (e) {} wgShowToast('Copied'); }
@@ -5682,7 +5837,7 @@ function wgCreateBlankConv() {
   WG_CONVERSATIONS.unshift({ id, title: 'New conversation', isEstimatedTitle: false, day: WG_TODAY_KEY, startAt: now, endAt: now, tag: 'personal',
     summary: '', decisions: [], talkingPoints: [], actionClusterIds: [], personIds: [], transcriptSentences: [],
     isStarred: false, isArchived: false, folderId: wgState.currentFolder, relatedConversationIds: [] });
-  wgRenderConvGrid(); wgConvOpen(id, null);
+  wgRenderConvGrid(); wgConvOpen(id, null, { type: wgState.currentFolder ? 'folder' : 'grid', label: wgState.currentFolder ? (wgFolderById(wgState.currentFolder) || {}).name || 'All Conversations' : 'All Conversations', listContext: wgFilteredConvs().map(c => c.id) });
   setTimeout(() => { const t = $('#wgConvTitle'); t.focus(); const r = document.createRange(); r.selectNodeContents(t); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }, REDUCED ? 0 : 80);
 }
 function wgTalkToOpalNow() {
@@ -6289,7 +6444,8 @@ function wgSearchResults(qRaw) {
   WG_PEOPLE.forEach(p => { const label = (p.isEstimated ? p.estimatedTitle : p.name) || ''; if (label.toLowerCase().includes(q)) out.push({ type: 'PERSON', label, sub: p.summary, go: () => { wgOpenDay(p.day); wgSwitchTab('people'); setTimeout(() => { const el = document.querySelector(`[data-person="${p.id}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 90); } }); });
   WG_CLUSTERS.forEach(c => { if (c.title.toLowerCase().includes(q) || c.quote.toLowerCase().includes(q)) out.push({ type: 'ACTION', label: c.title, sub: c.quote, go: () => { wgOpenDay(c.day); wgSwitchTab('actions'); setTimeout(() => { const el = document.querySelector(`.wg-cluster-row[data-cluster="${c.id}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 90); } }); });
   WG_DAYS.forEach(d => { const label = wgDayLabel(d.date); if (label.toLowerCase().includes(q)) out.push({ type: 'DATE', label, sub: `${d.actionCount} actions`, go: () => wgOpenDay(d.date) }); });
-  WG_CONVERSATIONS.forEach(c => { if (c.isArchived) return; if (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)) out.push({ type: 'CONVERSATION', label: c.title, sub: c.summary, go: () => { wgSwitchViewMode('conversations'); wgConvOpen(c.id, null); } }); });
+  const matchedConvIds = WG_CONVERSATIONS.filter(c => !c.isArchived && (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q))).map(c => c.id);
+  WG_CONVERSATIONS.forEach(c => { if (c.isArchived) return; if (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)) out.push({ type: 'CONVERSATION', label: c.title, sub: c.summary, go: () => { wgSwitchViewMode('conversations'); wgConvOpen(c.id, null, { type: 'search', label: `Search: "${qRaw.trim()}"`, listContext: matchedConvIds }); } }); });
   return out.slice(0, 24);
 }
 function wgRenderResults(list, q) {
@@ -6324,7 +6480,7 @@ function wgInit() {
     if (e.target.closest('[data-convtitle]')) return;
     const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
-    const cconv = e.target.closest('[data-conv]'); if (cconv) return wgConvOpen(cconv.dataset.conv, cconv);
+    const cconv = e.target.closest('[data-conv]'); if (cconv) { const dayConvIds = WG_CONVERSATIONS.filter(x => x.day === wgState.currentDay && !x.isArchived).sort((a, b) => b.startAt - a.startAt).map(x => x.id); return wgConvOpen(cconv.dataset.conv, cconv, { type: 'day', label: wgDayLabel(wgState.currentDay), listContext: dayConvIds }); }
     const span = e.target.closest('.wg-span'); if (span) return wgOpenPop(span);
     const daytxaa = e.target.closest('#wgDayTxAaSize [data-aa]'); if (daytxaa) return wgSetAaSize(daytxaa.dataset.aa);
     const daytxnext = e.target.closest('#wgDayTxNextFlag'); if (daytxnext) return wgDayTxJumpNextFlag();
@@ -6393,7 +6549,7 @@ function wgInit() {
     const crumb = e.target.closest('[data-crumbback]'); if (crumb) { wgState.currentFolder = null; wgRenderConvGrid(); wgRenderFolderList(); return; }
     const star = e.target.closest('[data-convstar]'); if (star) { e.stopPropagation(); return wgToggleConvStar(star.dataset.convstar); }
     const menu = e.target.closest('[data-cardmenu]'); if (menu) { e.stopPropagation(); return wgOpenCardMenu(menu.dataset.cardmenu, menu); }
-    const card = e.target.closest('[data-conv]'); if (card) wgConvOpen(card.dataset.conv, card);
+    const card = e.target.closest('[data-conv]'); if (card) { const folder = wgState.currentFolder ? wgFolderById(wgState.currentFolder) : null; wgConvOpen(card.dataset.conv, card, { type: folder ? 'folder' : 'grid', label: folder ? folder.name : 'All Conversations', listContext: wgFilteredConvs().map(x => x.id) }); }
   });
   $('#wgConvGrid').addEventListener('blur', e => {
     const el = e.target.closest && e.target.closest('[data-convtitle]'); if (!el) return;
@@ -6403,22 +6559,30 @@ function wgInit() {
   $('#wgConvGrid').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-convtitle]')) { e.preventDefault(); e.target.blur(); } });
 
   /* conversations: the detail page */
-  $('#wgConvBack').addEventListener('click', wgConvClose);
+  $('#wgConvBack').addEventListener('click', wgConvGoBack);
+  $('#wgConvPrevBtn').addEventListener('click', wgConvGoPrev);
+  $('#wgConvNextBtn').addEventListener('click', wgConvGoNext);
   $('#wgConvStar').addEventListener('click', () => wgToggleConvStar(wgState.currentConv));
   $('#wgConvMenuBtn').addEventListener('click', e => { e.stopPropagation(); wgToggleConvMenu(); });
   $('#wgConvMenu').addEventListener('click', e => {
     const b = e.target.closest('[data-convact]'); if (!b) return; const c = wgConvById(wgState.currentConv); if (!c) return;
     if (b.dataset.convact === 'movefolder') { wgOpenMoveMenu(c.id, $('#wgConvMenuBtn')); $('#wgConvMenu').hidden = true; return; }
+    if (b.dataset.convact === 'delete') { $('#wgConvMenu').hidden = true; wgOpenConvConfirm(); return; }
+    if (b.dataset.convact === 'shortcuts') { $('#wgConvMenu').hidden = true; wgOpenConvShortcuts(); return; }
     $('#wgConvMenu').hidden = true;
     if (b.dataset.convact === 'copy') wgConvCopy(c);
     else if (b.dataset.convact === 'notion') wgConvExportNotion();
     else if (b.dataset.convact === 'archive') wgArchiveConv(c.id);
   });
   $('#wgConvTitle').addEventListener('blur', () => { const c = wgConvById(wgState.currentConv); if (!c) return; c.title = $('#wgConvTitle').textContent.trim() || c.title; c.isEstimatedTitle = false; $('#wgConvTitle').textContent = c.title; });
-  $('#wgConvThread').addEventListener('click', e => { const b = e.target.closest('[data-convjump]'); if (b) wgConvOpen(b.dataset.convjump, null); });
+  $('#wgConvJumpbar').addEventListener('click', e => { const b = e.target.closest('[data-convjumpto]'); if (b) wgConvJumpToSection(b.dataset.convjumpto); });
+  $('#wgConvConfirmCancel').addEventListener('click', wgCloseConvConfirm);
+  $('#wgConvConfirmDelete').addEventListener('click', wgConvConfirmDelete);
+  $('#wgConvConfirm').addEventListener('click', e => { if (e.target.id === 'wgConvConfirm') wgCloseConvConfirm(); });
   $('#wgConvBody').addEventListener('click', e => {
     const person = e.target.closest('[data-person]'); if (person) return wgOpenPersonPanel(person.dataset.person);
     const action = e.target.closest('[data-convaction]'); if (action) return wgConvJumpToActionDay(action.dataset.convaction, action.dataset.convactionday);
+    const jump = e.target.closest('[data-convjump]'); if (jump) return wgConvOpenRelated(jump.dataset.convjump);
     const foot = e.target.closest('[data-convfootjump]'); if (foot) { const c = wgConvById(wgState.currentConv); if (c) wgConvFootJump(c); return; }
     const span = e.target.closest('.wg-span'); if (span) return wgOpenPop(span);
     const cite = e.target.closest('[data-cite]'); if (cite) { e.stopPropagation(); return wgOpenCitePop(cite); }
@@ -6430,6 +6594,15 @@ function wgInit() {
   $('#wgAaSize').addEventListener('click', e => { const b = e.target.closest('[data-aa]'); if (b) wgSetAaSize(b.dataset.aa); });
   $('#wgConvNextFlag').addEventListener('click', wgConvJumpNextFlag);
   $('#wgConvInner').addEventListener('scroll', wgConvOnScroll);
+  document.addEventListener('keydown', e => {
+    if (!$('#wgConvPage').classList.contains('show')) return;
+    const tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+    if (e.key === 'Escape') { if ($('#wgConvShortcuts').classList.contains('show')) return wgCloseConvShortcuts(); if ($('#wgConvConfirm').classList.contains('show')) return wgCloseConvConfirm(); return wgConvGoBack(); }
+    if (e.key === '[') return wgConvGoPrev();
+    if (e.key === ']') return wgConvGoNext();
+  });
+  document.addEventListener('click', e => { if ($('#wgConvShortcuts').classList.contains('show') && !e.target.closest('#wgConvShortcuts') && !e.target.closest('[data-convact="shortcuts"]')) wgCloseConvShortcuts(); });
 
   /* conversations: folders, a permanent column to the left of the grid */
   $('#wgConvFoldersCol').addEventListener('click', e => {
@@ -6505,7 +6678,7 @@ function wgInit() {
     if (e.target.closest('[data-convtitle]')) return;
     const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
-    const conv = e.target.closest('[data-conv]'); if (conv) return wgConvOpen(conv.dataset.conv, conv);
+    const conv = e.target.closest('[data-conv]'); if (conv) { const todayConvIds = WG_CONVERSATIONS.filter(x => x.day === WG_TODAY_KEY && !x.isArchived).sort((a, b) => b.startAt - a.startAt).map(x => x.id); return wgConvOpen(conv.dataset.conv, conv, { type: 'day', label: 'Today', listContext: todayConvIds }); }
   });
   $('#wgToday').addEventListener('blur', e => {
     const el = e.target.closest && e.target.closest('[data-convtitle]'); if (!el) return;
@@ -7055,7 +7228,7 @@ function ntJumpToMoment(n) {
   const btn = document.querySelector('[data-nav="widgets"]'), r = btn ? btn.getBoundingClientRect() : { left: innerWidth / 2, top: 30, width: 0, height: 0 };
   chatGo('widgets', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
   setTimeout(() => {
-    wgConvOpen(n.sourceConversationId, null);
+    wgConvOpen(n.sourceConversationId, null, { type: 'annotationJump', label: 'Notes', listContext: [] });
     setTimeout(() => {
       const el = document.querySelector(`#wgConvTranscript [data-sent="${n.sourceSentenceId}"]`);
       if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); }
