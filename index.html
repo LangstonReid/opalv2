@@ -701,9 +701,6 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-daynav-btn:hover:not(:disabled){background:var(--wg-surface-2);color:var(--wg-ink)}
 .wg-daynav-btn:disabled{opacity:.32;cursor:default}
 .wg-daynav-btn.sm{width:28px;height:28px;font-size:15px}
-.wg-folders-btn{display:inline-flex;align-items:center;gap:7px;font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-60);background:var(--wg-surface);border:1px solid var(--wg-border);padding:10px 16px;border-radius:999px;box-shadow:var(--wg-shadow-sm);transition:background .2s,color .2s;margin-left:auto}
-.wg-folders-btn svg{width:15px;height:15px}
-.wg-folders-btn:hover{background:var(--wg-surface-2);color:var(--wg-ink)}
 .wg-day-title-wrap{text-align:center;min-width:180px}
 .wg-day-title-wrap h2{font:400 26px/1.1 var(--sans);color:var(--wg-ink);white-space:nowrap}
 .wg-day-title-wrap .mono{margin-top:3px;color:var(--wg-ink-42);white-space:nowrap}
@@ -735,6 +732,11 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 
 /* actions: a persistent 2:1 grid, one row per cluster, the divider always drawn */
 .wg-actions-empty{color:var(--wg-ink-42);font-size:13px;padding:20px 0}
+.wg-actions-head{display:grid;grid-template-columns:2fr 1fr;padding-bottom:12px;border-bottom:1px solid var(--wg-border-2);margin-bottom:4px}
+.wg-actions-head div{display:flex;align-items:center;gap:8px;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-actions-head div:first-child{padding-right:28px}
+.wg-actions-head div:last-child{padding-left:28px}
+.wg-actions-head b{color:var(--wg-accent-ink);font-weight:600}
 .wg-actions-list{display:flex;flex-direction:column}
 .wg-cluster-row{display:grid;grid-template-columns:2fr 1fr;padding:24px 0;border-bottom:1px solid var(--wg-border)}
 .wg-cluster-row:first-child{padding-top:0}
@@ -848,6 +850,30 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 
 /* day-scoped conversations list */
 .wg-dayconv-list{display:flex;flex-direction:column;gap:12px;max-width:640px}
+
+/* today: the default landing view */
+.wg-today{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;width:100%}
+.wg-today-col{display:flex;flex-direction:column;gap:26px;min-width:0}
+.wg-today-sec-label{font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:10px}
+.wg-today-list{display:flex;flex-direction:column;gap:9px}
+.wg-today-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;box-shadow:var(--wg-shadow-sm)}
+.wg-today-row .tag{flex:none;margin-top:1px;font:400 8px/1.6 var(--mono);letter-spacing:.06em;padding:2px 7px;border-radius:999px;color:#fff;background:var(--wg-accent)}
+.wg-today-row .tag.you{background:var(--wg-ink)}
+.wg-today-row p{font-size:12.5px;line-height:1.4;color:var(--wg-ink)}
+.wg-today-tp{padding-left:16px;position:relative;font-size:12.5px;line-height:1.5;color:var(--wg-ink)}
+.wg-today-tp::before{content:'';position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--wg-accent)}
+.wg-today-tplist{display:flex;flex-direction:column;gap:8px}
+.wg-today-live{background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:18px;padding:18px 16px;box-shadow:var(--wg-shadow-sm);position:sticky;top:0;max-height:80vh;display:flex;flex-direction:column;min-width:0}
+.wg-today-live-head{display:flex;align-items:center;gap:7px;margin-bottom:12px}
+.wg-today-live-head i{width:6px;height:6px;border-radius:50%;background:var(--wg-accent);animation:wgLivePulse 1.6s ease-in-out infinite}
+.wg-today-feed{flex:1;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.wg-today-feed-row{display:flex;gap:10px;align-items:baseline;padding-bottom:9px;border-bottom:1px solid var(--wg-border)}
+.wg-today-feed-row:last-child{border-bottom:0}
+.wg-today-feed-row .mono{flex:none;font-size:9px;color:var(--wg-ink-42)}
+.wg-today-feed-row p{font-size:12.5px;line-height:1.5;color:var(--wg-ink)}
+.wg-today-feed-row.new{animation:wgTodayNew .5s var(--ease)}
+@keyframes wgTodayNew{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+.wg-today-empty{color:var(--wg-ink-42);font-size:12.5px;padding:6px 0}
 .wg-dayconv-list .wg-conv-card{width:100%}
 .wg-span{text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--wg-accent);text-underline-offset:3px;text-decoration-thickness:1.4px;cursor:pointer;color:var(--wg-accent-ink);font-weight:500}
 .wg-span:hover,.wg-span:focus-visible{background:var(--wg-yellow);border-radius:3px}
@@ -878,13 +904,9 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 /* day-todo slide overlay + person panel: light glass, matching the AI-chat side panel reference */
 #wgScrim{position:fixed;inset:0;z-index:6;background:rgba(31,36,29,.18);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 #wgScrim.show{opacity:1;pointer-events:auto}
-.wg-daytodo{position:fixed;left:0;top:0;bottom:0;z-index:9;width:min(320px,86vw);background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-right:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);padding:22px 18px;transform:translateX(-104%);transition:transform .4s var(--ease);overflow-y:auto;color:var(--wg-ink)}
-.wg-daytodo.show{transform:none}
-.wg-daytodo .wg-todos-head{margin-bottom:14px}
-.wg-daytodo .wg-seg{background:var(--wg-surface-3)}
-.wg-person-panel{position:fixed;right:0;top:0;bottom:0;z-index:7;width:min(380px,90vw);
-  background:linear-gradient(165deg,#fbf7ea 0%,rgba(255,255,255,.94) 40%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-left:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);padding:24px 22px;transform:translateX(104%);transition:transform .4s var(--ease);overflow-y:auto;color:var(--wg-ink)}
+.wg-person-panel{position:fixed;left:0;top:0;bottom:0;z-index:7;width:min(380px,90vw);
+  background:linear-gradient(195deg,#fbf7ea 0%,rgba(255,255,255,.94) 40%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-right:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);padding:24px 22px;transform:translateX(-104%);transition:transform .4s var(--ease);overflow-y:auto;color:var(--wg-ink)}
 .wg-person-panel.show{transform:none}
 .wg-pp-close{float:right;width:28px;height:28px;border-radius:50%;background:var(--wg-surface-3);font:400 17px/28px var(--sans);color:var(--wg-ink-60);text-align:center}
 .wg-pp-av{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 65%,#54713a) center/cover;margin-bottom:16px;box-shadow:var(--wg-shadow-sm)}
@@ -902,6 +924,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-filters button{font:400 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:8px 14px;border-radius:999px;transition:color .3s,background .3s}
 .wg-conv-filters button.on{color:#fff;background:var(--wg-accent-ink)}
 .wg-conv-filters button:not(.on):hover{color:var(--wg-ink);background:rgba(31,36,29,.05)}
+.wg-conv-layout{display:flex;align-items:flex-start;gap:22px;width:100%}
+.wg-conv-folders-col{flex:0 0 25%;max-width:300px;min-width:200px;position:sticky;top:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:18px;padding:18px 16px;box-shadow:var(--wg-shadow-sm);max-height:76vh;overflow-y:auto;scrollbar-width:thin}
 .wg-conv-grid{flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:14px;align-content:start}
 .wg-conv-card{position:relative;text-align:left;display:flex;flex-direction:column;gap:8px;padding:16px 16px 14px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:18px;box-shadow:var(--wg-shadow-sm);transition:transform .22s var(--ease),box-shadow .22s var(--ease),opacity .2s,filter .2s}
 .wg-conv-card:hover{transform:translateY(-2px);box-shadow:var(--wg-shadow-md)}
@@ -955,7 +979,6 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-menu{position:absolute;right:0;top:calc(100% + 6px);width:180px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:14px;box-shadow:var(--wg-shadow-lg);padding:6px;z-index:5}
 .wg-conv-menu button{display:block;width:100%;text-align:left;padding:9px 11px;font-size:12.5px;color:var(--wg-ink);border-radius:9px;transition:background .15s}
 .wg-conv-menu button:hover{background:var(--wg-surface-2)}
-.wg-conv-menu button.danger{color:#b0452f}
 .wg-conv-title{font:400 30px/1.15 var(--sans);color:var(--wg-ink);outline:none;border-radius:8px}
 .wg-conv-title:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
 .wg-conv-meta{margin-top:8px;color:var(--wg-ink-42)}
@@ -998,16 +1021,6 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-nextflag.show{opacity:1;transform:none;pointer-events:auto}
 
 /* delete confirmation */
-.wg-confirm{position:fixed;inset:0;z-index:11;background:rgba(31,36,29,.3);opacity:0;pointer-events:none;display:grid;place-items:center;transition:opacity .2s var(--ease)}
-.wg-confirm.show{opacity:1;pointer-events:auto}
-.wg-confirm-box{width:min(360px,88vw);background:var(--wg-surface);border-radius:18px;box-shadow:var(--wg-shadow-lg);padding:22px;transform:scale(.96);transition:transform .2s var(--ease)}
-.wg-confirm.show .wg-confirm-box{transform:none}
-.wg-confirm-box p{font-size:13.5px;line-height:1.55;color:var(--wg-ink)}
-.wg-confirm-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-.wg-confirm-btns button{font:400 11px/1.6 var(--mono);letter-spacing:.06em;padding:10px 16px;border-radius:999px;color:var(--wg-ink-60);transition:background .2s,color .2s}
-.wg-confirm-btns button:hover{background:var(--wg-surface-2);color:var(--wg-ink)}
-.wg-confirm-btns button.danger{color:#fff;background:#b0452f}
-.wg-confirm-btns button.danger:hover{background:#8f3624}
 
 /* folders, left panel */
 .wg-folder-group{margin-bottom:16px}
@@ -1117,9 +1130,11 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 #wgLeader{position:fixed;inset:0;z-index:9;pointer-events:none}
 
 @media (max-width:760px){
-  .wg-shell,.wg-day-inner{padding:86px 16px 60px}
+  .wg-shell,.wg-day-inner,.wg-conv-inner{padding:86px 16px 60px}
   .wg-body{flex-direction:column}
-  .wg-todos{width:100%;position:static;max-height:none}
+  .wg-conv-layout{flex-direction:column}
+  .wg-conv-folders-col{flex:none;width:100%;max-width:none;position:static}
+  .wg-today{grid-template-columns:1fr}
   .wg-welcome{flex-direction:column;align-items:stretch}
   .wg-welcome-r{width:100%}
 }
@@ -1134,7 +1149,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-spin{animation:none}
   .wg-running i,.wg-day-title-wrap .mono.live i{animation:none}
   .wg-day-content.slideoutL,.wg-day-content.slideoutR,.wg-day-content.slideinL,.wg-day-content.slideinR{animation:none}
-  .wg-conv-card,.wg-conv-page,.wg-confirm,.wg-confirm-box,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce{transition:none!important;animation:none!important}
+  .wg-conv-card,.wg-conv-page,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce,.wg-today-feed-row.new,.wg-today-live-head i{transition:none!important;animation:none!important}
   .wg-conv-card:hover{transform:none}
 }
 /* ---------- chat: a second way to live in the same garden ---------- */
@@ -1641,10 +1656,11 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div class="wg-welcome" id="wgWelcomePanel"></div>
       <div class="wg-filters-row">
         <div class="wg-filters" id="wgFilters">
-          <button type="button" data-wgmode="calendar" class="on">Calendar</button>
+          <button type="button" data-wgmode="today" class="on">Today</button>
+          <button type="button" data-wgmode="calendar">Calendar</button>
           <button type="button" data-wgmode="conversations">Conversations</button>
         </div>
-        <div class="wg-cal-nav" id="wgCalNav">
+        <div class="wg-cal-nav" id="wgCalNav" hidden>
           <button type="button" class="wg-daynav-btn sm" id="wgCalPrev" aria-label="Previous month">‹</button>
           <span class="mono" id="wgCalMonthLabel"></span>
           <button type="button" class="wg-daynav-btn sm" id="wgCalNext" aria-label="Next month">›</button>
@@ -1655,11 +1671,14 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           <button type="button" data-convfilter="todo">To&#8209;do</button>
           <button type="button" data-convfilter="unsorted">Unsorted</button>
         </div>
-        <button type="button" class="wg-folders-btn" id="wgFoldersBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>Folders</button>
       </div>
       <div class="wg-body">
-        <div class="wg-grid" id="wgGrid"></div>
-        <div class="wg-conv-grid" id="wgConvGrid" hidden></div>
+        <div class="wg-today" id="wgToday"></div>
+        <div class="wg-grid" id="wgGrid" hidden></div>
+        <div class="wg-conv-layout" id="wgConvLayout" hidden>
+          <aside class="wg-conv-folders-col" id="wgConvFoldersCol"><div class="wg-todos-head"><span>Folders</span></div><div id="wgFolderList"></div></aside>
+          <div class="wg-conv-grid" id="wgConvGrid"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1702,7 +1721,6 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
                 <button type="button" data-convact="copy">Copy</button>
                 <button type="button" data-convact="notion">Export to Notion</button>
                 <button type="button" data-convact="archive">Archive</button>
-                <button type="button" data-convact="delete" class="danger">Delete</button>
               </div>
             </div>
           </div>
@@ -1716,15 +1734,8 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     <div class="wg-conv-rail" id="wgConvRail"><i id="wgConvProgress"></i></div>
     <button type="button" class="wg-conv-nextflag" id="wgConvNextFlag">&darr; NEXT FLAGGED LINE</button>
   </div>
-  <div class="wg-confirm" id="wgConfirm">
-    <div class="wg-confirm-box">
-      <p id="wgConfirmText"></p>
-      <div class="wg-confirm-btns"><button type="button" id="wgConfirmCancel">Cancel</button><button type="button" id="wgConfirmGo" class="danger">Delete</button></div>
-    </div>
-  </div>
   <div class="wg-dragghost" id="wgDragGhost" hidden></div>
   <div id="wgScrim"></div>
-  <aside class="wg-daytodo" id="wgFoldersPanel"></aside>
   <aside class="wg-person-panel" id="wgPersonPanel" role="dialog" aria-modal="true" aria-label="Person"></aside>
   <aside class="wg-person-panel" id="wgDebriefPanel" role="dialog" aria-modal="true" aria-label="Result"></aside>
   <div class="wg-toast" id="wgToast"></div>
@@ -4257,7 +4268,7 @@ const wgCheckSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" s
 const wgLockSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>`;
 function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = WG_BADGE_COLOR[id] || (o && o.brand) || '#7a9a5a'; const icon = o ? markSvg(o.logo, '#fff') : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/></svg>`; return `<b style="--c:${color}" title="${esc((o && o.name) || id)}">${icon}</b>`; }
 
-const wgState = { viewMode: 'calendar', currentDay: null, tab: 'actions',
+const wgState = { viewMode: 'today', currentDay: null, tab: 'actions',
   convFilter: 'all', currentFolder: null, currentConv: null, aaSize: (state.wgAaSize || 'm'), drag: null, pendingConvFromChat: false,
   calMonth: { year: WG_T0.getFullYear(), month: WG_T0.getMonth() },
   railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null };
@@ -4359,7 +4370,7 @@ function wgSnoozeTodo(which) {
 }
 function wgRailGo(taskId) { wgState.railPinned[taskId] = 'running'; wgAcceptTask(taskId); }
 function wgRailJumpToTask(clusterId, day) {
-  wgCloseFoldersPanel(); wgClosePersonPanel(); wgCloseDebrief();
+  wgClosePersonPanel(); wgCloseDebrief();
   if (wgState.viewMode !== 'calendar') wgSwitchViewMode('calendar');
   wgOpenDay(day);
   setTimeout(() => wgJumpToAction(clusterId, null), REDUCED ? 0 : 80);
@@ -4393,23 +4404,27 @@ function wgNavigateCalMonth(dir) {
   let { year, month } = wgState.calMonth; month += dir; if (month < 0) { month = 11; year--; } else if (month > 11) { month = 0; year++; }
   wgState.calMonth = { year, month }; wgRenderCalendarInto($('#wgGrid'));
 }
-function wgRenderGrid() {
-  wgRenderCalendarInto($('#wgGrid'));
-  if (wgState.viewMode === 'conversations') wgRenderConvGrid();
+function wgViewPanes() { return { today: $('#wgToday'), calendar: $('#wgGrid'), conversations: $('#wgConvLayout') }; }
+function wgRenderModeContent(mode) {
+  if (mode === 'today') wgRenderToday();
+  else if (mode === 'calendar') wgRenderCalendarInto($('#wgGrid'));
+  else wgRenderConvGrid();
 }
+function wgRenderGrid() { wgRenderModeContent(wgState.viewMode); }
 function wgSwitchViewMode(newMode) {
   if (newMode === wgState.viewMode) return;
+  const prevMode = wgState.viewMode;
   wgState.viewMode = newMode;
   document.querySelectorAll('#wgFilters button').forEach(b => b.classList.toggle('on', b.dataset.wgmode === newMode));
   $('#wgConvFilters').hidden = newMode !== 'conversations';
   $('#wgCalNav').hidden = newMode !== 'calendar';
-  $('#wgFoldersBtn').hidden = newMode !== 'conversations';
-  const calGrid = $('#wgGrid'), convGrid = $('#wgConvGrid');
-  if (newMode === 'conversations') { wgRenderConvGrid(); }
-  if (REDUCED) { calGrid.hidden = newMode !== 'calendar'; convGrid.hidden = newMode !== 'conversations'; return; }
-  const showEl = newMode === 'calendar' ? calGrid : convGrid, hideEl = newMode === 'calendar' ? convGrid : calGrid;
+  wgRenderModeContent(newMode);
+  if (newMode === 'today') wgStartTodayFeed(); else wgStopTodayFeed();
+  const panes = wgViewPanes(), showEl = panes[newMode], hideEl = panes[prevMode];
+  if (REDUCED) { Object.entries(panes).forEach(([k, el]) => { el.hidden = k !== newMode; }); return; }
   hideEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'ease-out' }).onfinish = () => {
-    hideEl.hidden = true; showEl.hidden = false;
+    Object.entries(panes).forEach(([k, el]) => { if (k !== newMode) el.hidden = true; });
+    showEl.hidden = false;
     showEl.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.22,1,.36,1)' });
   };
 }
@@ -4462,6 +4477,7 @@ function wgRenderConvGrid() {
   const grid = $('#wgConvGrid'), list = wgFilteredConvs();
   const crumb = wgState.currentFolder ? (() => { const f = wgFolderById(wgState.currentFolder); return `<div class="wg-folder-crumb"><button type="button" data-crumbback>&larr; All Conversations</button>${f ? ' / ' + esc(f.name) : ''}</div>`; })() : '';
   grid.innerHTML = crumb + wgConvNewCardHTML() + (list.length ? list.map(wgConvCardHTML).join('') : `<p class="wg-conv-empty">${wgConvEmptyMsg()}</p>`);
+  wgRenderFolderList();
 }
 
 /* the conversation detail page */
@@ -4573,29 +4589,12 @@ function wgToggleConvStar(id) {
   if (wgState.viewMode === 'conversations' && wgState.convFilter === 'starred') wgRenderConvGrid();
 }
 function wgRenderConvMenuDefault() {
-  $('#wgConvMenu').innerHTML = `<button type="button" data-convact="copy">Copy</button><button type="button" data-convact="notion">Export to Notion</button><button type="button" data-convact="movefolder">Move to folder &#9656;</button><button type="button" data-convact="archive">Archive</button><button type="button" data-convact="delete" class="danger">Delete</button>`;
+  $('#wgConvMenu').innerHTML = `<button type="button" data-convact="copy">Copy</button><button type="button" data-convact="notion">Export to Notion</button><button type="button" data-convact="movefolder">Move to folder &#9656;</button><button type="button" data-convact="archive">Archive</button>`;
 }
 function wgToggleConvMenu() { const m = $('#wgConvMenu'); if (m.hidden) { wgRenderConvMenuDefault(); m.hidden = false; } else m.hidden = true; }
 function wgConvCopy(c) { try { navigator.clipboard && navigator.clipboard.writeText(c.summary || c.title); } catch (e) {} wgShowToast('Copied'); }
 function wgConvExportNotion() { wgShowToast('Opens in Notion'); }
 function wgArchiveConv(id) { const c = wgConvById(id); if (!c) return; c.isArchived = true; if (wgState.currentConv === id) wgConvClose(); wgRenderConvGrid(); wgRenderFolderList(); wgShowToast('Archived'); }
-let wgPendingDeleteId = null;
-function wgOpenDeleteConfirm(convId) {
-  const c = wgConvById(convId); if (!c) return; wgPendingDeleteId = convId;
-  const bits = []; if (c.actionClusterIds.length) bits.push(`${c.actionClusterIds.length} linked action${c.actionClusterIds.length > 1 ? 's' : ''}`);
-  if (c.transcriptSentences.length) bits.push('its transcript');
-  $('#wgConfirmText').textContent = `Delete "${c.title}"? This removes the summary${bits.length ? ', ' + bits.join(' and ') : ''} for good. This can't be undone.`;
-  $('#wgConfirm').classList.add('show');
-}
-function wgCloseDeleteConfirm() { $('#wgConfirm').classList.remove('show'); wgPendingDeleteId = null; }
-function wgConfirmDelete() {
-  if (!wgPendingDeleteId) return; const id = wgPendingDeleteId;
-  const idx = WG_CONVERSATIONS.findIndex(c => c.id === id); if (idx >= 0) WG_CONVERSATIONS.splice(idx, 1);
-  WG_FOLDERS.forEach(f => { f.conversationIds = f.conversationIds.filter(x => x !== id); });
-  wgCloseDeleteConfirm();
-  if (wgState.currentConv === id) wgConvClose();
-  wgRenderConvGrid(); wgRenderFolderList(); wgShowToast('Deleted');
-}
 
 /* the card menu and the move-to-folder popover: both float, both dismiss on outside click */
 function wgCloseCardMenu() { const el = document.getElementById('wgCardMenuPop'); if (el) el.remove(); }
@@ -4605,14 +4604,13 @@ function wgOpenCardMenu(convId, anchorEl) {
   const c = wgConvById(convId); if (!c) return; const r = anchorEl.getBoundingClientRect();
   const div = document.createElement('div'); div.className = 'wg-conv-menu'; div.id = 'wgCardMenuPop';
   div.style.position = 'fixed'; div.style.top = wgPopTop(r, 160) + 'px'; div.style.left = clamp(r.right - 180, 12, innerWidth - 196) + 'px'; div.style.zIndex = 9;
-  div.innerHTML = `<button type="button" data-cardact="star">${c.isStarred ? 'Unstar' : 'Star'}</button><button type="button" data-cardact="move">Move to folder &#9656;</button><button type="button" data-cardact="archive">Archive</button><button type="button" data-cardact="delete" class="danger">Delete</button>`;
+  div.innerHTML = `<button type="button" data-cardact="star">${c.isStarred ? 'Unstar' : 'Star'}</button><button type="button" data-cardact="move">Move to folder &#9656;</button><button type="button" data-cardact="archive">Archive</button>`;
   document.body.appendChild(div);
   div.addEventListener('click', e => {
     const b = e.target.closest('[data-cardact]'); if (!b) return;
     if (b.dataset.cardact === 'star') { wgToggleConvStar(convId); wgCloseCardMenu(); }
     else if (b.dataset.cardact === 'move') { wgCloseCardMenu(); wgOpenMoveMenu(convId, anchorEl); }
     else if (b.dataset.cardact === 'archive') { wgArchiveConv(convId); wgCloseCardMenu(); }
-    else if (b.dataset.cardact === 'delete') { wgCloseCardMenu(); wgOpenDeleteConfirm(convId); }
   });
 }
 function wgCloseMoveMenu() { const el = document.getElementById('wgMovePop'); if (el) el.remove(); }
@@ -4944,7 +4942,8 @@ function wgClusterOpalBlock(c) {
 function wgRenderActions(dateKey) {
   const clusters = wgClustersFor(dateKey), pane = $('#wgPaneActions');
   if (!clusters.length) { pane.innerHTML = `<p class="wg-actions-empty">Nothing surfaced from this day.</p>`; return; }
-  pane.innerHTML = `<div class="wg-actions-list">${clusters.map(c => {
+  const head = `<div class="wg-actions-head"><div><b>Opal</b> is doing this for you</div><div><b>You</b> check these off yourself</div></div>`;
+  pane.innerHTML = head + `<div class="wg-actions-list">${clusters.map(c => {
     const human = c.humanTaskId ? wgTodoById(c.humanTaskId) : null, hasOpal = c.opalTasks.some(t => t.status !== 'moved');
     const left = hasOpal ? wgClusterOpalBlock(c) : '';
     const rightHeader = !hasOpal ? `<div class="wg-cluster-h"><div><b>${esc(c.title)}</b><p>"${esc(c.quote)}"</p></div></div>` : '';
@@ -5012,6 +5011,65 @@ function wgRenderDayConversations(dateKey) {
   const list = WG_CONVERSATIONS.filter(c => c.day === dateKey && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
   pane.innerHTML = list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-actions-empty">No conversations this day.</p>`;
 }
+
+/* today: the default landing view — today's action items, talking points, conversations, and a live-updating transcript feed */
+function wgTodayActionItems() {
+  const items = [];
+  wgClustersFor(WG_TODAY_KEY).forEach(c => {
+    const human = c.humanTaskId ? wgTodoById(c.humanTaskId) : null;
+    if (human) items.push({ text: human.text, who: 'you', done: human.status === 'done' });
+    c.opalTasks.forEach(t => { if (t.status !== 'moved') items.push({ text: t.text, who: 'opal', done: t.status === 'done' }); });
+  });
+  return items;
+}
+function wgTodayActionsHTML() {
+  const items = wgTodayActionItems();
+  if (!items.length) return `<p class="wg-today-empty">Nothing surfaced yet today.</p>`;
+  return `<div class="wg-today-list">${items.map(i => `<div class="wg-today-row"><span class="tag${i.who === 'you' ? ' you' : ''}">${i.who === 'you' ? 'YOU' : 'OPAL'}</span><p${i.done ? ' style="text-decoration:line-through;opacity:.5"' : ''}>${esc(i.text)}</p></div>`).join('')}</div>`;
+}
+function wgTodayTalkingHTML() {
+  const points = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.talkingPoints);
+  if (!points.length) return `<p class="wg-today-empty">Nothing yet.</p>`;
+  return `<div class="wg-today-tplist">${points.map(p => `<p class="wg-today-tp">${esc(p)}</p>`).join('')}</div>`;
+}
+function wgTodayConvsHTML() {
+  const list = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
+  return list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-today-empty">No conversations yet today.</p>`;
+}
+function wgRenderToday() {
+  $('#wgToday').innerHTML = `<div class="wg-today-col">
+    <div class="wg-today-sec"><div class="wg-today-sec-label">Today's action items</div>${wgTodayActionsHTML()}</div>
+    <div class="wg-today-sec"><div class="wg-today-sec-label">Key talking points</div>${wgTodayTalkingHTML()}</div>
+    <div class="wg-today-sec"><div class="wg-today-sec-label">Today's conversations</div>${wgTodayConvsHTML()}</div>
+  </div>
+  <div class="wg-today-live">
+    <div class="wg-today-live-head"><i></i><span class="mono" style="font-size:9.5px;letter-spacing:.1em;color:var(--wg-ink-42);text-transform:uppercase">Live transcript</span></div>
+    <div class="wg-today-feed" id="wgTodayFeed"></div>
+  </div>`;
+}
+let wgTodayFeedTimer = null, wgTodayFeedPool = [];
+function wgBuildTodayFeedPool() {
+  const sentences = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.transcriptSentences.map(s => s.text));
+  return sentences.length ? sentences : ['Quiet right now.'];
+}
+function wgAddTodayFeedLine() {
+  const feed = $('#wgTodayFeed'); if (!feed) return;
+  if (!wgTodayFeedPool.length) wgTodayFeedPool = wgBuildTodayFeedPool();
+  const text = wgTodayFeedPool[Math.floor(Math.random() * wgTodayFeedPool.length)];
+  const row = document.createElement('div'); row.className = 'wg-today-feed-row' + (REDUCED ? '' : ' new');
+  row.innerHTML = `<span class="mono">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span><p>${esc(text)}</p>`;
+  feed.prepend(row);
+  while (feed.children.length > 30) feed.removeChild(feed.lastChild);
+}
+function wgTodayFeedTick() { if (mode === 'widgets' && wgState.viewMode === 'today' && state.listening) wgAddTodayFeedLine(); }
+function wgStartTodayFeed() {
+  wgTodayFeedPool = wgBuildTodayFeedPool();
+  const feed = $('#wgTodayFeed'); if (feed) feed.innerHTML = '';
+  for (let i = 0; i < 5; i++) wgAddTodayFeedLine();
+  clearInterval(wgTodayFeedTimer);
+  wgTodayFeedTimer = setInterval(wgTodayFeedTick, REDUCED ? 9000 : 4200);
+}
+function wgStopTodayFeed() { clearInterval(wgTodayFeedTimer); wgTodayFeedTimer = null; }
 function wgSpanData(el) { return { conn: el.dataset.spanConn, conf: +el.dataset.spanConf, clusterId: el.dataset.spanCluster }; }
 function wgOpenPop(el) {
   const { conn, conf, clusterId } = wgSpanData(el), pop = $('#wgPop'), r = el.getBoundingClientRect();
@@ -5071,16 +5129,8 @@ function wgOpenPersonPanel(id) {
   $('#wgPersonPanel').classList.add('show'); $('#wgScrim').classList.add('show');
   const input = $('#wgPPRename'); if (input) input.addEventListener('change', () => { state.wgNames = state.wgNames || {}; state.wgNames[id] = input.value.trim() || null; save(); wgOpenPersonPanel(id); wgRenderPeople(wgState.currentDay); });
 }
-function wgAnyScrimPanelOpen() { return $('#wgPersonPanel').classList.contains('show') || $('#wgDebriefPanel').classList.contains('show') || $('#wgFoldersPanel').classList.contains('show'); }
+function wgAnyScrimPanelOpen() { return $('#wgPersonPanel').classList.contains('show') || $('#wgDebriefPanel').classList.contains('show'); }
 function wgClosePersonPanel() { $('#wgPersonPanel').classList.remove('show'); if (!wgAnyScrimPanelOpen()) $('#wgScrim').classList.remove('show'); }
-
-/* folders, relocated into Conversations: the same glass slide-in as the person panel */
-function wgOpenFoldersPanel() {
-  $('#wgFoldersPanel').innerHTML = `<div class="wg-todos-head"><span>Folders</span></div><div id="wgFolderList"></div>`;
-  wgRenderFolderList();
-  $('#wgFoldersPanel').classList.add('show'); $('#wgScrim').classList.add('show');
-}
-function wgCloseFoldersPanel() { $('#wgFoldersPanel').classList.remove('show'); if (!wgAnyScrimPanelOpen()) $('#wgScrim').classList.remove('show'); }
 
 /* search: one ranked list, one destination per type */
 let wgSearchList = [];
@@ -5155,7 +5205,7 @@ function wgInit() {
     const el = e.target.closest && e.target.closest('[data-tasktext]'); if (!el) return;
     const found = wgOpalTaskById(el.dataset.tasktext); if (found && found.task.deliverable) found.task.deliverable.content = el.textContent;
   }, true);
-  $('#wgScrim').addEventListener('click', () => { wgClosePersonPanel(); wgClosePop(); wgCloseDebrief(); wgCloseFoldersPanel(); });
+  $('#wgScrim').addEventListener('click', () => { wgClosePersonPanel(); wgClosePop(); wgCloseDebrief(); });
   document.addEventListener('click', e => {
     if (!e.target.closest('#wgPop') && !e.target.closest('.wg-span')) wgClosePop();
     if (!e.target.closest('.wg-search')) $('#wgResults').classList.remove('show');
@@ -5166,7 +5216,7 @@ function wgInit() {
   });
   addEventListener('keydown', e => {
     if (mode !== 'widgets') return;
-    if (e.key === 'Escape') { if ($('#wgConfirm').classList.contains('show')) return wgCloseDeleteConfirm(); if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgFoldersPanel').classList.contains('show')) return wgCloseFoldersPanel(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
+    if (e.key === 'Escape') { if ($('#wgConvPage').classList.contains('show')) return wgConvClose(); if ($('#wgPersonPanel').classList.contains('show')) return wgClosePersonPanel(); if ($('#wgDebriefPanel').classList.contains('show')) return wgCloseDebrief(); if ($('#wgPop').classList.contains('show')) return wgClosePop(); if ($('#wgDayPage').classList.contains('show')) return wgCloseDay(); if ($('#wgRail').classList.contains('drawer-open')) return wgCloseRailDrawer(); return; }
     if (!$('#wgDayPage').classList.contains('show')) return;
     if (e.target.closest('input,textarea,select,[contenteditable]')) return;
     if (e.key === 'ArrowLeft') { e.preventDefault(); wgNavigateDay(-1); }
@@ -5209,7 +5259,6 @@ function wgInit() {
     if (b.dataset.convact === 'copy') wgConvCopy(c);
     else if (b.dataset.convact === 'notion') wgConvExportNotion();
     else if (b.dataset.convact === 'archive') wgArchiveConv(c.id);
-    else if (b.dataset.convact === 'delete') wgOpenDeleteConfirm(c.id);
   });
   $('#wgConvTitle').addEventListener('blur', () => { const c = wgConvById(wgState.currentConv); if (!c) return; c.title = $('#wgConvTitle').textContent.trim() || c.title; c.isEstimatedTitle = false; $('#wgConvTitle').textContent = c.title; });
   $('#wgConvThread').addEventListener('click', e => { const b = e.target.closest('[data-convjump]'); if (b) wgConvOpen(b.dataset.convjump, null); });
@@ -5226,20 +5275,16 @@ function wgInit() {
   $('#wgAaSize').addEventListener('click', e => { const b = e.target.closest('[data-aa]'); if (b) wgSetAaSize(b.dataset.aa); });
   $('#wgConvNextFlag').addEventListener('click', wgConvJumpNextFlag);
   $('#wgConvInner').addEventListener('scroll', wgConvOnScroll);
-  $('#wgConfirmCancel').addEventListener('click', wgCloseDeleteConfirm);
-  $('#wgConfirmGo').addEventListener('click', wgConfirmDelete);
-  $('#wgConfirm').addEventListener('click', e => { if (e.target === $('#wgConfirm')) wgCloseDeleteConfirm(); });
 
-  /* conversations: folders, now a slide-in panel opened from the Conversations grid header */
-  $('#wgFoldersBtn').addEventListener('click', wgOpenFoldersPanel);
-  $('#wgFoldersPanel').addEventListener('click', e => {
+  /* conversations: folders, a permanent column to the left of the grid */
+  $('#wgConvFoldersCol').addEventListener('click', e => {
     if (e.target.closest('[data-folderinput]')) return;
     const crumb = e.target.closest('[data-crumbback]'); if (crumb) { wgState.currentFolder = null; wgRenderFolderList(); wgRenderConvGrid(); return; }
     const rename = e.target.closest('[data-folderrename]'); if (rename) { e.stopPropagation(); return wgFolderRenamePrompt(rename.dataset.folderrename); }
     const del = e.target.closest('[data-folderdelete]'); if (del) { e.stopPropagation(); return wgFolderDeleteConfirm(del.dataset.folderdelete); }
     const suggestAdd = e.target.closest('[data-foldersuggest]'); if (suggestAdd) { e.stopPropagation(); return wgPromoteSuggestedFolder(suggestAdd.dataset.foldersuggest); }
     const newBtn = e.target.closest('[data-foldernew]'); if (newBtn) return wgCreateFolderPrompt();
-    const row = e.target.closest('[data-folder]'); if (row) { wgState.currentFolder = row.dataset.folder; wgRenderFolderList(); wgRenderConvGrid(); wgCloseFoldersPanel(); }
+    const row = e.target.closest('[data-folder]'); if (row) { wgState.currentFolder = row.dataset.folder; wgRenderFolderList(); wgRenderConvGrid(); }
   });
 
   /* calendar: month navigation */
@@ -5284,6 +5329,7 @@ function wgPullThrough(force) {
 }
 try {
   wgRenderWelcomePanel(); wgInit(); wgRenderRail();
+  if (wgState.viewMode === 'today') wgStartTodayFeed();
   try { sessionStorage.removeItem('wgRecoveryAttempted'); } catch (e3) {}
 } catch (err) {
   console.error('Widgets failed to start, attempting a one-time recovery reload.', err);
