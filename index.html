@@ -7,7 +7,7 @@
 <title>Opal OS · Garden</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Instrument+Serif:ital@1&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Instrument+Serif:ital@1&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --ground-900:#0b120c; --ground-800:#121b13; --ground-700:#1c2a1d;
@@ -846,20 +846,9 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
   .wg-day-right{justify-self:center}
 }
 
-/* transcription */
-.wg-tr-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.wg-tr-scroll{max-height:64vh;overflow-y:auto;scrollbar-width:thin;padding-right:6px}
-.wg-hour{padding:6px 0 18px}
-.wg-hour-head{position:sticky;top:0;z-index:2;display:flex;align-items:baseline;gap:10px;padding:8px 0;background:var(--wg-bg,#f5f5f0)}
-.wg-hour-head b{font:400 15px/1 var(--sans);color:var(--wg-ink)}
-.wg-hour-head span{font:400 9px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ink-42)}
-.wg-hour-body{background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:14px;padding:14px 16px;margin-top:8px}
-.wg-hour-body p{font-size:13px;line-height:1.65;color:var(--wg-ink);max-width:78ch}
-.wg-hour.silent{padding:2px 0}
-.wg-hour.silent .wg-hour-head{opacity:.4;background:none}
-.wg-hour.silent .wg-hour-head b{font-size:11px}
-.wg-hour-toggle{font:400 8.5px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ink-42);margin-left:auto;transition:color .2s}
-.wg-hour-toggle:hover{color:var(--wg-accent-ink)}
+/* day-scoped conversations list */
+.wg-dayconv-list{display:flex;flex-direction:column;gap:12px;max-width:640px}
+.wg-dayconv-list .wg-conv-card{width:100%}
 .wg-span{text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--wg-accent);text-underline-offset:3px;text-decoration-thickness:1.4px;cursor:pointer;color:var(--wg-accent-ink);font-weight:500}
 .wg-span:hover,.wg-span:focus-visible{background:var(--wg-yellow);border-radius:3px}
 
@@ -876,13 +865,15 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-pop-conf small{font:400 9px/1.6 var(--mono);color:var(--wg-ink-42)}
 .wg-pop-jump{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:4px;padding:8px 2px 2px;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-accent-ink)}
 
-/* people */
-.wg-people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
-.wg-person{text-align:left;padding:18px 16px;border-radius:18px;background:var(--wg-surface);border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-sm);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.wg-person:hover{transform:translateY(-3px);box-shadow:var(--wg-shadow-md)}
-.wg-p-av{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 65%,#54713a) center/cover;margin-bottom:12px}
-.wg-person b{display:block;font-size:12.5px;font-weight:600;color:var(--wg-ink)}
-.wg-person small{display:block;margin-top:4px;font:400 8.5px/1.5 var(--mono);letter-spacing:.06em;color:var(--wg-ember)}
+/* people, as specimen tags */
+.wg-people-wrap{display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 12px}
+.wg-ptag-col{display:flex;flex-direction:column;align-items:center;gap:5px}
+.wg-ptag{position:relative;display:inline-flex;align-items:center;background:#fff;padding:11px 20px 11px 28px;border-radius:999px;box-shadow:var(--wg-shadow-sm);transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .18s}
+.wg-ptag:hover{transform:translateY(-2px);box-shadow:var(--wg-shadow-md)}
+.wg-ptag.spore{background:var(--wg-spore)}
+.wg-ptag .hole{position:absolute;left:11px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--wg-bg);box-shadow:inset 0 1px 2px rgba(31,36,29,.18)}
+.wg-ptag b{font-family:'Caveat',cursive;font-weight:600;font-size:24px;line-height:1;color:#0a0a08;white-space:nowrap}
+.wg-ptag-guess{font:400 9px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:rgba(10,10,8,.55)}
 
 /* day-todo slide overlay + person panel: light glass, matching the AI-chat side panel reference */
 #wgScrim{position:fixed;inset:0;z-index:6;background:rgba(31,36,29,.18);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
@@ -1686,12 +1677,12 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </div>
       <div class="wg-tri" id="wgTri">
         <button type="button" data-wgtab="actions" class="on">Actions</button>
-        <button type="button" data-wgtab="transcript">Transcription</button>
+        <button type="button" data-wgtab="conversations">Conversations</button>
         <button type="button" data-wgtab="people">People</button>
       </div>
       <div class="wg-film" id="wgFilm">
         <div class="wg-pane" id="wgPaneActions"></div>
-        <div class="wg-pane" id="wgPaneTranscript" hidden></div>
+        <div class="wg-pane" id="wgPaneConversations" hidden></div>
         <div class="wg-pane" id="wgPanePeople" hidden></div>
       </div>
       </div>
@@ -4266,7 +4257,7 @@ const wgCheckSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" s
 const wgLockSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>`;
 function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = WG_BADGE_COLOR[id] || (o && o.brand) || '#7a9a5a'; const icon = o ? markSvg(o.logo, '#fff') : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/></svg>`; return `<b style="--c:${color}" title="${esc((o && o.name) || id)}">${icon}</b>`; }
 
-const wgState = { viewMode: 'calendar', currentDay: null, tab: 'actions', transcriptMode: 'summary', hourOverride: {},
+const wgState = { viewMode: 'calendar', currentDay: null, tab: 'actions',
   convFilter: 'all', currentFolder: null, currentConv: null, aaSize: (state.wgAaSize || 'm'), drag: null, pendingConvFromChat: false,
   calMonth: { year: WG_T0.getFullYear(), month: WG_T0.getMonth() },
   railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null };
@@ -4503,7 +4494,7 @@ function wgConvBodyHTML(c) {
   if (c.actionClusterIds.length) html += wgSec('Action items', c.actionClusterIds.map(wgConvActionItemHTML).join(''));
   html += wgSec('People', wgConvPeopleHTML(c));
   if (c.transcriptSentences.length) html += wgSec('Transcript', `<div class="wg-conv-transcript" id="wgConvTranscript">${wgConvTranscriptHTML(c)}</div>`);
-  html += `<div class="wg-conv-foot"><button type="button" data-convfootjump>${wgFmtDateMono(c.day)} · Open in Transcription &rarr;</button></div>`;
+  html += `<div class="wg-conv-foot"><button type="button" data-convfootjump>See other conversations from this day &rarr;</button></div>`;
   return html;
 }
 function wgRenderConvDetail(c) {
@@ -4540,10 +4531,10 @@ function wgConvJumpToActionDay(clusterId, day) {
   setTimeout(() => { wgSwitchViewMode('calendar'); wgOpenDay(day); setTimeout(() => wgJumpToAction(clusterId, null), REDUCED ? 0 : 80); }, REDUCED ? 0 : 260);
 }
 function wgConvFootJump(c) {
-  wgConvClose(); const hour = c.startAt.getHours();
+  wgConvClose();
   setTimeout(() => {
-    wgSwitchViewMode('calendar'); wgOpenDay(c.day); wgSwitchTab('transcript');
-    setTimeout(() => { const rows = document.querySelectorAll('#wgPaneTranscript .wg-hour'); const el = rows[hour]; if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 100);
+    wgSwitchViewMode('calendar'); wgOpenDay(c.day); wgSwitchTab('conversations');
+    setTimeout(() => { const el = document.querySelector(`#wgPaneConversations [data-conv="${c.id}"]`); if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 100);
   }, REDUCED ? 0 : 260);
 }
 
@@ -4792,10 +4783,10 @@ function wgOpenDay(dateKey, cellEl, navDir) {
   const page = $('#wgDayPage'), shell = $('#wgShell'), content = $('#wgDayContent');
   const doSlide = !!navDir && !REDUCED && page.classList.contains('show');
   const paint = () => {
-    wgState.currentDay = dateKey; wgState.hourOverride = {};
+    wgState.currentDay = dateKey;
     if (!navDir) wgState.tab = 'actions';
     wgRenderDayHeader(day);
-    wgRenderActions(dateKey); wgRenderTranscript(dateKey); wgRenderPeople(dateKey);
+    wgRenderActions(dateKey); wgRenderDayConversations(dateKey); wgRenderPeople(dateKey);
     wgSwitchTab(wgState.tab, true);
     wgUpdateRunningBadge();
     if (doSlide) { content.classList.remove('slideoutL', 'slideoutR'); content.classList.add(navDir > 0 ? 'slideinL' : 'slideinR'); setTimeout(() => content.classList.remove('slideinL', 'slideinR'), 320); }
@@ -4822,11 +4813,11 @@ function wgRenderDayHeader(day) {
   const keys = wgSortedDayKeys(), idx = keys.indexOf(day.date);
   $('#wgDayPrev').disabled = idx <= 0; $('#wgDayNext').disabled = idx < 0 || idx >= keys.length - 1;
 }
-const WG_TABS = ['actions', 'transcript', 'people'];
+const WG_TABS = ['actions', 'conversations', 'people'];
 function wgSwitchTab(tab, silent) {
   const order = WG_TABS.indexOf(tab) - WG_TABS.indexOf(wgState.tab); wgState.tab = tab;
   document.querySelectorAll('#wgTri button').forEach(b => b.classList.toggle('on', b.dataset.wgtab === tab));
-  const panes = { actions: $('#wgPaneActions'), transcript: $('#wgPaneTranscript'), people: $('#wgPanePeople') };
+  const panes = { actions: $('#wgPaneActions'), conversations: $('#wgPaneConversations'), people: $('#wgPanePeople') };
   Object.entries(panes).forEach(([k, el]) => { if (k !== tab) el.hidden = true; });
   const target = panes[tab]; target.hidden = false;
   if (!silent && !REDUCED && order !== 0) { target.classList.remove('slide-l', 'slide-r'); void target.offsetWidth; target.classList.add(order > 0 ? 'slide-l' : 'slide-r'); }
@@ -4876,7 +4867,7 @@ function wgAcceptTask(taskId) {
   if (task.status !== 'proposed' && task.status !== 'error' && task.status !== 'skipped') return;
   if (task.dependsOn && !wgTodoDone(task.dependsOn)) return;
   task.status = 'running'; task.runStatus = wgRunStatusFor(task); wgSaveTaskState(taskId);
-  wgRenderActions(wgState.currentDay); wgUpdateRunningBadge(); wgRenderRail();
+  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgUpdateRunningBadge(); wgRenderRail();
   setTimeout(() => wgResolveTask(taskId), 1500 + Math.random() * 1300);
 }
 function wgResolveTask(taskId) {
@@ -4887,7 +4878,7 @@ function wgResolveTask(taskId) {
   else { task.status = 'done'; task.deliverable = wgDeliverableFor(task); task.completedAt = Date.now();
     if (wgState.currentDay !== cluster.day || wgState.tab !== 'actions') wgShowToast(`✓ ${task.text} ready · ${wgDayLabel(cluster.day).split(' ').slice(0, 2).join(' ')}`); }
   wgSaveTaskState(taskId);
-  if (wgState.currentDay === cluster.day) wgRenderActions(wgState.currentDay);
+  if (wgState.currentDay === cluster.day) { wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); }
   wgUpdateRunningBadge();
   if (wgState.railPinned[taskId]) {
     if (task.status === 'done') { wgState.railPinned[taskId] = 'done'; setTimeout(() => { delete wgState.railPinned[taskId]; wgRenderRail(); }, REDUCED ? 0 : 2200); }
@@ -4897,11 +4888,11 @@ function wgResolveTask(taskId) {
 }
 function wgSkipTask(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found; if (task.status !== 'proposed') return;
-  task.status = 'skipped'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderRail();
+  task.status = 'skipped'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail();
 }
 function wgUndoSkip(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found; if (task.status !== 'skipped') return;
-  task.status = 'proposed'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay);
+  task.status = 'proposed'; wgSaveTaskState(taskId); wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay);
 }
 function wgRetryTask(taskId) { wgAcceptTask(taskId); }
 function wgMoveToHuman(taskId) {
@@ -4911,7 +4902,7 @@ function wgMoveToHuman(taskId) {
   cluster.movedToHuman = cluster.movedToHuman || []; if (!cluster.movedToHuman.includes(newId)) cluster.movedToHuman.push(newId);
   task.status = 'moved'; wgSaveTaskState(taskId);
   const st = wgS(); st.moved = st.moved || {}; st.moved[taskId] = newId; save();
-  wgRenderActions(wgState.currentDay); wgRenderRail();
+  wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgRenderRail();
 }
 function wgAcceptAllCluster(clusterId) {
   const c = WG_CLUSTERS.find(x => x.id === clusterId); if (!c) return;
@@ -4976,7 +4967,7 @@ function wgCheckTask(id, btnEl) {
   const newlyUnlocked = [];
   WG_CLUSTERS.forEach(c => c.opalTasks.forEach(t => { if (t.dependsOn === id && t.status === 'proposed') newlyUnlocked.push(t.id); }));
   if (wgState.currentDay) {
-    wgRenderActions(wgState.currentDay);
+    wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay);
     newlyUnlocked.forEach(tid => { const el = document.querySelector(`[data-otask="${tid}"]`); if (el && !REDUCED) { el.classList.add('wg-unlock-flourish'); const ring = el.querySelector('[data-ring]'); if (ring) ring.classList.add('go'); setTimeout(() => el.classList.remove('wg-unlock-flourish'), 600); } });
   }
   wgRenderRail();
@@ -4985,7 +4976,7 @@ function wgUndoCheckTask(id) {
   const todo = wgTodoById(id); if (!todo) return;
   todo.status = 'open'; delete wgS().done[id]; save();
   wgRenderRail();
-  if (wgState.currentDay) wgRenderActions(wgState.currentDay);
+  if (wgState.currentDay) { wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); }
 }
 
 /* the debrief panel: the same glass slide-in as the person panel, templated by deliverable type */
@@ -5015,29 +5006,11 @@ function wgCommitTask(taskId) {
   wgShowToast(`✓ ${task.text}`); setTimeout(wgCloseDebrief, 900);
 }
 
-/* transcription: one scroll, sized hours, dotted spans, the popover, the leader-line jump */
-function wgSpanify(text, spans) {
-  if (!spans || !spans.length) return `<p>${esc(text)}</p>`;
-  let out = '', last = 0;
-  spans.slice().sort((a, b) => a.rangeStart - b.rangeStart).forEach(sp => {
-    out += esc(text.slice(last, sp.rangeStart));
-    out += `<span class="wg-span" tabindex="0" role="button" data-span-conn="${sp.connector}" data-span-conf="${sp.confidence}" data-span-cluster="${sp.actionClusterId}">${esc(text.slice(sp.rangeStart, sp.rangeEnd))}</span>`;
-    last = sp.rangeEnd;
-  });
-  out += esc(text.slice(last));
-  return `<p>${out}</p>`;
-}
-function wgRenderTranscript(dateKey) {
-  const day = wgDayByKey(dateKey), pane = $('#wgPaneTranscript'), mode = wgState.transcriptMode;
-  const maxTalk = Math.max(1, ...day.hours.map(h => h.talkTimeSeconds), 1);
-  let html = `<div class="wg-tr-head"><span class="mono" style="color:var(--bone-35);font-size:10px;letter-spacing:.1em">${day.hours.length} ACTIVE HOUR${day.hours.length === 1 ? '' : 'S'}</span><button type="button" class="wg-hour-toggle" id="wgGlobalToggle" style="margin:0">${mode === 'summary' ? 'SUMMARIES' : 'FULL TEXT'}</button></div><div class="wg-tr-scroll" id="wgTrScroll">`;
-  for (let h = 0; h < 24; h++) {
-    const hr = day.hours.find(x => x.hour === h);
-    if (!hr) { html += `<div class="wg-hour silent"><div class="wg-hour-head"><b>${wgHourLabel(h)}</b><span>Silence is never stored.</span></div></div>`; continue; }
-    const localMode = wgState.hourOverride[hr.hour] || mode, text = localMode === 'full' ? hr.fullText : hr.summary, talkPct = clamp(hr.talkTimeSeconds / maxTalk, .1, 1);
-    html += `<div class="wg-hour" style="opacity:${(.55 + .45 * talkPct).toFixed(2)}"><div class="wg-hour-head"><b>${wgHourLabel(h)}</b><span>${Math.round(hr.talkTimeSeconds / 60)} MIN TALKED</span><button type="button" class="wg-hour-toggle" data-hourtoggle="${h}">${localMode === 'full' ? 'SUMMARY' : 'FULL TEXT'}</button></div><div class="wg-hour-body">${wgSpanify(text, localMode === 'full' ? hr.actionableSpans : null)}</div></div>`;
-  }
-  pane.innerHTML = html + '</div>';
+/* day-scoped conversations: the same cards the standalone Conversations grid uses, stacked, filtered to this day */
+function wgRenderDayConversations(dateKey) {
+  const pane = $('#wgPaneConversations');
+  const list = WG_CONVERSATIONS.filter(c => c.day === dateKey && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
+  pane.innerHTML = list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-actions-empty">No conversations this day.</p>`;
 }
 function wgSpanData(el) { return { conn: el.dataset.spanConn, conf: +el.dataset.spanConf, clusterId: el.dataset.spanCluster }; }
 function wgOpenPop(el) {
@@ -5057,21 +5030,34 @@ function wgJumpToAction(clusterId, anchorEl) {
     const path = $('#wgLeaderPath'); path.setAttribute('d', `M${x0},${y0} L${x1},${y1}`);
     const len = Math.hypot(x1 - x0, y1 - y0); path.style.strokeDasharray = String(len); path.style.strokeDashoffset = String(len);
     path.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 150, easing: 'linear', fill: 'forwards' });
-    const tp = $('#wgPaneTranscript'); if (!tp.hidden) { tp.style.transition = 'opacity .3s,filter .3s'; tp.style.filter = 'blur(6px)'; tp.style.opacity = '0'; }
+    const tp = $('#wgPaneConversations'); if (!tp.hidden) { tp.style.transition = 'opacity .3s,filter .3s'; tp.style.filter = 'blur(6px)'; tp.style.opacity = '0'; }
   }
   setTimeout(() => {
-    const tp = $('#wgPaneTranscript'); tp.style.filter = ''; tp.style.opacity = ''; $('#wgLeaderPath').removeAttribute('d');
+    const tp = $('#wgPaneConversations'); tp.style.filter = ''; tp.style.opacity = ''; $('#wgLeaderPath').removeAttribute('d');
     wgSwitchTab('actions');
     requestAnimationFrame(() => { const card = document.querySelector(`.wg-cluster-row[data-cluster="${clusterId}"]`); if (card) { card.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); card.classList.add('wg-highlight'); setTimeout(() => card.classList.remove('wg-highlight'), 1400); } });
   }, REDUCED ? 0 : 220);
 }
 
-/* people */
-function wgPersonCardHTML(p) { const label = (state.wgNames && state.wgNames[p.id]) || (p.isEstimated ? p.estimatedTitle : p.name);
-  return `<button type="button" class="wg-person" data-person="${p.id}"><span class="wg-p-av" style="${p.photo ? `background-image:url('${p.photo}')` : ''}"></span><b>${esc(label)}</b>${p.isEstimated && !(state.wgNames && state.wgNames[p.id]) ? `<small>OPAL'S GUESS · TAP TO RENAME</small>` : ''}</button>`; }
+/* people, as specimen tags: hand-lettered names, spore fill when something's outstanding */
+function wgPersonHasOpenTask(p) {
+  return (p.actionClusterIds || []).some(cid => {
+    const c = WG_CLUSTERS.find(x => x.id === cid); if (!c) return false;
+    const human = c.humanTaskId ? wgTodoById(c.humanTaskId) : null;
+    if (human && human.status === 'open') return true;
+    return c.opalTasks.some(t => t.status === 'proposed' || t.status === 'running' || t.status === 'error');
+  });
+}
+function wgPersonTagHTML(p) {
+  const label = (state.wgNames && state.wgNames[p.id]) || (p.isEstimated ? p.estimatedTitle : p.name);
+  const guess = p.isEstimated && !(state.wgNames && state.wgNames[p.id]);
+  const outstanding = wgPersonHasOpenTask(p);
+  return `<div class="wg-ptag-col"><button type="button" class="wg-ptag${outstanding ? ' spore' : ''}" data-person="${p.id}"><i class="hole"></i><b>${esc(label)}</b></button>${guess ? `<small class="wg-ptag-guess">OPAL'S GUESS · TAP TO RENAME</small>` : ''}</div>`;
+}
 function wgRenderPeople(dateKey) {
   const people = wgPeopleForDay(dateKey), pane = $('#wgPanePeople');
-  pane.innerHTML = people.length ? `<div class="wg-people-grid">${people.map(wgPersonCardHTML).join('')}</div>` : `<p style="color:var(--bone-35);font-size:13px;padding:20px 0">No one new this day.</p>`;
+  const sorted = people.slice().sort((a, b) => (wgPersonHasOpenTask(b) ? 1 : 0) - (wgPersonHasOpenTask(a) ? 1 : 0));
+  pane.innerHTML = sorted.length ? `<div class="wg-people-wrap">${sorted.map(wgPersonTagHTML).join('')}</div>` : `<p class="wg-actions-empty">No one new this day.</p>`;
 }
 function wgOpenPersonPanel(id) {
   const p = WG_PEOPLE.find(x => x.id === id); if (!p) return;
@@ -5079,7 +5065,7 @@ function wgOpenPersonPanel(id) {
   const clusters = (p.actionClusterIds || []).map(cid => WG_CLUSTERS.find(c => c.id === cid)).filter(Boolean);
   $('#wgPersonPanel').innerHTML = `<button type="button" class="wg-pp-close" id="wgPPClose" aria-label="Close">&times;</button>
     <div class="wg-pp-av" style="${p.photo ? `background-image:url('${p.photo}')` : ''}"></div><div class="wg-pp-name">${esc(label)}</div>
-    ${p.isEstimated && !(state.wgNames && state.wgNames[id]) ? `<div class="wg-pp-title">OPAL'S GUESS</div><input type="text" id="wgPPRename" placeholder="Give them a name" style="margin-top:8px;width:100%;background:rgba(236,235,228,.06);border:1px solid var(--bone-10);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--bone)">` : ''}
+    ${p.isEstimated && !(state.wgNames && state.wgNames[id]) ? `<div class="wg-pp-title">OPAL'S GUESS</div><input type="text" id="wgPPRename" placeholder="Give them a name" style="margin-top:8px;width:100%;background:var(--wg-surface-2);border:1px solid var(--wg-border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--wg-ink)">` : ''}
     <p class="wg-pp-sum">${esc(p.summary)}</p>
     ${clusters.length ? `<div class="wg-pp-sec">From this</div>${clusters.map(c => `<button type="button" class="wg-pp-cluster" data-wgjump="${c.id}">${esc(c.title)}</button>`).join('')}` : ''}`;
   $('#wgPersonPanel').classList.add('show'); $('#wgScrim').classList.add('show');
@@ -5104,7 +5090,6 @@ function wgSearchResults(qRaw) {
   WG_PEOPLE.forEach(p => { const label = (p.isEstimated ? p.estimatedTitle : p.name) || ''; if (label.toLowerCase().includes(q)) out.push({ type: 'PERSON', label, sub: p.summary, go: () => { wgOpenDay(p.day); wgSwitchTab('people'); setTimeout(() => { const el = document.querySelector(`[data-person="${p.id}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 90); } }); });
   WG_CLUSTERS.forEach(c => { if (c.title.toLowerCase().includes(q) || c.quote.toLowerCase().includes(q)) out.push({ type: 'ACTION', label: c.title, sub: c.quote, go: () => { wgOpenDay(c.day); wgSwitchTab('actions'); setTimeout(() => { const el = document.querySelector(`.wg-cluster-row[data-cluster="${c.id}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('wg-highlight'); setTimeout(() => el.classList.remove('wg-highlight'), 1400); } }, 90); } }); });
   WG_DAYS.forEach(d => { const label = wgDayLabel(d.date); if (label.toLowerCase().includes(q)) out.push({ type: 'DATE', label, sub: `${d.actionCount} actions`, go: () => wgOpenDay(d.date) }); });
-  WG_DAYS.forEach(d => d.hours.forEach(h => { if (h.fullText.toLowerCase().includes(q)) out.push({ type: 'TRANSCRIPT', label: `${wgDayLabel(d.date)} · ${wgHourLabel(h.hour)}`, sub: h.fullText, go: () => { wgOpenDay(d.date); wgSwitchTab('transcript'); } }); }));
   WG_CONVERSATIONS.forEach(c => { if (c.isArchived) return; if (c.title.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)) out.push({ type: 'CONVERSATION', label: c.title, sub: c.summary, go: () => { wgSwitchViewMode('conversations'); wgConvOpen(c.id, null); } }); });
   return out.slice(0, 24);
 }
@@ -5137,11 +5122,18 @@ function wgInit() {
     const debrief = e.target.closest('[data-debrief]'); if (debrief) return wgOpenDebrief(debrief.dataset.debrief);
     const jump = e.target.closest('[data-wgjump]'); if (jump) return wgJumpToAction(jump.dataset.wgjump, jump);
     const person = e.target.closest('[data-person]'); if (person) return wgOpenPersonPanel(person.dataset.person);
-    const g = e.target.closest('#wgGlobalToggle'); if (g) { wgState.transcriptMode = wgState.transcriptMode === 'full' ? 'summary' : 'full'; return wgRenderTranscript(wgState.currentDay); }
-    const h = e.target.closest('[data-hourtoggle]'); if (h) { const hh = +h.dataset.hourtoggle, cur = wgState.hourOverride[hh] || wgState.transcriptMode; wgState.hourOverride[hh] = cur === 'full' ? 'summary' : 'full'; return wgRenderTranscript(wgState.currentDay); }
+    if (e.target.closest('[data-convtitle]')) return;
+    const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
+    const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
+    const cconv = e.target.closest('[data-conv]'); if (cconv) return wgConvOpen(cconv.dataset.conv, cconv);
     const span = e.target.closest('.wg-span'); if (span) return wgOpenPop(span);
   });
   $('#wgFilm').addEventListener('keydown', e => { if (e.key !== 'Enter') return; const span = e.target.closest('.wg-span'); if (span) wgOpenPop(span); });
+  $('#wgFilm').addEventListener('blur', e => {
+    const el = e.target.closest && e.target.closest('[data-convtitle]'); if (!el) return;
+    const c = wgConvById(el.dataset.convtitle); if (!c) return;
+    c.title = el.textContent.trim() || c.title; c.isEstimatedTitle = false; el.textContent = c.title;
+  }, true);
   let wgDwellT = 0;
   document.addEventListener('pointerover', e => { const span = e.target.closest('.wg-span'); if (!span || e.pointerType !== 'mouse') return; clearTimeout(wgDwellT); wgDwellT = setTimeout(() => wgOpenPop(span), 200); });
   document.addEventListener('pointerout', e => { if (e.target.closest('.wg-span')) clearTimeout(wgDwellT); });
