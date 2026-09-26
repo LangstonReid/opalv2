@@ -1571,7 +1571,7 @@ body.sheet-open.mode-chat #chatRoot{filter:blur(14px) brightness(.94) saturate(.
 /* chrome recolors for the light chat canvas: same elements, reread on a putty ground */
 body.mode-chat .hdr .cap{color:rgba(31,36,29,.5)}
 body.mode-chat #chrome::before,body.mode-chat #chrome::after{opacity:0}
-body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode-widgets .ruler,body.mode-notes .legend,body.mode-notes .ruler{opacity:0;pointer-events:none}
+body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode-widgets .ruler,body.mode-notes .legend,body.mode-notes .ruler,body.mode-live .legend,body.mode-live .ruler{opacity:0;pointer-events:none}
 body.mode-chat .chip{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-chat .chip .track{border-color:rgba(31,36,29,.28)}
 body.mode-chat .batt-dial{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10)}
@@ -2119,6 +2119,7 @@ body.mode-notes .nt-rail{display:block}
   --wg-shadow-sm:0 1px 2px rgba(31,36,29,.05),0 1px 1px rgba(31,36,29,.03);
   --wg-shadow-md:0 4px 10px rgba(31,36,29,.05),0 14px 32px rgba(31,36,29,.07);
   --wg-shadow-lg:0 20px 44px rgba(31,36,29,.14),0 4px 14px rgba(31,36,29,.08);
+  --wg-fill:var(--wg-ink); --wg-fill-ink:#fff;
   color:var(--wg-ink);
   background:
     linear-gradient(rgba(31,36,29,.035) 1px,transparent 1px) 0 0/44px 44px,
@@ -2139,21 +2140,22 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-mobiletabs button{font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:9px 20px;border-radius:999px;transition:color .3s,background .3s}
 .live-mobiletabs button.on{color:#fff;background:var(--wg-ink)}
 
-.live-panes{flex:1;min-height:0;display:grid;grid-template-columns:50fr 76px 50fr;background:var(--wg-surface);border-radius:22px;box-shadow:var(--wg-shadow-md);border:1px solid var(--wg-border);overflow:hidden;transition:none}
+.live-panes{flex:1;min-height:0;display:grid;grid-template-columns:50fr 120px 50fr;background:var(--wg-surface);border-radius:22px;box-shadow:var(--wg-shadow-md);border:1px solid var(--wg-border);overflow:hidden;transition:none}
 .live-panes.snapping{transition:grid-template-columns .34s var(--ease)}
 .live-panes.dragging{cursor:ew-resize;user-select:none}
 
-.live-pane{display:flex;flex-direction:column;min-width:0;position:relative;overflow:hidden;opacity:1;transition:opacity .2s var(--ease)}
+.live-pane{display:flex;flex-direction:column;min-width:0;position:relative;overflow:hidden;opacity:1;background:var(--wg-surface);color:var(--wg-ink);transition:opacity .2s var(--ease),background .25s var(--ease)}
 .live-pane.collapsed{opacity:0;pointer-events:none}
 .live-pane-top{flex:none;padding:16px 18px 12px;border-bottom:1px solid var(--wg-border)}
 .live-pane-label{display:flex;align-items:baseline;gap:8px;margin-bottom:11px}
 .live-pane-label span{font:400 15px/1.2 var(--sans);color:var(--wg-ink)}
 .live-pane-label small{font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+.live-today-tag{color:#66a458;font-weight:600}
 .live-hourbar{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
-.live-hb{font:400 8.5px/1 var(--mono);letter-spacing:.01em;padding:6px 0;border-radius:7px;background:var(--wg-surface-3);color:var(--wg-ink-28);text-align:center;transition:background .15s,color .15s}
+.live-hb{font:400 8px/1 var(--mono);letter-spacing:.01em;padding:6px 0;border-radius:7px;background:var(--wg-surface-3);color:var(--wg-ink-28);text-align:center;transition:background .15s,color .15s}
 .live-hb.has{background:var(--wg-surface);color:var(--wg-ink-60);box-shadow:0 0 0 1px var(--wg-border-2) inset}
 .live-hb:hover{background:var(--wg-border-2);color:var(--wg-ink)}
-.live-hb.current{background:var(--wg-ink);color:#fff;box-shadow:none}
+.live-hb.current{background:var(--wg-fill);color:var(--wg-fill-ink);box-shadow:none}
 
 .live-pane-scroll{flex:1;min-height:0;overflow-y:auto;position:relative;padding:14px 18px 44px;scrollbar-width:thin}
 .live-transcript{--live-fs:13.5px;display:flex;flex-direction:column}
@@ -2166,8 +2168,12 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-hour-divider::after{content:'';flex:1;height:1px;background:var(--wg-border-2)}
 .live-hour-divider span{font:400 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42)}
 
-.live-sent-row{display:flex;align-items:baseline;gap:10px;padding:5px 8px;margin:0 -8px;border-radius:8px;color:var(--wg-ink-28);transition:color .15s var(--ease),background .15s var(--ease)}
+.live-sent-row{position:relative;display:flex;align-items:baseline;gap:10px;padding:5px 8px 5px 26px;margin:0 -8px;border-radius:8px;color:var(--wg-ink-28);transition:color .15s var(--ease),background .15s var(--ease)}
 .live-sent-row:hover,.live-sent-row.newest{color:var(--wg-ink);background:rgba(111,143,78,.06)}
+.live-sent-copy{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:18px;height:18px;display:grid;place-items:center;border-radius:5px;color:var(--wg-ink-42);opacity:0;pointer-events:none;transition:opacity .15s var(--ease),background .15s,color .15s}
+.live-sent-copy svg{width:12px;height:12px}
+.live-sent-row:hover .live-sent-copy{opacity:1;pointer-events:auto}
+.live-sent-copy:hover{background:var(--wg-border-2);color:var(--wg-ink)}
 .live-sent-speaker{flex:none;width:54px;font:600 9.5px/1.5 var(--mono);letter-spacing:.02em;color:var(--wg-ink-60);text-transform:uppercase}
 .live-sent-speaker.you{color:var(--wg-accent-ink)}
 .live-sent-time{flex:none;width:58px;font:400 9.5px/1.6 var(--mono);color:var(--wg-ink-28)}
@@ -2176,28 +2182,42 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-sent-new.settled{opacity:1;transform:none;transition:opacity .4s var(--ease),transform .4s var(--ease)}
 .live-empty{padding:40px 8px;font:400 12.5px/1.6 var(--sans);color:var(--wg-ink-42);text-align:center}
 
-.live-scrolltop{position:absolute;top:10px;right:10px;z-index:5;width:34px;height:34px;border-radius:50%;background:var(--wg-ink);color:#fff;display:grid;place-items:center;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease);box-shadow:var(--wg-shadow-md)}
+.live-scrolltop{position:absolute;top:10px;right:10px;z-index:5;width:34px;height:34px;border-radius:50%;background:var(--wg-fill);color:var(--wg-fill-ink);display:grid;place-items:center;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease);box-shadow:var(--wg-shadow-md)}
 .live-scrolltop.show{opacity:1;transform:none;pointer-events:auto}
 .live-scrolltop svg{width:16px;height:16px}
-.live-scrolltop:hover{background:#000}
+.live-scrolltop:hover{filter:brightness(.85)}
 
-.live-divider{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-left:1px solid var(--wg-border);border-right:1px solid var(--wg-border);background:var(--wg-surface-2);cursor:ew-resize;touch-action:none}
-.live-divider::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:3px;height:34px;border-radius:999px;background:var(--wg-border-2);pointer-events:none}
-.live-divider-nav{display:flex;flex-direction:column;gap:6px;opacity:0;pointer-events:none;transition:opacity .2s var(--ease);z-index:2}
-.live-panes.edge-l .live-divider-nav,.live-panes.edge-r .live-divider-nav{opacity:1;pointer-events:auto}
-.live-divider-nav button{width:30px;height:30px;border-radius:50%;background:var(--wg-surface);box-shadow:var(--wg-shadow-sm);display:grid;place-items:center;color:var(--wg-ink-60);transition:background .15s,color .15s}
-.live-divider-nav button svg{width:14px;height:14px}
+/* today's pane: a distinct light-green identity, wins over the default positional theme */
+.pane-today,.console-today{
+  --wg-surface:#dce1cf; --wg-surface-2:#d3d9c4; --wg-surface-3:#c8cfb7;
+  --wg-border:rgba(31,36,29,.12); --wg-border-2:rgba(31,36,29,.2);
+  --wg-ink:#232a1e; --wg-ink-60:rgba(35,42,30,.64); --wg-ink-42:rgba(35,42,30,.46); --wg-ink-28:rgba(35,42,30,.3);
+  --wg-fill:#232a1e; --wg-fill-ink:#dce1cf;
+  background:#dce1cf}
+/* the right-hand slot: dark mode by default, unless it's showing today (pane-today wins) */
+.pane-dark,.console-dark{
+  --wg-surface:var(--ground-800); --wg-surface-2:var(--ground-700); --wg-surface-3:#26331f;
+  --wg-border:var(--bone-10); --wg-border-2:var(--bone-25);
+  --wg-ink:var(--bone); --wg-ink-60:var(--bone-60); --wg-ink-42:var(--bone-35); --wg-ink-28:var(--bone-25);
+  --wg-accent-ink:var(--moss-300);
+  --wg-fill:var(--bone); --wg-fill-ink:var(--ground-900);
+  background:var(--ground-900)}
+.pane-dark .live-sent-row:hover,.pane-dark .live-sent-row.newest{background:var(--bone-08)}
+
+.live-divider{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:10px;padding:14px 10px;border-left:1px solid var(--wg-border);border-right:1px solid var(--wg-border);background:var(--wg-surface-2);cursor:ew-resize;touch-action:none}
+.live-console{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:16px;background:var(--wg-surface);box-shadow:var(--wg-shadow-sm);transition:background .25s var(--ease);z-index:2}
+.live-console>button{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-60);transition:background .15s,color .15s}
+.live-console>button:hover{background:var(--wg-border-2);color:var(--wg-ink)}
+.live-console>button svg{width:14px;height:14px}
+.live-divider-nav{flex:none;display:flex;flex-direction:row;justify-content:center;gap:8px;z-index:2}
+.live-divider-nav button{width:28px;height:28px;border-radius:50%;background:var(--wg-surface);box-shadow:var(--wg-shadow-sm);display:grid;place-items:center;color:var(--wg-ink-60);transition:background .15s,color .15s}
+.live-divider-nav button svg{width:13px;height:13px}
 .live-divider-nav button:hover:not(:disabled){background:var(--wg-ink);color:#fff}
 .live-divider-nav button:disabled{opacity:.28;cursor:default}
-.live-divider-actions{display:flex;flex-direction:column;gap:8px;padding:10px 8px;border-radius:16px;background:var(--wg-surface);box-shadow:var(--wg-shadow-sm);transition:background .25s var(--ease);z-index:2}
-.live-divider-actions.sel-r{background:rgba(111,143,78,.12)}
-.live-divider-actions>button{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-60);transition:background .15s,color .15s}
-.live-divider-actions>button:hover{background:var(--wg-border-2);color:var(--wg-ink)}
-.live-divider-actions>button svg{width:15px;height:15px}
 .live-aa{display:flex;flex-direction:column;gap:2px;padding:2px;border-radius:12px;background:var(--wg-surface-3)}
 .live-aa button{font:400 8px/1 var(--sans);color:var(--wg-ink-42);padding:5px 6px;border-radius:9px}
 .live-aa button[data-aa="l"]{font-size:10px}
-.live-aa button.on{background:var(--wg-ink);color:#fff}
+.live-aa button.on{background:var(--wg-fill);color:var(--wg-fill-ink)}
 
 .live-share{position:fixed;inset:0;z-index:var(--z-confirm);background:rgba(31,36,29,.4);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
 .live-share.show{opacity:1;pointer-events:auto}
@@ -2221,9 +2241,9 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
   .live-panes.mobile-show-l .live-pane[data-side="l"]{display:flex}
   .live-panes.mobile-show-r .live-pane[data-side="r"]{display:flex}
   .live-divider{flex-direction:row;border-left:0;border-right:0;border-bottom:1px solid var(--wg-border);padding:9px 12px;justify-content:space-between;cursor:default}
-  .live-divider::before{display:none}
-  .live-divider-nav{flex-direction:row;opacity:1;pointer-events:auto}
-  .live-divider-actions{flex-direction:row}
+  .live-console{flex:1}
+  .live-panes.mobile-show-l #liveConsoleBottom{display:none}
+  .live-panes.mobile-show-r #liveConsoleTop{display:none}
   .live-aa{flex-direction:row}
 }
 @media (prefers-reduced-motion:reduce){
@@ -2884,14 +2904,19 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </section>
 
       <div class="live-divider" id="liveDivider">
+        <div class="live-console" id="liveConsoleTop" data-consoleside="l">
+          <button type="button" data-liveact="copy" data-consoleside="l" aria-label="Copy left transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+          <div class="live-aa" id="liveAaSizeTop"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
+          <button type="button" data-liveact="share" data-consoleside="l" aria-label="Share left transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
+        </div>
         <div class="live-divider-nav" id="liveDividerNav">
           <button type="button" data-livenav="prev" aria-label="Previous day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
           <button type="button" data-livenav="next" aria-label="Next day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
         </div>
-        <div class="live-divider-actions" id="liveDividerActions">
-          <button type="button" data-liveact="copy" aria-label="Copy transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
-          <div class="live-aa" id="liveAaSize"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
-          <button type="button" data-liveact="share" aria-label="Share transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
+        <div class="live-console" id="liveConsoleBottom" data-consoleside="r">
+          <button type="button" data-liveact="copy" data-consoleside="r" aria-label="Copy right transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+          <div class="live-aa" id="liveAaSizeBottom"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
+          <button type="button" data-liveact="share" data-consoleside="r" aria-label="Share right transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
         </div>
       </div>
 
@@ -6559,7 +6584,10 @@ function wgSetAaSize(size) {
   const daytx = $('.wg-daytx');
   if (daytx) { daytx.classList.remove('size-s', 'size-m', 'size-l'); daytx.classList.add('size-' + size); $('#wgDayTxAaSize').querySelectorAll('[data-aa]').forEach(b => b.classList.toggle('on', b.dataset.aa === size)); }
   const liveRoot = $('#liveRoot');
-  if (liveRoot) { liveRoot.classList.remove('size-s', 'size-m', 'size-l'); liveRoot.classList.add('size-' + size); $('#liveAaSize').querySelectorAll('[data-aa]').forEach(b => b.classList.toggle('on', b.dataset.aa === size)); }
+  if (liveRoot) {
+    liveRoot.classList.remove('size-s', 'size-m', 'size-l'); liveRoot.classList.add('size-' + size);
+    liveRoot.querySelectorAll('.live-aa').forEach(group => group.querySelectorAll('[data-aa]').forEach(b => b.classList.toggle('on', b.dataset.aa === size)));
+  }
 }
 
 /* star, title, menu, copy/export/archive/delete */
@@ -7384,15 +7412,16 @@ function liveHourGroups(key) {
   return groups;
 }
 function liveHourLabel(h) { return h === 0 ? '12 AM' : h < 12 ? h + ' AM' : h === 12 ? '12 PM' : (h - 12) + ' PM'; }
-function liveHourBubbleLabel(h) { return h === 0 ? '12a' : h < 12 ? h + 'a' : h === 12 ? '12p' : (h - 12) + 'p'; }
+function liveHourBubbleLabel(h) { return h === 0 ? '12am' : h < 12 ? h + 'am' : h === 12 ? '12pm' : (h - 12) + 'pm'; }
 function liveHourBarHTML(hoursWithData) {
   let html = '';
-  for (let h = 0; h < 24; h++) html += `<button type="button" class="live-hb${hoursWithData.has(h) ? ' has' : ''}" data-livehour="${h}" aria-label="${liveHourBubbleLabel(h).toUpperCase()}">${liveHourBubbleLabel(h)}</button>`;
+  for (let h = 23; h >= 0; h--) html += `<button type="button" class="live-hb${hoursWithData.has(h) ? ' has' : ''}" data-livehour="${h}" aria-label="${liveHourBubbleLabel(h).toUpperCase()}">${liveHourBubbleLabel(h)}</button>`;
   return html;
 }
+const LIVE_COPY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>';
 function liveSentRowHTML(r) {
   const timeStr = r.time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  return `<div class="live-sent-row" data-liveconv="${r.convId}" data-livesent="${r.sentId}"><span class="live-sent-speaker${r.speaker === 'You' ? ' you' : ''}">${esc(r.speaker)}</span><span class="live-sent-time">${esc(timeStr)}</span><p class="live-sent-text">${esc(r.text)}</p></div>`;
+  return `<div class="live-sent-row" data-liveconv="${r.convId}" data-livesent="${r.sentId}"><button type="button" class="live-sent-copy" data-linecopy aria-label="Copy this line">${LIVE_COPY_SVG}</button><span class="live-sent-speaker${r.speaker === 'You' ? ' you' : ''}">${esc(r.speaker)}</span><span class="live-sent-time">${esc(timeStr)}</span><p class="live-sent-text">${esc(r.text)}</p></div>`;
 }
 function liveGroupHTML(g) { return `<div class="live-hourgroup" data-hourgroup="${g.hour}"><div class="live-hour-divider"><span>${liveHourLabel(g.hour)}</span></div>${g.rows.map(liveSentRowHTML).join('')}</div>`; }
 function liveTranscriptPlainText(key) {
@@ -7408,7 +7437,7 @@ function liveShowToast(text) {
 
 function liveApplySplitVars(pctLeft) {
   const el = $('#livePanes'); if (!el) return;
-  el.style.gridTemplateColumns = `${pctLeft}fr 76px ${100 - pctLeft}fr`;
+  el.style.gridTemplateColumns = `${pctLeft}fr 120px ${100 - pctLeft}fr`;
   el.classList.toggle('edge-l', pctLeft <= 0); el.classList.toggle('edge-r', pctLeft >= 100);
   const l = $('#livePaneL'), r = $('#livePaneR');
   if (l) l.classList.toggle('collapsed', pctLeft <= 0);
@@ -7422,7 +7451,7 @@ function liveSetSplit(pct, animate) {
   liveApplySplitVars(pct);
 }
 function liveDividerPointerDown(e) {
-  if (e.target.closest('.live-divider-actions') || e.target.closest('.live-divider-nav')) return;
+  if (e.target.closest('.live-console') || e.target.closest('.live-divider-nav')) return;
   const wrap = $('#livePanes'); if (!wrap) return;
   e.preventDefault();
   const rect = wrap.getBoundingClientRect();
@@ -7444,8 +7473,6 @@ function liveGoDay(dir) {
 }
 function liveSetSelectedSide(side) {
   liveState.selectedSide = side; state.live = state.live || {}; state.live.selectedSide = side; save();
-  const actions = $('#liveDividerActions');
-  if (actions) actions.classList.toggle('sel-r', side === 'r');
   $('#livePanes').classList.toggle('mobile-show-l', side === 'l');
   $('#livePanes').classList.toggle('mobile-show-r', side === 'r');
   $('#liveMobileTabs').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.livemobile === side));
@@ -7472,18 +7499,21 @@ function liveOnScroll(side) {
   if (btn) { if (st < prev - 2 && st > 80) btn.classList.add('show'); else if (st >= prev || st <= 20) btn.classList.remove('show'); }
   liveState.lastScroll[side] = st;
 }
-function liveCopySelected() {
-  const key = liveState.selectedSide === 'l' ? liveDayKey(liveState.anchorOffset - 1) : liveDayKey(liveState.anchorOffset);
-  const text = liveTranscriptPlainText(key);
+function liveCopyText(text, msg) {
   try { navigator.clipboard && navigator.clipboard.writeText(text).catch(() => {}); } catch (e) {}
-  liveShowToast('Copied');
+  liveShowToast(msg || 'Copied');
+}
+function liveCopySide(side) {
+  const key = side === 'l' ? liveDayKey(liveState.anchorOffset - 1) : liveDayKey(liveState.anchorOffset);
+  liveCopyText(liveTranscriptPlainText(key), 'Copied');
+}
+function liveCopyLine(row) {
+  const text = row.querySelector('.live-sent-text'); if (!text) return;
+  liveCopyText(text.textContent, 'Line copied');
 }
 function liveOpenShare() { $('#liveShareLink').value = 'https://www.opal.fashion'; $('#liveShare').classList.add('show'); }
 function liveCloseShare() { const el = $('#liveShare'); if (el) el.classList.remove('show'); }
-function liveCopyShareLink() {
-  try { navigator.clipboard && navigator.clipboard.writeText($('#liveShareLink').value).catch(() => {}); } catch (e) {}
-  liveShowToast('Link copied');
-}
+function liveCopyShareLink() { liveCopyText($('#liveShareLink').value, 'Link copied'); }
 function liveStopInsertTimer() { if (liveState.insertTimer) clearInterval(liveState.insertTimer); liveState.insertTimer = null; }
 function liveStartInsertTimer() {
   liveStopInsertTimer();
@@ -7521,12 +7551,26 @@ function liveStartInsertTimer() {
     const bar = $('#liveHourBarR'), b = bar && bar.querySelector(`[data-livehour="${curHour}"]`); if (b) b.classList.add('has');
   }, 32000 + Math.random() * 10000);
 }
+function livePaneVariant(key, side) {
+  if (key === WG_TODAY_KEY) return 'today';
+  if (side === 'r') return 'dark';
+  return null;
+}
+function liveApplyVariant(el, variant) {
+  if (!el) return;
+  el.classList.remove('pane-today', 'pane-dark', 'console-today', 'console-dark');
+  if (!variant) return;
+  el.classList.add(el.classList.contains('live-console') ? 'console-' + variant : 'pane-' + variant);
+}
 function liveRenderPane(side) {
   const offset = side === 'l' ? liveState.anchorOffset - 1 : liveState.anchorOffset;
   const key = liveDayKey(offset);
+  const d = wgDateAt(offset);
   const titleEl = $(side === 'l' ? '#livePaneLTitle' : '#livePaneRTitle'), dateEl = $(side === 'l' ? '#livePaneLDate' : '#livePaneRDate');
-  titleEl.textContent = key === WG_TODAY_KEY ? 'Today' : key === WG_YDAY_KEY ? 'Yesterday' : fmtDate(wgDateAt(offset));
-  dateEl.textContent = fmtDate(wgDateAt(offset));
+  titleEl.innerHTML = key === WG_TODAY_KEY ? `<b class="live-today-tag">TODAY</b>, ${esc(fmtDate(d))}` : esc(fmtDate(d));
+  dateEl.textContent = d.toLocaleDateString(undefined, { weekday: 'long' });
+  const variant = livePaneVariant(key, side);
+  liveApplyVariant($(side === 'l' ? '#livePaneL' : '#livePaneR'), variant);
   const groups = liveHourGroups(key);
   const hoursWithData = new Set(groups.map(g => g.hour));
   $(side === 'l' ? '#liveHourBarL' : '#liveHourBarR').innerHTML = liveHourBarHTML(hoursWithData);
@@ -7535,6 +7579,7 @@ function liveRenderPane(side) {
   const firstRow = txEl.querySelector('.live-sent-row'); if (firstRow) firstRow.classList.add('newest');
   const scrollEl = $(side === 'l' ? '#livePaneLScroll' : '#livePaneRScroll'); if (scrollEl) scrollEl.scrollTop = 0;
   const topBtn = $(side === 'l' ? '#liveScrollTopL' : '#liveScrollTopR'); if (topBtn) topBtn.classList.remove('show');
+  liveApplyVariant($(side === 'l' ? '#liveConsoleTop' : '#liveConsoleBottom'), variant);
   liveOnScroll(side);
 }
 function liveRender() {
@@ -7553,18 +7598,18 @@ function liveInit() {
   $('#liveRoot').classList.add('size-' + (wgState.aaSize || 'm'));
   liveRender();
 
-  $('#livePanes').addEventListener('pointerdown', e => { if (e.target.closest('.live-divider')) liveDividerPointerDown(e); });
+  $('#livePanes').addEventListener('pointerdown', e => { if (e.target.closest('.live-divider') && !e.target.closest('.live-console')) liveDividerPointerDown(e); });
   $('#livePanes').addEventListener('click', e => {
+    const copyLine = e.target.closest('[data-linecopy]');
+    if (copyLine) return liveCopyLine(copyLine.closest('.live-sent-row'));
     const hb = e.target.closest('[data-livehour]');
     if (hb) { const pane = hb.closest('.live-pane'); return liveJumpToHour(pane === $('#livePaneL') ? 'l' : 'r', +hb.dataset.livehour); }
     const navBtn = e.target.closest('[data-livenav]');
     if (navBtn) { if (!navBtn.disabled) liveGoDay(navBtn.dataset.livenav === 'next' ? 1 : -1); return; }
     const act = e.target.closest('[data-liveact]');
-    if (act) { if (act.dataset.liveact === 'copy') liveCopySelected(); if (act.dataset.liveact === 'share') liveOpenShare(); return; }
-    const aa = e.target.closest('#liveAaSize [data-aa]');
+    if (act) { if (act.dataset.liveact === 'copy') liveCopySide(act.dataset.consoleside); if (act.dataset.liveact === 'share') liveOpenShare(); return; }
+    const aa = e.target.closest('.live-aa [data-aa]');
     if (aa) return wgSetAaSize(aa.dataset.aa);
-    const pane = e.target.closest('.live-pane');
-    if (pane) liveSetSelectedSide(pane.dataset.side);
   });
   $('#liveMobileTabs').addEventListener('click', e => { const b = e.target.closest('[data-livemobile]'); if (b) liveSetSelectedSide(b.dataset.livemobile); });
   $('#livePaneLScroll').addEventListener('scroll', () => liveOnScroll('l'), { passive: true });
