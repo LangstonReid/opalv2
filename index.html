@@ -2248,12 +2248,81 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
   .live-console{flex:1}
   .live-panes.mobile-show-l #liveConsoleBottom{display:none}
   .live-panes.mobile-show-r #liveConsoleTop{display:none}
+  .live-fab{right:8px;width:40px;height:40px}
+  .live-sidebar{border-radius:20px 0 0 20px}
 }
+
+/* the tasks/to-do/activity companion — a floating launcher + a right-edge drawer,
+   reusing the .wg-rail's own slide-in idiom (translateX reveal, 24px radius on the
+   screen-edge side, --wg-shadow-lg) and the transcript pane's white/gray surfaces.
+   Both are siblings of #liveRoot (see the HTML comment there for why), so they
+   redeclare the same --wg-* tokens locally and gate their own visibility on
+   body.mode-live instead of inheriting #liveRoot's opacity/pointer-events. */
+.live-fab,.live-sidebar{
+  --wg-surface:#ffffff; --wg-surface-2:#f7f7f2; --wg-surface-3:#eeeee6;
+  --wg-border:rgba(31,36,29,.09); --wg-border-2:rgba(31,36,29,.16);
+  --wg-ink:#1f241d; --wg-ink-60:rgba(31,36,29,.62); --wg-ink-42:rgba(31,36,29,.44); --wg-ink-28:rgba(31,36,29,.26);
+  --wg-accent-ink:#3c4c2a; --wg-fill:var(--wg-ink); --wg-fill-ink:#fff;
+  --wg-shadow-lg:0 20px 44px rgba(31,36,29,.14),0 4px 14px rgba(31,36,29,.08);
+  opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+body.mode-live .live-fab,body.mode-live .live-sidebar{opacity:1;pointer-events:auto}
+body.mode-live .live-sidebar{pointer-events:none}
+body.mode-live .live-sidebar.show{pointer-events:auto}
+.live-fab{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:var(--z-modal);width:46px;height:46px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);display:grid;place-items:center;color:var(--wg-ink-60);transition:opacity .2s var(--ease),transform .2s var(--ease),background .15s,color .15s}
+.live-fab:hover{color:var(--wg-ink);transform:translateY(-50%) scale(1.07)}
+.live-fab svg{width:19px;height:19px}
+.live-sidebar-scrim{position:fixed;inset:0;z-index:var(--z-modal);background:rgba(31,36,29,.3);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+body.mode-live .live-sidebar-scrim.show{opacity:1;pointer-events:auto}
+.live-sidebar{position:fixed;right:0;top:0;bottom:0;z-index:var(--z-modal);width:min(400px,88vw);background:var(--wg-surface);border-left:1px solid var(--wg-border);border-radius:24px 0 0 24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;padding:20px 0 0;transform:translateX(104%);transition:opacity .2s var(--ease),transform .38s var(--ease);color:var(--wg-ink)}
+body.mode-live .live-sidebar.show{transform:none}
+.live-sidebar-close{position:absolute;top:16px;right:18px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);font-size:19px;line-height:1;transition:background .15s,color .15s}
+.live-sidebar-close:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-sidebar-menu{flex:none;display:flex;justify-content:center;gap:6px;padding:4px;width:fit-content;margin:0 auto 16px;border-radius:999px;background:var(--wg-surface-3)}
+.live-sidebar-menu button{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);transition:background .2s,color .2s}
+.live-sidebar-menu button svg{width:17px;height:17px}
+.live-sidebar-menu button.on{background:var(--wg-ink);color:#fff}
+.live-sidebar-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 20px 20px}
+.live-sideview{display:none;flex:1;min-height:0;flex-direction:column}
+.live-sideview.on{display:flex}
+.live-sidefilter{flex:none;display:flex;gap:4px;padding:3px;width:fit-content;border-radius:999px;background:var(--wg-surface-3);margin-bottom:14px}
+.live-sidefilter button{font:400 9.5px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--wg-ink-42);padding:8px 12px;border-radius:999px;transition:background .2s,color .2s}
+.live-sidefilter button.on{background:var(--wg-ink);color:#fff}
+.live-sidelist{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
+
+.live-task-row{padding:12px 13px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border)}
+.live-task-row.stuck{border-color:rgba(221,143,69,.4)}
+.live-task-meta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap}
+.live-task-connector{font:600 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-42)}
+.live-task-day{font:400 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-28)}
+.live-task-status{font:600 8px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:999px;margin-left:auto}
+.live-task-status.blocked,.live-task-status.error{background:rgba(221,143,69,.16);color:#a5661f}
+.live-task-status.running{background:rgba(111,143,78,.16);color:var(--wg-accent-ink)}
+.live-task-status.proposed{background:var(--wg-surface-3);color:var(--wg-ink-60)}
+.live-task-text{font:400 13px/1.45 var(--sans);color:var(--wg-ink)}
+
+.live-todo-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);text-align:left;transition:opacity .2s var(--ease)}
+.live-todo-row.done{opacity:.52}
+.live-todo-check{flex:none;width:21px;height:21px;border-radius:7px;border:1.5px solid var(--wg-border-2);display:grid;place-items:center;color:transparent;transition:background .15s,border-color .15s,color .15s}
+.live-todo-row.done .live-todo-check{background:var(--wg-fill);border-color:var(--wg-fill);color:var(--wg-fill-ink)}
+.live-todo-check svg{width:12px;height:12px}
+.live-todo-text{flex:1;font:400 13px/1.42 var(--sans);color:var(--wg-ink)}
+.live-todo-row.done .live-todo-text{text-decoration:line-through;color:var(--wg-ink-42)}
+
+.live-activity-row{display:flex;align-items:flex-start;gap:12px;padding:10px 4px;border-bottom:1px solid var(--wg-border)}
+.live-activity-row:last-child{border-bottom:0}
+.live-activity-time{flex:none;width:58px;font:400 9.5px/1.6 var(--mono);color:var(--wg-ink-28);padding-top:1px}
+.live-activity-text{flex:1;font:400 12.5px/1.5 var(--sans);color:var(--wg-ink)}
+.live-activity-eye{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);transition:background .15s,color .15s}
+.live-activity-eye:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-activity-eye svg{width:14px;height:14px}
+
 @media (prefers-reduced-motion:reduce){
   .live-panes{transition:none!important}
   .live-pane{transition:none}
   .live-sent-new{opacity:1;transform:none;transition:none}
   .live-scrolltop{transition:none}
+  .live-sidebar{transition:none}
+  .live-fab{transition:none}
 }
 
 /* ---------- welcome widget ---------- */
@@ -2943,6 +3012,42 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     </div>
   </div>
 </div>
+
+<!-- Live's launcher + sidebar are deliberately siblings of #liveRoot, not nested inside it:
+     #liveRoot is position:fixed with its own z-index, which establishes a stacking context —
+     any descendant's z-index only ranks against other #liveRoot descendants, never against
+     the global #chrome header (z-index:var(--z-nav)) sitting outside it. Visibility is gated
+     by body.mode-live instead (see CSS). -->
+<button type="button" class="live-fab" id="liveFab" aria-label="Open tasks and activity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="5" rx="1"/><path d="M4.5 6.5l1 1 2-2"/><path d="M11 6h9"/><rect x="3" y="14" width="5" height="5" rx="1"/><path d="M11 16h6"/><path d="M19.5 13.5l2 2L15 22l-2.3.3.3-2.3z"/></svg></button>
+<div class="live-sidebar-scrim" id="liveSidebarScrim"></div>
+<aside class="live-sidebar" id="liveSidebar" role="dialog" aria-modal="true" aria-label="Tasks and activity">
+  <button type="button" class="live-sidebar-close" id="liveSidebarClose" aria-label="Close">&times;</button>
+  <div class="live-sidebar-menu" id="liveSidebarMenu">
+    <button type="button" class="on" data-liveside="tasks" aria-label="Opal's proactive tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="5" rx="1"/><path d="M4.5 6.5l1 1 2-2"/><path d="M11 6h9"/><rect x="3" y="14" width="5" height="5" rx="1"/><path d="M11 16h6"/><path d="M19.5 13.5l2 2L15 22l-2.3.3.3-2.3z"/></svg></button>
+    <button type="button" data-liveside="todo" aria-label="Your to-do list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5V6a1.5 1.5 0 013 0v5.5"/><path d="M12 11.5V5a1.5 1.5 0 013 0v6.5"/><path d="M15 11.5V6.5a1.5 1.5 0 013 0V14c0 4-2.5 6.5-6 6.5s-6-2-6.5-5L5 13a1.3 1.3 0 012.2-1.2L9 14"/></svg></button>
+    <button type="button" data-liveside="activity" aria-label="Recent activity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></button>
+  </div>
+  <div class="live-sidebar-body">
+    <div class="live-sideview on" id="liveSideTasks" data-sideview="tasks">
+      <div class="live-sidefilter" id="liveTasksFilter">
+        <button type="button" class="on" data-taskfilter="recent">Recent</button>
+        <button type="button" data-taskfilter="urgent">Urgency</button>
+        <button type="button" data-taskfilter="stuck">Emergency</button>
+      </div>
+      <div class="live-sidelist" id="liveTasksList"></div>
+    </div>
+    <div class="live-sideview" id="liveSideTodo" data-sideview="todo">
+      <div class="live-sidefilter" id="liveTodoFilter">
+        <button type="button" class="on" data-todofilter="open-first">To-do first</button>
+        <button type="button" data-todofilter="done-first">Done first</button>
+      </div>
+      <div class="live-sidelist" id="liveTodoList"></div>
+    </div>
+    <div class="live-sideview" id="liveSideActivity" data-sideview="activity">
+      <div class="live-sidelist" id="liveActivityList"></div>
+    </div>
+  </div>
+</aside>
 
 <div id="scrim"></div>
 <div id="sheetWrap" hidden>
@@ -5299,7 +5404,7 @@ function chatGo(next, rect) {
       if ($('#ntConfirm').classList.contains('show')) ntCloseConfirm();
       if ($('#ntDetail').classList.contains('show')) ntCloseDetail();
     }
-    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); }
+    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); liveSidebarClose(); }
     mode = next; $$nav(mode);
     document.body.classList.toggle('mode-chat', mode === 'chat'); document.body.classList.toggle('mode-widgets', mode === 'widgets'); document.body.classList.toggle('mode-notes', mode === 'notes'); document.body.classList.toggle('mode-live', mode === 'live');
     chatRoot.setAttribute('aria-hidden', String(mode !== 'chat')); $('#widgetsRoot').setAttribute('aria-hidden', String(mode !== 'widgets')); $('#notesRoot').setAttribute('aria-hidden', String(mode !== 'notes')); $('#liveRoot').setAttribute('aria-hidden', String(mode !== 'live'));
@@ -7384,6 +7489,7 @@ const liveState = {
   selectedSide: (state.live && state.live.selectedSide) || 'r',
   lastScroll: {}, inited: false, insertTimer: null, _dragPct: null
 };
+const liveSideState = { open: false, view: 'tasks', taskFilter: 'recent', todoFilter: 'open-first' };
 const LIVE_SPLITS = [0, 25, 50, 75, 100];
 const LIVE_FILLER = [
   "Let's circle back to that after lunch.", "Can you send me the link when you get a sec?",
@@ -7597,6 +7703,81 @@ function liveRender() {
   if (liveState.anchorOffset === 0) liveStartInsertTimer(); else liveStopInsertTimer();
 }
 function liveRefresh() { liveRender(); }
+/* ---------- live: the tasks/to-do/activity sidebar ---------- */
+function liveOpalTaskPool() {
+  return WG_CLUSTERS.flatMap(c => c.opalTasks.map(t => ({ t, c })))
+    .filter(({ t }) => t.status === 'proposed' || t.status === 'running' || t.status === 'blocked' || t.status === 'error');
+}
+function liveTaskUrgencyRank(status) { return { blocked: 0, error: 1, running: 2, proposed: 3 }[status]; }
+function liveTaskConnectorName(t) { const o = ORB_DEFS.find(x => x.id === t.connector); return (o && o.name) || t.connector || 'Task'; }
+function liveTaskStatusLabel(status) { return status === 'blocked' ? 'Stuck' : status === 'error' ? 'Failed' : status === 'running' ? 'Running' : 'Ready'; }
+function liveTaskRowHTML({ t, c }) {
+  const stuck = t.status === 'blocked' || t.status === 'error';
+  return `<div class="live-task-row${stuck ? ' stuck' : ''}">
+    <div class="live-task-meta"><span class="live-task-connector">${esc(liveTaskConnectorName(t))}</span><span class="live-task-day">${esc(new Date(c.day + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))}</span><span class="live-task-status ${t.status}">${liveTaskStatusLabel(t.status)}</span></div>
+    <p class="live-task-text">${esc(t.text)}</p>
+  </div>`;
+}
+function liveRenderTasksView() {
+  let pool = liveOpalTaskPool();
+  if (liveSideState.taskFilter === 'recent') pool = [...pool].sort((a, b) => b.c.day.localeCompare(a.c.day));
+  else if (liveSideState.taskFilter === 'urgent') pool = [...pool].sort((a, b) => liveTaskUrgencyRank(a.t.status) - liveTaskUrgencyRank(b.t.status));
+  else if (liveSideState.taskFilter === 'stuck') pool = pool.filter(({ t }) => t.status === 'blocked' || t.status === 'error');
+  const list = $('#liveTasksList'); if (!list) return;
+  list.innerHTML = pool.length ? pool.map(liveTaskRowHTML).join('') : `<p class="live-empty">Nothing here right now.</p>`;
+}
+function liveTodoRowHTML(td) {
+  const isDone = td.status === 'done';
+  return `<button type="button" class="live-todo-row${isDone ? ' done' : ''}" data-livetodo="${td.id}"><span class="live-todo-check">${wgCheckSvg}</span><span class="live-todo-text">${esc(td.text)}</span></button>`;
+}
+function liveRenderTodoView() {
+  const list = $('#liveTodoList'); if (!list) return;
+  const sorted = [...WG_TODOS].sort((a, b) => liveSideState.todoFilter === 'open-first' ? (a.status === 'done') - (b.status === 'done') : (b.status === 'done') - (a.status === 'done'));
+  list.innerHTML = sorted.length ? sorted.map(liveTodoRowHTML).join('') : `<p class="live-empty">Nothing here right now.</p>`;
+}
+function liveToggleTodo(id) {
+  const td = wgTodoById(id); if (!td) return;
+  if (td.status === 'done') { td.status = 'open'; delete wgS().done[id]; }
+  else { td.status = 'done'; wgS().done[id] = true; }
+  save();
+  liveRenderTodoView();
+}
+function liveDerivedTime(dayKey, seedId) {
+  const hour = 7 + Math.floor(mulberry32(liveHash(dayKey + ':' + seedId + ':h'))() * 15);
+  const minute = Math.floor(mulberry32(liveHash(dayKey + ':' + seedId + ':m'))() * 60);
+  return wgConvAt(dayKey, hour, minute);
+}
+function liveActivityLog() {
+  const rows = [];
+  WG_CLUSTERS.forEach(c => (c.opalTasks || []).forEach(t => {
+    if (t.status === 'done') rows.push({ text: `Opal completed "${t.text}."`, time: t.completedAt ? new Date(t.completedAt) : liveDerivedTime(c.day, t.id), eye: false });
+    else if (t.status === 'blocked' || t.status === 'error') rows.push({ text: `Opal ran into trouble with "${t.text}" and needs your help.`, time: liveDerivedTime(c.day, t.id), eye: true });
+  }));
+  WG_TODOS.forEach(td => { if (td.status === 'done') rows.push({ text: `You checked off "${td.text}."`, time: liveDerivedTime(td.createdOnDay || WG_TODAY_KEY, td.id), eye: false }); });
+  return rows.sort((a, b) => b.time - a.time);
+}
+function liveActivityRowHTML(r) {
+  const timeStr = r.time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  const eyeBtn = r.eye ? `<button type="button" class="live-activity-eye" data-eyedemo aria-label="View details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>` : '';
+  return `<div class="live-activity-row"><span class="live-activity-time">${esc(timeStr)}</span><p class="live-activity-text">${esc(r.text)}</p>${eyeBtn}</div>`;
+}
+function liveRenderActivityView() {
+  const list = $('#liveActivityList'); if (!list) return;
+  const rows = liveActivityLog();
+  list.innerHTML = rows.length ? rows.map(liveActivityRowHTML).join('') : `<p class="live-empty">Nothing yet.</p>`;
+}
+function liveRenderSidebar() { liveRenderTasksView(); liveRenderTodoView(); liveRenderActivityView(); }
+function liveSwitchSideView(view) {
+  liveSideState.view = view;
+  $('#liveSidebarMenu').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.liveside === view));
+  $('#liveSidebar').querySelectorAll('.live-sideview').forEach(v => v.classList.toggle('on', v.dataset.sideview === view));
+  if (view === 'tasks') liveRenderTasksView();
+  else if (view === 'todo') liveRenderTodoView();
+  else if (view === 'activity') liveRenderActivityView();
+}
+function liveSidebarOpen() { liveSideState.open = true; $('#liveSidebar').classList.add('show'); $('#liveSidebarScrim').classList.add('show'); liveRenderSidebar(); }
+function liveSidebarClose() { liveSideState.open = false; $('#liveSidebar').classList.remove('show'); $('#liveSidebarScrim').classList.remove('show'); }
+
 function liveInit() {
   if (liveState.inited) return; liveState.inited = true;
   $('#liveRoot').classList.add('size-' + (wgState.aaSize || 'm'));
@@ -7623,7 +7804,19 @@ function liveInit() {
   $('#liveShareCopy').addEventListener('click', liveCopyShareLink);
   $('#liveShareClose').addEventListener('click', liveCloseShare);
   $('#liveShare').addEventListener('click', e => { if (e.target.id === 'liveShare') liveCloseShare(); });
-  addEventListener('keydown', e => { if (mode === 'live' && e.key === 'Escape' && $('#liveShare').classList.contains('show')) liveCloseShare(); });
+  $('#liveFab').addEventListener('click', liveSidebarOpen);
+  $('#liveSidebarClose').addEventListener('click', liveSidebarClose);
+  $('#liveSidebarScrim').addEventListener('click', liveSidebarClose);
+  $('#liveSidebarMenu').addEventListener('click', e => { const b = e.target.closest('[data-liveside]'); if (b) liveSwitchSideView(b.dataset.liveside); });
+  $('#liveTasksFilter').addEventListener('click', e => { const b = e.target.closest('[data-taskfilter]'); if (!b) return; liveSideState.taskFilter = b.dataset.taskfilter; $('#liveTasksFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTasksView(); });
+  $('#liveTodoFilter').addEventListener('click', e => { const b = e.target.closest('[data-todofilter]'); if (!b) return; liveSideState.todoFilter = b.dataset.todofilter; $('#liveTodoFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTodoView(); });
+  $('#liveTodoList').addEventListener('click', e => { const row = e.target.closest('[data-livetodo]'); if (row) liveToggleTodo(row.dataset.livetodo); });
+  addEventListener('keydown', e => {
+    if (mode !== 'live') return;
+    if (e.key !== 'Escape') return;
+    if ($('#liveShare').classList.contains('show')) return liveCloseShare();
+    if ($('#liveSidebar').classList.contains('show')) return liveSidebarClose();
+  });
   addEventListener('resize', () => { if (mode === 'live') liveApplySplitVars(liveState.splitLeft); });
 }
 
