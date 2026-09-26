@@ -2151,6 +2151,7 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-pane-label span{font:400 15px/1.2 var(--sans);color:var(--wg-ink)}
 .live-pane-label small{font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
 .live-today-tag{color:#66a458;font-weight:600}
+.live-yesterday-tag{color:var(--wg-ink-60);font-weight:600}
 .live-hourbar{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
 .live-hb{font:400 8px/1 var(--mono);letter-spacing:.01em;padding:6px 0;border-radius:7px;background:var(--wg-surface-3);color:var(--wg-ink-28);text-align:center;transition:background .15s,color .15s}
 .live-hb.has{background:var(--wg-surface);color:var(--wg-ink-60);box-shadow:0 0 0 1px var(--wg-border-2) inset}
@@ -2194,15 +2195,17 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
   --wg-ink:#232a1e; --wg-ink-60:rgba(35,42,30,.64); --wg-ink-42:rgba(35,42,30,.46); --wg-ink-28:rgba(35,42,30,.3);
   --wg-fill:#232a1e; --wg-fill-ink:#dce1cf;
   background:#dce1cf}
-/* the right-hand slot: dark mode by default, unless it's showing today (pane-today wins) */
+/* the right-hand slot: dark GRAY by default (deliberately neutral, no green undertone —
+   distinct from the rest of the app's moss-tinted dark palette), unless it's showing
+   today (pane-today wins) */
 .pane-dark,.console-dark{
-  --wg-surface:var(--ground-800); --wg-surface-2:var(--ground-700); --wg-surface-3:#26331f;
-  --wg-border:var(--bone-10); --wg-border-2:var(--bone-25);
-  --wg-ink:var(--bone); --wg-ink-60:var(--bone-60); --wg-ink-42:var(--bone-35); --wg-ink-28:var(--bone-25);
-  --wg-accent-ink:var(--moss-300);
-  --wg-fill:var(--bone); --wg-fill-ink:var(--ground-900);
-  background:var(--ground-900)}
-.pane-dark .live-sent-row:hover,.pane-dark .live-sent-row.newest{background:var(--bone-08)}
+  --wg-surface:#2c2c2c; --wg-surface-2:#343434; --wg-surface-3:#3e3e3e;
+  --wg-border:rgba(255,255,255,.1); --wg-border-2:rgba(255,255,255,.2);
+  --wg-ink:#ededed; --wg-ink-60:rgba(237,237,237,.62); --wg-ink-42:rgba(237,237,237,.42); --wg-ink-28:rgba(237,237,237,.26);
+  --wg-accent-ink:#ededed;
+  --wg-fill:#ededed; --wg-fill-ink:#1e1e1e;
+  background:#242424}
+.pane-dark .live-sent-row:hover,.pane-dark .live-sent-row.newest{background:rgba(255,255,255,.06)}
 
 .live-divider{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:10px;padding:14px 10px;border-left:1px solid var(--wg-border);border-right:1px solid var(--wg-border);background:var(--wg-surface-2);cursor:ew-resize;touch-action:none}
 .live-console{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:16px;background:var(--wg-surface);box-shadow:var(--wg-shadow-sm);transition:background .25s var(--ease);z-index:2}
@@ -2214,7 +2217,8 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-divider-nav button svg{width:13px;height:13px}
 .live-divider-nav button:hover:not(:disabled){background:var(--wg-ink);color:#fff}
 .live-divider-nav button:disabled{opacity:.28;cursor:default}
-.live-aa{display:flex;flex-direction:column;gap:2px;padding:2px;border-radius:12px;background:var(--wg-surface-3)}
+.live-aa{display:flex;flex-direction:row;gap:2px;padding:2px;border-radius:12px;background:var(--wg-surface-3)}
+.live-aa-shared{flex:none;align-self:center;margin-bottom:2px}
 .live-aa button{font:400 8px/1 var(--sans);color:var(--wg-ink-42);padding:5px 6px;border-radius:9px}
 .live-aa button[data-aa="l"]{font-size:10px}
 .live-aa button.on{background:var(--wg-fill);color:var(--wg-fill-ink)}
@@ -2244,7 +2248,6 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
   .live-console{flex:1}
   .live-panes.mobile-show-l #liveConsoleBottom{display:none}
   .live-panes.mobile-show-r #liveConsoleTop{display:none}
-  .live-aa{flex-direction:row}
 }
 @media (prefers-reduced-motion:reduce){
   .live-panes{transition:none!important}
@@ -2904,9 +2907,9 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </section>
 
       <div class="live-divider" id="liveDivider">
+        <div class="live-aa live-aa-shared" id="liveAaSize"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
         <div class="live-console" id="liveConsoleTop" data-consoleside="l">
           <button type="button" data-liveact="copy" data-consoleside="l" aria-label="Copy left transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
-          <div class="live-aa" id="liveAaSizeTop"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
           <button type="button" data-liveact="share" data-consoleside="l" aria-label="Share left transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
         </div>
         <div class="live-divider-nav" id="liveDividerNav">
@@ -2915,7 +2918,6 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
         </div>
         <div class="live-console" id="liveConsoleBottom" data-consoleside="r">
           <button type="button" data-liveact="copy" data-consoleside="r" aria-label="Copy right transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
-          <div class="live-aa" id="liveAaSizeBottom"><button type="button" data-aa="s">Aa</button><button type="button" data-aa="m" class="on">Aa</button><button type="button" data-aa="l">Aa</button></div>
           <button type="button" data-liveact="share" data-consoleside="r" aria-label="Share right transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
         </div>
       </div>
@@ -7567,7 +7569,9 @@ function liveRenderPane(side) {
   const key = liveDayKey(offset);
   const d = wgDateAt(offset);
   const titleEl = $(side === 'l' ? '#livePaneLTitle' : '#livePaneRTitle'), dateEl = $(side === 'l' ? '#livePaneLDate' : '#livePaneRDate');
-  titleEl.innerHTML = key === WG_TODAY_KEY ? `<b class="live-today-tag">TODAY</b>, ${esc(fmtDate(d))}` : esc(fmtDate(d));
+  titleEl.innerHTML = key === WG_TODAY_KEY ? `<b class="live-today-tag">TODAY</b>, ${esc(fmtDate(d))}`
+    : key === WG_YDAY_KEY ? `<b class="live-yesterday-tag">YESTERDAY</b>, ${esc(fmtDate(d))}`
+    : esc(fmtDate(d));
   dateEl.textContent = d.toLocaleDateString(undefined, { weekday: 'long' });
   const variant = livePaneVariant(key, side);
   liveApplyVariant($(side === 'l' ? '#livePaneL' : '#livePaneR'), variant);
