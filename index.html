@@ -2131,7 +2131,7 @@ body.mode-notes .nt-rail{display:block}
 body.mode-live #liveRoot{opacity:1;transform:scale(1);pointer-events:auto}
 body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 
-.live-shell{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(var(--nav-height) + var(--space-2)) 40px 24px}
+.live-shell{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(var(--nav-height) + var(--space-2)) 40px 0}
 .live-head{flex:none;margin-bottom:14px}
 .live-head h1{font:400 27px/1.15 var(--sans);letter-spacing:-.01em;color:var(--wg-ink)}
 .live-head-sub{font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin-top:4px}
@@ -2140,7 +2140,7 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
 .live-mobiletabs button{font:400 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-ink-42);padding:9px 20px;border-radius:999px;transition:color .3s,background .3s}
 .live-mobiletabs button.on{color:#fff;background:var(--wg-ink)}
 
-.live-panes{flex:1;min-height:0;display:grid;grid-template-columns:50fr 120px 50fr;background:var(--wg-surface);border-radius:22px;box-shadow:var(--wg-shadow-md);border:1px solid var(--wg-border);overflow:hidden;transition:none}
+.live-panes{flex:1;min-height:0;display:grid;grid-template-columns:50fr 120px 50fr;background:var(--wg-surface);border-radius:22px 22px 0 0;box-shadow:var(--wg-shadow-md);border:1px solid var(--wg-border);border-bottom:0;overflow:hidden;transition:none}
 .live-panes.snapping{transition:grid-template-columns .34s var(--ease)}
 .live-panes.dragging{cursor:ew-resize;user-select:none}
 
@@ -2353,16 +2353,34 @@ body.mode-live .live-taskpanel.show{transform:none}
    stacking context the way the FAB/sidebar/task panel did, since it only needs to sit above
    that pane's own transcript, never above the global header) — drag or tap the handle up to
    reveal Opal's tasks / your tasks / conversations for the specific day that pane is showing */
-.live-day-drawer{position:absolute;left:8px;right:8px;bottom:6px;height:80%;background:var(--wg-surface);border-radius:22px 22px 0 0;box-shadow:0 -14px 30px rgba(0,0,0,.14),0 0 0 1px var(--wg-border);transform:translateY(calc(100% - 30px));transition:transform .4s var(--ease);z-index:4;display:flex;flex-direction:column;overflow:hidden}
+/* the drawer always carries its own fixed per-side theme (dark gray on the left, bone
+   light on the right) regardless of whatever variant the pane itself is currently in
+   (today/dark/default) — a deliberate, fixed "almost identical reverse" pairing */
+.live-day-drawer{position:absolute;left:8px;right:8px;bottom:6px;height:80%;background:var(--wg-surface);border-radius:22px 22px 0 0;box-shadow:0 -14px 30px rgba(0,0,0,.14),0 0 0 1px var(--wg-border);transform:translateY(calc(100% - 30px));transition:transform .4s var(--ease);z-index:4;overflow:hidden}
+.live-day-drawer[data-drawerside="l"]{
+  --wg-surface:#2c2c2c; --wg-surface-2:#343434; --wg-surface-3:#3e3e3e;
+  --wg-border:rgba(255,255,255,.1); --wg-border-2:rgba(255,255,255,.2);
+  --wg-ink:#ededed; --wg-ink-60:rgba(237,237,237,.62); --wg-ink-42:rgba(237,237,237,.42); --wg-ink-28:rgba(237,237,237,.26);
+  --wg-accent-ink:#ededed; --wg-fill:#ededed; --wg-fill-ink:#1e1e1e;
+  background:#242424}
+.live-day-drawer[data-drawerside="r"]{
+  --wg-surface:#ecebe4; --wg-surface-2:#f4f3ec; --wg-surface-3:#dfddd0;
+  --wg-border:rgba(31,36,29,.1); --wg-border-2:rgba(31,36,29,.18);
+  --wg-ink:#1f241d; --wg-ink-60:rgba(31,36,29,.62); --wg-ink-42:rgba(31,36,29,.44); --wg-ink-28:rgba(31,36,29,.26);
+  --wg-accent-ink:#3c4c2a; --wg-fill:#1f241d; --wg-fill-ink:#ecebe4;
+  background:#ecebe4}
 .live-day-drawer.dragging{transition:none}
 .live-day-drawer.open{transform:translateY(0)}
-.live-day-drawer-handle{flex:none;display:flex;justify-content:center;align-items:center;gap:4px;height:30px;touch-action:none;cursor:grab}
+/* the handle floats above the content rather than taking its own flex row, so an open
+   conversation page's background can run flush to the drawer's very top edge with no
+   seam — the dots just sit on top of whatever's there, tinted by the same --wg-ink-28
+   token as everything else, so they read correctly light-on-dark or dark-on-light */
+.live-day-drawer-handle{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:center;align-items:center;gap:4px;height:26px;touch-action:none;cursor:grab}
 .live-day-drawer-handle:active{cursor:grabbing}
 .live-day-drawer-handle i{width:5px;height:5px;border-radius:50%;background:var(--wg-ink-28);transition:background .15s}
 .live-day-drawer-handle:hover i{background:var(--wg-ink-60)}
-.live-day-drawer-body{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;padding:2px 18px 18px}
-
-.live-drawer-cols{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:18px;height:100%}
+.live-day-drawer-body{position:absolute;inset:0;overflow-y:auto;scrollbar-width:thin}
+.live-drawer-cols{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:18px;min-height:100%;padding:30px 18px 18px}
 .live-drawer-col{display:flex;flex-direction:column;min-height:0}
 .live-drawer-col+.live-drawer-col{border-left:1px solid var(--wg-border);padding-left:18px}
 .live-drawer-col h4{flex:none;font:500 12.5px/1.3 var(--sans);color:var(--wg-ink-60);margin-bottom:10px}
@@ -2373,13 +2391,38 @@ body.mode-live .live-taskpanel.show{transform:none}
 .live-drawer-go:hover{filter:brightness(1.1)}
 .live-drawer-status{flex:none;font:600 8.5px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--wg-surface-3);color:var(--wg-ink-60)}
 .live-drawer-convlist{gap:10px}
-.live-drawer-convlist .wg-conv-card{cursor:pointer;transition:background .15s var(--ease),transform .15s var(--ease)}
-.live-drawer-convlist .wg-conv-card:hover{background:var(--wg-surface-2);transform:translateY(-1px)}
+
+/* the drawer's own conversation card — a distinct component from .wg-conv-card (Widgets'
+   grid card), built fresh per Langston's specific redesign (date moved to the bottom,
+   star/tag sharing one row, a pencil that flips the card into an edit front) rather than
+   mutating the shared component other modes still use as-is */
+.live-conv-card{position:relative;text-align:left;padding:16px 38px 14px 16px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:18px;box-shadow:var(--wg-shadow-sm);cursor:pointer;transition:background .15s var(--ease),transform .15s var(--ease)}
+.live-conv-card:hover{background:var(--wg-surface-2);transform:translateY(-1px)}
+.live-conv-card.editing{cursor:default}
+.live-conv-card.editing:hover{transform:none;background:var(--wg-surface)}
+.live-conv-card-editbtn{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);transition:background .15s,color .15s;z-index:2}
+.live-conv-card-editbtn:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-conv-card-editbtn svg{width:13px;height:13px}
+.live-conv-card-title{font:500 15px/1.3 var(--sans);color:var(--wg-ink);margin-bottom:6px;outline:none;border-radius:6px}
+.live-conv-card.editing .live-conv-card-title{background:var(--wg-surface-3);padding:3px 6px;margin:-3px -6px 9px}
+.live-conv-card-sum{font-size:11.5px;line-height:1.45;color:var(--wg-ink-60)}
+.live-conv-card.editing .live-conv-card-sum{background:var(--wg-surface-3);border-radius:6px;padding:5px 6px;margin:0 -6px}
+.live-conv-card-bottom{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.live-conv-card-tag{font:400 8.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-accent-ink);background:rgba(111,143,78,.14);padding:3px 9px;border-radius:999px}
+.live-conv-card-tag.editable{transition:background .15s}
+.live-conv-card-tag.editable:hover{background:rgba(111,143,78,.26)}
+.live-conv-card-star{width:24px;height:24px;color:var(--wg-ink-28);transition:color .2s,transform .15s}
+.live-conv-card-star svg{width:14px;height:14px}
+.live-conv-card-star:hover{color:var(--wg-ink-42)}
+.live-conv-card-star.on{color:var(--wg-ember)}
+.live-conv-card-trash{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#c0452f;transition:background .15s}
+.live-conv-card-trash:hover{background:rgba(192,69,47,.15)}
+.live-conv-card-trash svg{width:14px;height:14px}
+.live-conv-card-date{margin-top:10px;width:100%;font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42)}
 
 /* the expanded conversation — deliberately always the same dark Notion-style page
    regardless of whichever pane/theme it was opened from, per the reference shared */
-.live-convdetail{--wg-surface:#1a1a1a;--wg-surface-2:#242424;--wg-surface-3:#2d2d2d;--wg-border:rgba(255,255,255,.1);--wg-ink:#f2f1ec;--wg-ink-60:rgba(242,241,236,.62);--wg-ink-42:rgba(242,241,236,.42);
-  background:var(--wg-surface);color:var(--wg-ink);border-radius:16px;margin:-2px -18px -18px;padding:24px 22px 32px;min-height:100%}
+.live-convdetail{background:var(--wg-surface);color:var(--wg-ink);border-radius:22px 22px 0 0;min-height:100%;padding:34px 22px 32px}
 .live-convdetail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .live-convdetail-back{display:flex;align-items:center;gap:6px;color:var(--wg-ink-60);font:400 12px/1 var(--sans);transition:color .15s}
 .live-convdetail-back:hover{color:var(--wg-ink)}
@@ -7994,12 +8037,66 @@ function liveDrawerColsHTML(dayKey) {
   return `<div class="live-drawer-cols">
     <div class="live-drawer-col"><h4>Opal To-Do</h4><div class="live-drawer-list">${opal.length ? opal.map(liveDrawerOpalRowHTML).join('') : '<p class="live-empty">Nothing for Opal this day.</p>'}</div></div>
     <div class="live-drawer-col"><h4>You To-Do</h4><div class="live-drawer-list">${todos.length ? todos.map(liveDrawerTodoRowHTML).join('') : '<p class="live-empty">Nothing for you this day.</p>'}</div></div>
-    <div class="live-drawer-col"><h4>Conversations</h4><div class="live-drawer-list live-drawer-convlist">${convs.length ? convs.map(wgConvCardHTML).join('') : '<p class="live-empty">No conversations this day.</p>'}</div></div>
+    <div class="live-drawer-col"><h4>Conversations</h4><div class="live-drawer-list live-drawer-convlist">${convs.length ? convs.map(liveConvCardHTML).join('') : '<p class="live-empty">No conversations this day.</p>'}</div></div>
   </div>`;
+}
+/* real, persisted edits over static seed data (title/summary/tag directly on the
+   conversation, mirroring how isStarred already mutates it in place; bullets keyed by
+   their rendered position since they're derived, not stored as a simple array) */
+const LIVE_CONV_TAGS = ['personal', 'work', 'school', 'family', 'supplier'];
+function liveConvEditsFor(id) { state.liveConvEdits = state.liveConvEdits || {}; return state.liveConvEdits[id] || {}; }
+function liveSaveConvEdit(id, field, value) {
+  state.liveConvEdits = state.liveConvEdits || {}; state.liveConvEdits[id] = state.liveConvEdits[id] || {};
+  state.liveConvEdits[id][field] = value; save();
+}
+function liveSaveConvBullet(id, section, index, value) {
+  state.liveConvEdits = state.liveConvEdits || {}; state.liveConvEdits[id] = state.liveConvEdits[id] || {};
+  state.liveConvEdits[id][section] = state.liveConvEdits[id][section] || {};
+  state.liveConvEdits[id][section][index] = value; save();
+}
+function liveConvBullet(id, section, index, fallback) {
+  const o = liveConvEditsFor(id)[section]; return (o && o[index] != null) ? o[index] : fallback;
+}
+function liveApplyConvEdits() {
+  Object.keys(state.liveConvEdits || {}).forEach(id => {
+    const c = wgConvById(id), e = state.liveConvEdits[id]; if (!c || !e) return;
+    if (e.title != null) c.title = e.title;
+    if (e.summary != null) c.summary = e.summary;
+    if (e.tag != null) c.tag = e.tag;
+  });
+}
+const liveCardEditState = {};
+function liveConvCardHTML(c) {
+  const editing = !!liveCardEditState[c.id];
+  const editBtn = editing
+    ? `<button type="button" class="live-conv-card-editbtn" data-convexitedit="${c.id}" aria-label="Done editing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`
+    : `<button type="button" class="live-conv-card-editbtn" data-conveditbtn="${c.id}" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4Z"/></svg></button>`;
+  const tagEl = editing
+    ? `<button type="button" class="live-conv-card-tag editable" data-convtagcycle="${c.id}">${esc(c.tag.toUpperCase())}</button>`
+    : `<span class="live-conv-card-tag">${esc(c.tag.toUpperCase())}</span>`;
+  const rightEl = editing
+    ? `<button type="button" class="live-conv-card-trash" data-convtrashbtn="${c.id}" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-9 0l1 12a1 1 0 001 1h6a1 1 0 001-1l1-12"/></svg></button>`
+    : `<button type="button" class="live-conv-card-star${c.isStarred ? ' on' : ''}" data-convstar="${c.id}" aria-label="${c.isStarred ? 'Unstar' : 'Star'}"><svg viewBox="0 0 24 24" fill="${c.isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6z"/></svg></button>`;
+  return `<div class="live-conv-card${editing ? ' editing' : ''}" data-conv="${c.id}">
+    ${editBtn}
+    <h3 class="live-conv-card-title" ${editing ? 'contenteditable="true" spellcheck="false"' : ''} data-convtitle="${c.id}">${esc(c.title)}</h3>
+    <p class="live-conv-card-sum" ${editing ? 'contenteditable="true" spellcheck="false"' : ''} data-convsum="${c.id}">${esc(c.summary || 'Nothing written yet.')}</p>
+    <div class="live-conv-card-bottom">${tagEl}${rightEl}</div>
+    ${!editing ? `<p class="live-conv-card-date">${esc(wgConvStartLabel(c))}</p>` : ''}
+  </div>`;
+}
+function liveToggleCardEdit(side, id, on) { liveCardEditState[id] = on; liveDrawerRender(side); }
+function liveCycleConvTag(id) {
+  const c = wgConvById(id); if (!c) return;
+  const next = LIVE_CONV_TAGS[(LIVE_CONV_TAGS.indexOf(c.tag) + 1) % LIVE_CONV_TAGS.length];
+  c.tag = next; liveSaveConvEdit(id, 'tag', next);
 }
 function liveConvPeopleHTML(c) {
   const names = (c.personIds || []).map(id => { const p = WG_PEOPLE.find(x => x.id === id); if (!p) return null; return p.isEstimated ? p.estimatedTitle : p.name; }).filter(Boolean);
   return `<p class="live-convdetail-people">${names.length + 1} people &middot; You${names.length ? ', ' + names.map(esc).join(', ') : ''}</p>`;
+}
+function liveEditableBulletHTML(id, section, index, text) {
+  return `<li contenteditable="true" spellcheck="false" data-convbullet="${id}" data-bulletsection="${section}" data-bulletindex="${index}">${esc(liveConvBullet(id, section, index, text))}</li>`;
 }
 function liveConvActionsHTML(c) {
   const clusters = (c.actionClusterIds || []).map(id => WG_CLUSTERS.find(cl => cl.id === id)).filter(Boolean);
@@ -8009,14 +8106,14 @@ function liveConvActionsHTML(c) {
     (cl.opalTasks || []).forEach(t => opals.push(t.text));
   });
   if (!yours.length && !opals.length) return '<p class="live-empty">No action items from this conversation.</p>';
-  let html = '';
-  if (yours.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:4px">For you</p><ul class="live-convdetail-bullets">${yours.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
-  if (opals.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin:${yours.length ? '14px' : '0'} 0 4px">For Opal</p><ul class="live-convdetail-bullets">${opals.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  let idx = 0, html = '';
+  if (yours.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:4px">For you</p><ul class="live-convdetail-bullets">${yours.map(t => liveEditableBulletHTML(c.id, 'actionBullets', idx++, t)).join('')}</ul>`;
+  if (opals.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin:${yours.length ? '14px' : '0'} 0 4px">For Opal</p><ul class="live-convdetail-bullets">${opals.map(t => liveEditableBulletHTML(c.id, 'actionBullets', idx++, t)).join('')}</ul>`;
   return html;
 }
 function liveConvPointsHTML(c) {
   const points = [...(c.decisions || []), ...(c.talkingPoints || [])].map(d => d.text);
-  return points.length ? `<ul class="live-convdetail-bullets">${points.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '<p class="live-empty">Nothing captured.</p>';
+  return points.length ? `<ul class="live-convdetail-bullets">${points.map((t, i) => liveEditableBulletHTML(c.id, 'pointBullets', i, t)).join('')}</ul>` : '<p class="live-empty">Nothing captured.</p>';
 }
 function liveConvNotes(id) { state.liveConvNotes = state.liveConvNotes || {}; return state.liveConvNotes[id] || ['', '', '']; }
 function liveConvNotesHTML(c) {
@@ -8032,8 +8129,8 @@ function liveConvDetailHTML(c) {
         <button type="button" data-liveconvdelete="${c.id}" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-9 0l1 12a1 1 0 001 1h6a1 1 0 001-1l1-12"/></svg></button>
       </div>
     </div>
-    <h1 class="live-convdetail-title">${esc(c.title)}</h1>
-    <p class="live-convdetail-sum">${esc(c.summary || 'Nothing written yet.')}</p>
+    <h1 class="live-convdetail-title" contenteditable="true" spellcheck="false" data-convtitle="${c.id}">${esc(c.title)}</h1>
+    <p class="live-convdetail-sum" contenteditable="true" spellcheck="false" data-convsum="${c.id}">${esc(c.summary || 'Nothing written yet.')}</p>
     ${liveConvPeopleHTML(c)}
     <h5>Action Points</h5>
     ${liveConvActionsHTML(c)}
@@ -8108,6 +8205,7 @@ function liveConvSaveNote(el) {
 
 function liveInit() {
   if (liveState.inited) return; liveState.inited = true;
+  liveApplyConvEdits();
   $('#liveRoot').classList.add('size-' + (wgState.aaSize || 'm'));
   liveRender();
 
@@ -8134,8 +8232,13 @@ function liveInit() {
     const back = e.target.closest('[data-drawerback]'); if (back) return liveDrawerBackToCols(side);
     const share = e.target.closest('[data-liveconvshare]'); if (share) return liveConvCopyShareLink();
     const del = e.target.closest('[data-liveconvdelete]'); if (del) return liveConvDeleteConfirmOpen(del.dataset.liveconvdelete);
+    const trash = e.target.closest('[data-convtrashbtn]'); if (trash) return liveConvDeleteConfirmOpen(trash.dataset.convtrashbtn);
     const star = e.target.closest('[data-convstar]'); if (star) return wgToggleConvStar(star.dataset.convstar);
-    const card = e.target.closest('[data-conv]'); if (card && !e.target.closest('[data-convstar],[data-cardmenu]')) return liveDrawerOpenConv(side, card.dataset.conv);
+    const editOn = e.target.closest('[data-conveditbtn]'); if (editOn) return liveToggleCardEdit(side, editOn.dataset.conveditbtn, true);
+    const editOff = e.target.closest('[data-convexitedit]'); if (editOff) return liveToggleCardEdit(side, editOff.dataset.convexitedit, false);
+    const tagCycle = e.target.closest('[data-convtagcycle]'); if (tagCycle) { liveCycleConvTag(tagCycle.dataset.convtagcycle); return liveDrawerRender(side); }
+    const card = e.target.closest('[data-conv]');
+    if (card && !card.classList.contains('editing') && !e.target.closest('[data-convstar],[data-conveditbtn]')) return liveDrawerOpenConv(side, card.dataset.conv);
   });
   $('#liveMobileTabs').addEventListener('click', e => { const b = e.target.closest('[data-livemobile]'); if (b) liveSetSelectedSide(b.dataset.livemobile); });
   $('#livePaneLScroll').addEventListener('scroll', () => liveOnScroll('l'), { passive: true });
@@ -8163,7 +8266,16 @@ function liveInit() {
   });
   $('#liveTaskPanelClose').addEventListener('click', liveCloseTaskPanel);
   $('#liveTaskPanelScrim').addEventListener('click', liveCloseTaskPanel);
-  $('#livePanes').addEventListener('blur', e => { const n = e.target.closest && e.target.closest('[data-convnote]'); if (n) liveConvSaveNote(n); }, true);
+  $('#livePanes').addEventListener('blur', e => {
+    const t = e.target;
+    const note = t.closest && t.closest('[data-convnote]'); if (note) return liveConvSaveNote(note);
+    const title = t.closest && t.closest('[data-convtitle]');
+    if (title) { const c = wgConvById(title.dataset.convtitle); if (c) { c.title = title.textContent.trim() || c.title; title.textContent = c.title; liveSaveConvEdit(c.id, 'title', c.title); } return; }
+    const sum = t.closest && t.closest('[data-convsum]');
+    if (sum) { const c = wgConvById(sum.dataset.convsum); if (c) { c.summary = sum.textContent.trim(); liveSaveConvEdit(c.id, 'summary', c.summary); } return; }
+    const bullet = t.closest && t.closest('[data-convbullet]');
+    if (bullet) return liveSaveConvBullet(bullet.dataset.convbullet, bullet.dataset.bulletsection, +bullet.dataset.bulletindex, bullet.textContent.trim());
+  }, true);
   $('#liveConvDeleteCancel').addEventListener('click', liveConvDeleteConfirmClose);
   $('#liveConvDeleteGo').addEventListener('click', liveConvDeleteConfirmed);
   $('#liveConvDeleteConfirm').addEventListener('click', e => { if (e.target.id === 'liveConvDeleteConfirm') liveConvDeleteConfirmClose(); });
