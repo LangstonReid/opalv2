@@ -718,6 +718,9 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-welcome-cal-grid span[data-day]:hover{background:var(--wg-surface-3)}
 .wg-welcome-cal-grid span.today{color:#fff;font-weight:600;background:#c0503f}
 .wg-welcome-cal-grid span.today:hover{background:#c0503f}
+.wg-welcome-cal-grid span.selected{color:#fff;font-weight:600;background:var(--wg-ink)}
+.wg-welcome-cal-grid span.selected:hover{background:var(--wg-ink)}
+.wg-welcome-cal-empty{margin-top:12px;padding-top:12px;border-top:1px solid var(--wg-border);text-align:center;font-size:12px;color:var(--wg-ink-42)}
 .wg-welcome-r{flex:none;width:min(300px,32%)}
 .wg-band{margin-top:10px;text-align:left;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;color:var(--wg-ink-42)}
 .wg-welcome-stats .wg-today-sec-label{margin:0 0 8px}
@@ -1135,6 +1138,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-today-state svg{width:12px;height:12px}
 .wg-today-state.done{background:var(--wg-accent)}
 .wg-today-state.error{width:auto;height:auto;background:var(--wg-ember);padding:6px 12px;font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;border-radius:999px}
+.wg-today-state.blocked{width:auto;height:auto;background:none;border:1px solid var(--wg-ember);color:var(--wg-ember);padding:5px 12px;font:400 9.5px/1.6 var(--mono);letter-spacing:.06em;border-radius:999px}
 .wg-today-row.you .wg-check{flex:none}
 .wg-today-row.you.done{background:var(--wg-surface-2)}
 .wg-today-row.you.done p{color:var(--wg-ink-42)}
@@ -5104,7 +5108,7 @@ $('.pills').addEventListener('click', e => {
    graphs, a day grid three ways, and a transcript that never cuts.
    ================================================================ */
 function wgKey(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
-const WG_T0 = new Date(); WG_T0.setHours(0, 0, 0, 0);
+const WG_T0 = new Date(2026, 8, 25); WG_T0.setHours(0, 0, 0, 0); // frozen "today" — this demo dataset covers exactly Sep 1-25, 2026 and must not drift with the real clock
 function wgDateAt(offset) { const d = new Date(WG_T0); d.setDate(d.getDate() + offset); return d; }
 const WG_TODAY_KEY = wgKey(WG_T0), WG_YDAY_KEY = wgKey(wgDateAt(-1)), WG_D6_KEY = wgKey(wgDateAt(-6));
 function wgHourLabel(h) { const hh = h % 12 || 12; return `${hh}${h < 12 ? 'AM' : 'PM'}`; }
@@ -5120,6 +5124,19 @@ const WG_TODOS = [
   { id: 'wt5', text: 'Call Dad back about the pilot', status: 'done', createdOnDay: wgKey(wgDateAt(-3)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-3)), hour: 8, quote: "I'll call you this evening about the school pilot" } },
   { id: 'wt6', text: 'Send Rylan the supplier contract notes', status: 'open', createdOnDay: wgKey(wgDateAt(-9)), dueOnDay: wgKey(wgDateAt(-2)), due: null, source: { day: wgKey(wgDateAt(-9)), hour: 11, quote: 'review the supplier contract by Thursday' } },
   { id: 'wt7', text: 'Reply to Lena about trying the bracelet', status: 'done', createdOnDay: wgKey(wgDateAt(-5)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-5)), hour: 22, quote: 'a unit is yours the week of the 21st' } },
+  /* Sep 1-25 demo dataset: one human todo per day that needs a person, not Opal */
+  { id: 'wt8', text: "Print the boards for tomorrow's crit", status: 'done', createdOnDay: wgKey(wgDateAt(-2)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-2)), hour: 20, quote: 'right before the crit, like always' } },
+  { id: 'wt9', text: 'Decide which supplier quote to move forward with', status: 'open', createdOnDay: wgKey(wgDateAt(-3)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-3)), hour: 14, quote: "eight percent higher than Monterrey's" } },
+  { id: 'wt10', text: "Ask Mom for the friend's contact info", status: 'open', createdOnDay: wgKey(wgDateAt(-4)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-4)), hour: 18, quote: 'sounded like a standing joke between them' } },
+  { id: 'wt11', text: 'Call and confirm the dentist appointment time', status: 'done', createdOnDay: wgKey(wgDateAt(-7)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-7)), hour: 12, quote: 'should really get that cleaning done' } },
+  { id: 'wt12', text: 'Take the passport photo', status: 'open', createdOnDay: wgKey(wgDateAt(-11)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-11)), hour: 17, quote: 'expires in six months, better now than later' } },
+  { id: 'wt13', text: "Pick a color and place the order", status: 'open', createdOnDay: wgKey(wgDateAt(-14)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-14)), hour: 19, quote: 'she mentioned wanting a new robe' } },
+  { id: 'wt14', text: 'Pay the car registration fee online', status: 'done', createdOnDay: wgKey(wgDateAt(-16)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-16)), hour: 13, quote: "sticker's expired, don't want a ticket" } },
+  { id: 'wt15', text: 'Photograph the process sketches', status: 'open', createdOnDay: wgKey(wgDateAt(-17)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-17)), hour: 16, quote: 'professor wants process work this time, not just final' } },
+  { id: 'wt16', text: 'Pick up groceries for the week', status: 'done', createdOnDay: wgKey(wgDateAt(-19)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-19)), hour: 18, quote: "always end up ordering out when there's no plan" } },
+  { id: 'wt17', text: 'Call Mom back about the weekend', status: 'done', createdOnDay: wgKey(wgDateAt(-21)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-21)), hour: 9, quote: 'she left a voicemail about Sunday' } },
+  { id: 'wt18', text: 'Print the return label and drop it off', status: 'open', createdOnDay: wgKey(wgDateAt(-22)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-22)), hour: 11, quote: "wrong size again, should've checked the chart" } },
+  { id: 'wt19', text: 'Transfer photos to the new phone', status: 'done', createdOnDay: wgKey(wgDateAt(-24)), dueOnDay: null, due: null, source: { day: wgKey(wgDateAt(-24)), hour: 20, quote: "still haven't moved everything over" } },
 ];
 function wgTodoById(id) { return WG_TODOS.find(t => t.id === id) || null; }
 function wgTodoDone(id) { const t = wgTodoById(id); return !t || t.status === 'done'; }
@@ -5144,6 +5161,70 @@ const WG_CLUSTERS = [
   { id: 'wc5', day: WG_D6_KEY, title: 'Titanium clasp RFQ', quote: 'nine weeks works if we lock the alloy by the 23rd', humanTaskId: 'wt4',
     opalTasks: [{ id: 'wo6', text: 'Draft the RFQ to the Monterrey shop', status: 'proposed', dependsOn: 'wt4', connector: 'notion', commitment: 'prepares', retryCount: 0,
       preview: 'A formal RFQ covering the titanium clasp, alloy spec, and pilot-run quantity, addressed to the Monterrey shop. Requests pricing and lead time in writing.', deliverableTag: '→ PDF' }] },
+  /* Sep 1-25 demo dataset: one cluster per remaining day so every day in the month has something to look at.
+     A deliberate mix of final statuses (done/proposed/error/blocked) is baked in directly rather than simulated,
+     so browsing different days alone shows every state without needing to click anything. */
+  { id: 'wc6', day: wgKey(wgDateAt(-2)), title: 'Pull together crit prep materials', quote: 'right before the crit, like always', humanTaskId: 'wt8',
+    opalTasks: [{ id: 'wo7', text: 'Organize reference images into one deck', status: 'done', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'Pulls every reference image from this cycle into one ordered deck, captioned and ready to present.', deliverableTag: '→ NOTION PAGE', completedAt: wgDueAt(wgKey(wgDateAt(-2)), 21).getTime() }] },
+  { id: 'wc7', day: wgKey(wgDateAt(-3)), title: 'Compare the two supplier quotes', quote: "eight percent higher than Monterrey's", humanTaskId: 'wt9',
+    opalTasks: [{ id: 'wo8', text: 'Build a side-by-side comparison of both quotes', status: 'done', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'A one-page comparison of both supplier quotes — price, lead time, and minimum order — side by side.', deliverableTag: '→ NOTION PAGE', completedAt: wgDueAt(wgKey(wgDateAt(-3)), 15).getTime() }] },
+  { id: 'wc8', day: wgKey(wgDateAt(-4)), title: 'Plan the Ojai weekend', quote: 'sounded like a standing joke between them', humanTaskId: 'wt10',
+    opalTasks: [{ id: 'wo9', text: 'Look up boutique hotels in Ojai for that weekend', status: 'proposed', dependsOn: null, connector: 'notes', commitment: 'prepares', retryCount: 0,
+      preview: 'A short list of small boutique hotels in Ojai with availability that weekend, sorted by price.', deliverableTag: '→ NOTES' }] },
+  { id: 'wc9', day: wgKey(wgDateAt(-5)), title: 'Write up the design sync notes', quote: "let's get notes out before end of day", humanTaskId: null,
+    opalTasks: [{ id: 'wo10', text: 'Draft and send the sync recap to the team', status: 'error', dependsOn: null, connector: 'gmail', commitment: 'commits', retryCount: 1,
+      preview: 'A recap of the weekly design sync — decisions, owners, and next steps — sent to the whole team.', deliverableTag: '→ EMAIL DRAFT', errorReason: "Couldn't find last week's doc to link for comparison." }] },
+  { id: 'wc10', day: wgKey(wgDateAt(-7)), title: 'Book the dentist cleaning', quote: 'should really get that cleaning done', humanTaskId: 'wt11',
+    opalTasks: [{ id: 'wo11', text: 'Find three openings this week', status: 'done', dependsOn: null, connector: 'calendar', commitment: 'prepares', retryCount: 0,
+      preview: "Checks the dentist's booking page and pulls three open slots this week that don't conflict with anything on your calendar.", deliverableTag: '→ NOTES', completedAt: wgDueAt(wgKey(wgDateAt(-7)), 12).getTime() }] },
+  { id: 'wc11', day: wgKey(wgDateAt(-9)), title: "Reconcile last month's invoices", quote: "numbers weren't matching up", humanTaskId: null,
+    opalTasks: [{ id: 'wo12', text: 'Cross-check the invoice totals against the bank statement', status: 'blocked', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'Matches every invoice line to the bank statement and flags anything that fails to reconcile.', deliverableTag: '→ NOTION PAGE',
+      errorReason: 'Two receipts are missing itemized totals — Opal needs them to finish reconciling.', stuckAt: wgDueAt(wgKey(wgDateAt(-9)), 17).getTime(),
+      stuckScreen: { app: 'Notion · Finance', url: 'notion.so/finance/invoices', field: 'Missing receipt total', cta: 'Save reconciliation' } }] },
+  { id: 'wc12', day: wgKey(wgDateAt(-11)), title: 'Renew the passport before it expires', quote: 'expires in six months, better now than later', humanTaskId: 'wt12',
+    opalTasks: [{ id: 'wo13', text: 'Fill out the DS-82 renewal form', status: 'proposed', dependsOn: null, connector: 'notes', commitment: 'prepares', retryCount: 0,
+      preview: 'Fills out the DS-82 renewal form with your details, ready for you to review and sign.', deliverableTag: '→ NOTES' }] },
+  { id: 'wc13', day: wgKey(wgDateAt(-12)), title: 'Draft the monthly investor update', quote: 'keep it to one page like last time', humanTaskId: null,
+    opalTasks: [
+      { id: 'wo14', text: "Pull this month's metrics into the update", status: 'done', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+        preview: 'Pulls this month\'s key metrics into the update template, matching the format from last month.', deliverableTag: '→ NOTION PAGE', completedAt: wgDueAt(wgKey(wgDateAt(-12)), 16).getTime() },
+      { id: 'wo15', text: 'Write the first draft of the update email', status: 'error', dependsOn: null, connector: 'gmail', commitment: 'commits', retryCount: 1,
+        preview: 'A one-page investor update covering this month\'s metrics, wins, and asks.', deliverableTag: '→ EMAIL DRAFT', errorReason: 'Waiting on the final revenue number from finance.' },
+    ] },
+  { id: 'wc14', day: wgKey(wgDateAt(-14)), title: "Find a gift for Mom's birthday", quote: 'she mentioned wanting a new robe', humanTaskId: 'wt13',
+    opalTasks: [{ id: 'wo16', text: 'Shortlist three robes in her size', status: 'done', dependsOn: null, connector: 'notes', commitment: 'prepares', retryCount: 0,
+      preview: 'Three robes in her size and preferred colors, linked and ready to compare.', deliverableTag: '→ NOTES', completedAt: wgDueAt(wgKey(wgDateAt(-14)), 20).getTime() }] },
+  { id: 'wc15', day: wgKey(wgDateAt(-15)), title: 'Write up the site audit findings', quote: "page load's the biggest issue by far", humanTaskId: null,
+    opalTasks: [{ id: 'wo17', text: 'Turn the audit notes into a shared doc', status: 'blocked', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'Turns the raw audit notes into a shared, formatted doc with a findings summary up top.', deliverableTag: '→ NOTION PAGE',
+      errorReason: 'Needs read access to the analytics dashboard to finish the load-time numbers.', stuckAt: wgDueAt(wgKey(wgDateAt(-15)), 15).getTime(),
+      stuckScreen: { app: 'Notion · Opalware', url: 'notion.so/opalware/site-audit', field: 'Dashboard access', cta: 'Request access' } }] },
+  { id: 'wc16', day: wgKey(wgDateAt(-16)), title: 'Renew the car registration', quote: "sticker's expired, don't want a ticket", humanTaskId: 'wt14', opalTasks: [] },
+  { id: 'wc17', day: wgKey(wgDateAt(-17)), title: 'Prep materials for the next crit', quote: 'professor wants process work this time, not just final', humanTaskId: 'wt15',
+    opalTasks: [{ id: 'wo18', text: 'Lay out the process boards in a deck', status: 'proposed', dependsOn: 'wt15', connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'Lays the photographed process sketches out into a clean, sequenced deck once the photos are in.', deliverableTag: '→ NOTION PAGE' }] },
+  { id: 'wc18', day: wgKey(wgDateAt(-18)), title: 'Follow up on the pricing gap', quote: 'still waiting to hear back on the delta', humanTaskId: null,
+    opalTasks: [{ id: 'wo19', text: 'Send a follow-up email to Rylan', status: 'error', dependsOn: null, connector: 'gmail', commitment: 'commits', retryCount: 1,
+      preview: 'A short, direct follow-up asking Rylan for the pricing delta he mentioned on the call.', deliverableTag: '→ EMAIL DRAFT', errorReason: "Rylan's inbox bounced — the email on file may be outdated." }] },
+  { id: 'wc19', day: wgKey(wgDateAt(-19)), title: 'Plan meals for the week', quote: "always end up ordering out when there's no plan", humanTaskId: 'wt16', opalTasks: [] },
+  { id: 'wc20', day: wgKey(wgDateAt(-20)), title: 'Draft outreach messages for new hires', quote: 'need two more people on the team by October', humanTaskId: null,
+    opalTasks: [{ id: 'wo20', text: 'Draft three outreach messages for LinkedIn', status: 'proposed', dependsOn: null, connector: 'linkedin', commitment: 'prepares', retryCount: 0,
+      preview: 'Three short outreach drafts, each tailored to a different candidate profile you flagged.', deliverableTag: '→ NOTES' }] },
+  { id: 'wc21', day: wgKey(wgDateAt(-21)), title: 'Call Mom back about the weekend', quote: 'she left a voicemail about Sunday', humanTaskId: 'wt17', opalTasks: [] },
+  { id: 'wc22', day: wgKey(wgDateAt(-22)), title: "Return the order that didn't fit", quote: "wrong size again, should've checked the chart", humanTaskId: 'wt18', opalTasks: [] },
+  { id: 'wc23', day: wgKey(wgDateAt(-23)), title: 'Send Marcus a thank-you note', quote: 'he really went out of his way explaining the pilot', humanTaskId: null,
+    opalTasks: [{ id: 'wo21', text: 'Draft a short thank-you email to Marcus', status: 'done', dependsOn: null, connector: 'gmail', commitment: 'commits', retryCount: 0,
+      preview: 'A short, warm thank-you note to Marcus for walking through how the pilot handles privacy for minors.', deliverableTag: '→ EMAIL DRAFT', completedAt: wgDueAt(wgKey(wgDateAt(-23)), 18).getTime() }] },
+  { id: 'wc24', day: wgKey(wgDateAt(-24)), title: 'Finish setting up the new phone', quote: "still haven't moved everything over", humanTaskId: 'wt19', opalTasks: [] },
+  { id: 'wc25', day: wgKey(wgDateAt(-10)), title: 'First pass on the Monterrey RFQ', quote: 'holding it until the spec is final', humanTaskId: null,
+    opalTasks: [{ id: 'wo22', text: 'Draft the RFQ language', status: 'done', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'A first pass at the RFQ language, held until the alloy spec is finalized.', deliverableTag: '→ NOTION PAGE', completedAt: wgDueAt(wgKey(wgDateAt(-10)), 11).getTime() }] },
+  { id: 'wc26', day: wgKey(wgDateAt(-13)), title: 'Confirm the alloy spec internally', quote: 'matches the pilot-run tolerance', humanTaskId: null,
+    opalTasks: [{ id: 'wo23', text: 'Circulate the spec for internal sign-off', status: 'done', dependsOn: null, connector: 'notion', commitment: 'prepares', retryCount: 0,
+      preview: 'Circulates the finalized alloy spec internally and collects sign-off before it goes to any supplier.', deliverableTag: '→ NOTION PAGE', completedAt: wgDueAt(wgKey(wgDateAt(-13)), 10).getTime() }] },
 ];
 function wgOpalTaskById(id) { for (const c of WG_CLUSTERS) { const t = c.opalTasks.find(x => x.id === id); if (t) return { cluster: c, task: t }; } return null; }
 const WG_TASK_SIM = { wo1: { willFail: true, errorReason: "NYU hasn't published next year's academic calendar yet." },
@@ -5246,22 +5327,22 @@ const WG_CONVERSATIONS = [
     summary: 'Started drafting the RFQ language before sending anything to Monterrey.',
     summaryCites: ['s1', 's2'],
     decisions: [], talkingPoints: [wgD('Needs the alloy spec and quantity before it goes out.', ['s2'])],
-    actionClusterIds: [], personIds: ['wp-tomas'],
-    transcriptSentences: [wgSent('s1', 'Drafted a first pass at the RFQ language.', 0), wgSent('s2', 'Holding it until the spec is final.', 8)],
+    actionClusterIds: ['wc25'], personIds: ['wp-tomas'],
+    transcriptSentences: [wgSent('s1', 'Drafted a first pass at the RFQ language.', 0), wgSent('s2', 'Holding it until the spec is final.', 8, 'wc25')],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv8', title: 'Alloy spec sign-off', isEstimatedTitle: false, day: wgKey(wgDateAt(-13)), startAt: wgConvAt(wgKey(wgDateAt(-13)), 10, 0), endAt: wgConvAt(wgKey(wgDateAt(-13)), 10, 9), tag: 'supplier',
     summary: 'Confirmed the alloy spec internally before quoting anyone.',
     summaryCites: ['s1'],
     decisions: [], talkingPoints: [wgD("Spec matches the pilot-run tolerance.", ['s2'])],
-    actionClusterIds: [], personIds: [],
-    transcriptSentences: [wgSent('s1', 'Signed off on the alloy spec internally.', 0), wgSent('s2', 'Matches the pilot-run tolerance.', 7)],
+    actionClusterIds: ['wc26'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'Signed off on the alloy spec internally.', 0), wgSent('s2', 'Matches the pilot-run tolerance.', 7, 'wc26')],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv9', title: 'Second supplier quote came in', isEstimatedTitle: false, day: wgKey(wgDateAt(-3)), startAt: wgConvAt(wgKey(wgDateAt(-3)), 14, 0), endAt: wgConvAt(wgKey(wgDateAt(-3)), 14, 11), tag: 'supplier',
     summary: "A second quote landed, a little higher than Monterrey's number.",
     summaryCites: ['s1', 's2'],
     decisions: [], talkingPoints: [wgD("About 8% higher than the first quote.", ['s2']), wgD('Still waiting on lead time from this one.')],
-    actionClusterIds: [], personIds: ['wp-tomas'],
-    transcriptSentences: [wgSent('s1', 'A second supplier quote came in.', 0), wgSent('s2', "Eight percent higher than Monterrey's.", 8)],
+    actionClusterIds: ['wc7'], personIds: ['wp-tomas'],
+    transcriptSentences: [wgSent('s1', 'A second supplier quote came in.', 0), wgSent('s2', "Eight percent higher than Monterrey's.", 8, 'wc7')],
     isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
   { id: 'wcv10', title: 'Coffee with Priya', isEstimatedTitle: false, day: WG_YDAY_KEY, startAt: wgConvAt(WG_YDAY_KEY, 11, 0), endAt: wgConvAt(WG_YDAY_KEY, 11, 24), tag: 'personal',
     summary: 'Coffee with Priya after Maya introduced you — she heads design at Loam and is training for the LA marathon.',
@@ -5274,15 +5355,15 @@ const WG_CONVERSATIONS = [
     summary: 'The 9AM professor came up again, right before a crit.',
     summaryCites: ['s1', 's2'],
     decisions: [], talkingPoints: [wgD('Same voice, still no name.'), wgD('Always right before a studio crit.', ['s2'])],
-    actionClusterIds: [], personIds: ['wp-prof'],
-    transcriptSentences: [wgSent('s1', 'Heard the same voice again this morning.', 0), wgSent('s2', 'Right before the crit, like always.', 6)],
+    actionClusterIds: ['wc6'], personIds: ['wp-prof'],
+    transcriptSentences: [wgSent('s1', 'Heard the same voice again this morning.', 0), wgSent('s2', 'Right before the crit, like always.', 6, 'wc6')],
     isStarred: false, isArchived: false, folderId: 'wf-prepcheck', relatedConversationIds: [] },
   { id: 'wcv12', title: 'Ojai with a friend from work', isEstimatedTitle: false, day: wgKey(wgDateAt(-4)), startAt: wgConvAt(wgKey(wgDateAt(-4)), 18, 20), endAt: wgConvAt(wgKey(wgDateAt(-4)), 18, 27), tag: 'family',
     summary: "Came up on a call with Mom — a trip to Ojai with a friend from work.",
     summaryCites: ['s1'],
     decisions: [], talkingPoints: [wgD('No last name yet.'), wgD('Sounded like a standing joke between them.', ['s1'])],
-    actionClusterIds: [], personIds: ['wp-momfriend'],
-    transcriptSentences: [wgSent('s1', 'Mom mentioned Ojai again, laughing about it.', 0), wgSent('s2', 'Same friend from work, still no name.', 7)],
+    actionClusterIds: ['wc8'], personIds: ['wp-momfriend'],
+    transcriptSentences: [wgSent('s1', 'Mom mentioned Ojai again, laughing about it.', 0, 'wc8'), wgSent('s2', 'Same friend from work, still no name.', 7)],
     isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
   { id: 'wcv13', title: "Dad's school pilot call", isEstimatedTitle: false, day: wgKey(wgDateAt(-3)), startAt: wgConvAt(wgKey(wgDateAt(-3)), 8, 0), endAt: wgConvAt(wgKey(wgDateAt(-3)), 8, 6), tag: 'family',
     summary: "Dad mentioned the pilot moving to October and asked you to call back.",
@@ -5291,6 +5372,105 @@ const WG_CONVERSATIONS = [
     actionClusterIds: [], personIds: ['wp-dad'],
     transcriptSentences: [wgSent('s1', 'Dad: the school pilot moves to October.', 0), wgSent('s2', "I'll call you this evening about it.", 5)],
     isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
+  /* Sep 1-25 demo dataset: one conversation for every day that didn't already have one */
+  { id: 'wcv14', title: 'Weekly design sync notes', isEstimatedTitle: false, day: wgKey(wgDateAt(-5)), startAt: wgConvAt(wgKey(wgDateAt(-5)), 10, 0), endAt: wgConvAt(wgKey(wgDateAt(-5)), 10, 18), tag: 'work',
+    summary: "The weekly design sync wrapped with a few real decisions — notes just need to go out to the team.",
+    summaryCites: ['s1', 's2'], decisions: [wgD('Ship the new nav by Friday.', ['s2'])],
+    talkingPoints: [wgD("Let's get notes out before end of day.", ['s1']), wgD('Sam is picking up the onboarding flow next.', ['s2'])],
+    actionClusterIds: ['wc9'], personIds: ['wp-sam'],
+    transcriptSentences: [wgSent('s1', "Let's get notes out before end of day.", 0), wgSent('s2', 'Sam, can you take the onboarding flow next?', 9, 'wc9')],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv15', title: 'Dentist reminder', isEstimatedTitle: false, day: wgKey(wgDateAt(-7)), startAt: wgConvAt(wgKey(wgDateAt(-7)), 12, 0), endAt: wgConvAt(wgKey(wgDateAt(-7)), 12, 5), tag: 'personal',
+    summary: "A quick reminder to yourself to finally book the dentist cleaning.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('Should really get that cleaning done.', ['s1'])],
+    actionClusterIds: ['wc10'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'Should really get that cleaning done.', 0, 'wc10'), wgSent('s2', "It's been over a year.", 4)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv16', title: 'Invoice reconciliation', isEstimatedTitle: false, day: wgKey(wgDateAt(-9)), startAt: wgConvAt(wgKey(wgDateAt(-9)), 16, 30), endAt: wgConvAt(wgKey(wgDateAt(-9)), 16, 41), tag: 'work',
+    summary: "Last month's invoices weren't lining up with the bank statement — flagged for a closer look.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Numbers weren't matching up.", ['s1']), wgD('Two receipts look incomplete.', ['s2'])],
+    actionClusterIds: ['wc11'], personIds: [],
+    transcriptSentences: [wgSent('s1', "The numbers weren't matching up.", 0, 'wc11'), wgSent('s2', 'A couple of receipts look incomplete.', 6)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv17', title: 'Passport renewal', isEstimatedTitle: false, day: wgKey(wgDateAt(-11)), startAt: wgConvAt(wgKey(wgDateAt(-11)), 17, 0), endAt: wgConvAt(wgKey(wgDateAt(-11)), 17, 9), tag: 'personal',
+    summary: "Passport expires in six months — better to start the renewal now than scramble later.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('Expires in six months.', ['s1']), wgD('Better now than later.', ['s2'])],
+    actionClusterIds: ['wc12'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'Passport expires in six months.', 0, 'wc12'), wgSent('s2', 'Better to start now than later.', 5)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv18', title: 'Investor update draft', isEstimatedTitle: false, day: wgKey(wgDateAt(-12)), startAt: wgConvAt(wgKey(wgDateAt(-12)), 16, 0), endAt: wgConvAt(wgKey(wgDateAt(-12)), 16, 14), tag: 'work',
+    summary: "Time for the monthly investor update — keep it to one page, same as last time.",
+    summaryCites: ['s1'], decisions: [wgD('One page, same format as last month.', ['s1'])],
+    talkingPoints: [wgD('Keep it to one page like last time.', ['s1']), wgD('Still waiting on the final revenue number.', ['s2'])],
+    actionClusterIds: ['wc13'], personIds: ['wp-sam'],
+    transcriptSentences: [wgSent('s1', 'Keep it to one page like last time.', 0, 'wc13'), wgSent('s2', 'Still waiting on the final revenue number from finance.', 8)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv19', title: "Mom's birthday gift", isEstimatedTitle: false, day: wgKey(wgDateAt(-14)), startAt: wgConvAt(wgKey(wgDateAt(-14)), 19, 30), endAt: wgConvAt(wgKey(wgDateAt(-14)), 19, 38), tag: 'family',
+    summary: "Mom's birthday is coming up — she mentioned wanting a new robe, so that's the lead.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('She mentioned wanting a new robe.', ['s1'])],
+    actionClusterIds: ['wc14'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'She mentioned wanting a new robe.', 0, 'wc14'), wgSent('s2', 'Her birthday is in two weeks.', 5)],
+    isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
+  { id: 'wcv20', title: 'Site audit notes for Opalware', isEstimatedTitle: false, day: wgKey(wgDateAt(-15)), startAt: wgConvAt(wgKey(wgDateAt(-15)), 15, 0), endAt: wgConvAt(wgKey(wgDateAt(-15)), 15, 16), tag: 'work',
+    summary: "Walked through the site audit — page load time is the biggest issue by far.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Page load's the biggest issue by far.", ['s1']), wgD('Everything else is minor by comparison.', ['s2'])],
+    actionClusterIds: ['wc15'], personIds: ['wp-sam'],
+    transcriptSentences: [wgSent('s1', "Page load's the biggest issue by far.", 0, 'wc15'), wgSent('s2', 'Everything else is pretty minor next to that.', 6)],
+    isStarred: false, isArchived: false, folderId: 'wf-opalware', relatedConversationIds: [] },
+  { id: 'wcv21', title: 'Car registration renewal', isEstimatedTitle: false, day: wgKey(wgDateAt(-16)), startAt: wgConvAt(wgKey(wgDateAt(-16)), 13, 0), endAt: wgConvAt(wgKey(wgDateAt(-16)), 13, 4), tag: 'personal',
+    summary: "Registration sticker's expired — paid it online before it became a problem.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Sticker's expired, don't want a ticket.", ['s1'])],
+    actionClusterIds: ['wc16'], personIds: [],
+    transcriptSentences: [wgSent('s1', "Sticker's expired, don't want a ticket.", 0, 'wc16')],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv22', title: 'Studio crit prep materials', isEstimatedTitle: false, day: wgKey(wgDateAt(-17)), startAt: wgConvAt(wgKey(wgDateAt(-17)), 16, 0), endAt: wgConvAt(wgKey(wgDateAt(-17)), 16, 11), tag: 'school',
+    summary: "The professor wants process work shown this time, not just the final piece.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('Professor wants process work this time.', ['s1']), wgD('Not just the final piece.', ['s2'])],
+    actionClusterIds: ['wc17'], personIds: ['wp-prof'],
+    transcriptSentences: [wgSent('s1', 'Professor wants process work this time, not just final.', 0, 'wc17'), wgSent('s2', 'Photograph the sketches before the crit.', 7)],
+    isStarred: false, isArchived: false, folderId: 'wf-prepcheck', relatedConversationIds: [] },
+  { id: 'wcv23', title: 'Follow up with Rylan on pricing', isEstimatedTitle: false, day: wgKey(wgDateAt(-18)), startAt: wgConvAt(wgKey(wgDateAt(-18)), 9, 0), endAt: wgConvAt(wgKey(wgDateAt(-18)), 9, 7), tag: 'supplier',
+    summary: "Still waiting on the pricing delta Rylan mentioned on last week's call.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('Still waiting to hear back on the delta.', ['s1'])],
+    actionClusterIds: ['wc18'], personIds: ['wp-tomas'],
+    transcriptSentences: [wgSent('s1', 'Still waiting to hear back on the pricing delta.', 0, 'wc18'), wgSent('s2', 'Rylan said he would send it Monday.', 5)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv24', title: 'Grocery run for the week', isEstimatedTitle: false, day: wgKey(wgDateAt(-19)), startAt: wgConvAt(wgKey(wgDateAt(-19)), 18, 0), endAt: wgConvAt(wgKey(wgDateAt(-19)), 18, 6), tag: 'personal',
+    summary: "Planned the week's meals so it's not another week of ordering out.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Always end up ordering out when there's no plan.", ['s1'])],
+    actionClusterIds: ['wc19'], personIds: [],
+    transcriptSentences: [wgSent('s1', "Always end up ordering out when there's no plan.", 0, 'wc19')],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv25', title: 'LinkedIn outreach draft', isEstimatedTitle: false, day: wgKey(wgDateAt(-20)), startAt: wgConvAt(wgKey(wgDateAt(-20)), 11, 0), endAt: wgConvAt(wgKey(wgDateAt(-20)), 11, 13), tag: 'work',
+    summary: "Need two more people on the team by October — time to start outreach.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('Need two more people on the team by October.', ['s1'])],
+    actionClusterIds: ['wc20'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'Need two more people on the team by October.', 0, 'wc20'), wgSent('s2', 'Start with a few outreach messages on LinkedIn.', 6)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv26', title: 'Call Mom back', isEstimatedTitle: false, day: wgKey(wgDateAt(-21)), startAt: wgConvAt(wgKey(wgDateAt(-21)), 9, 0), endAt: wgConvAt(wgKey(wgDateAt(-21)), 9, 4), tag: 'family',
+    summary: "Mom left a voicemail about Sunday plans — called her back before the day got away.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('She left a voicemail about Sunday.', ['s1'])],
+    actionClusterIds: ['wc21'], personIds: [],
+    transcriptSentences: [wgSent('s1', 'Mom left a voicemail about Sunday.', 0, 'wc21')],
+    isStarred: false, isArchived: false, folderId: 'wf-family', relatedConversationIds: [] },
+  { id: 'wcv27', title: 'Return the online order', isEstimatedTitle: false, day: wgKey(wgDateAt(-22)), startAt: wgConvAt(wgKey(wgDateAt(-22)), 11, 0), endAt: wgConvAt(wgKey(wgDateAt(-22)), 11, 5), tag: 'personal',
+    summary: "Wrong size again — starting the return before the window closes.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Wrong size again, should've checked the chart.", ['s1'])],
+    actionClusterIds: ['wc22'], personIds: [],
+    transcriptSentences: [wgSent('s1', "Wrong size again, should've checked the chart.", 0, 'wc22')],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv28', title: 'Thank-you note to Marcus', isEstimatedTitle: false, day: wgKey(wgDateAt(-23)), startAt: wgConvAt(wgKey(wgDateAt(-23)), 17, 30), endAt: wgConvAt(wgKey(wgDateAt(-23)), 17, 36), tag: 'work',
+    summary: "Marcus went out of his way explaining the pilot's privacy handling — worth a real thank-you.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD('He really went out of his way explaining the pilot.', ['s1'])],
+    actionClusterIds: ['wc23'], personIds: ['wp-marcus'],
+    transcriptSentences: [wgSent('s1', 'He really went out of his way explaining the pilot.', 0, 'wc23'), wgSent('s2', 'Worth a real thank-you, not just a quick reply.', 6)],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
+  { id: 'wcv29', title: 'Set up the new phone', isEstimatedTitle: false, day: wgKey(wgDateAt(-24)), startAt: wgConvAt(wgKey(wgDateAt(-24)), 20, 0), endAt: wgConvAt(wgKey(wgDateAt(-24)), 20, 9), tag: 'personal',
+    summary: "Still moving everything over to the new phone — a slow process in the background.",
+    summaryCites: ['s1'], decisions: [], talkingPoints: [wgD("Still haven't moved everything over.", ['s1'])],
+    actionClusterIds: ['wc24'], personIds: [],
+    transcriptSentences: [wgSent('s1', "Still haven't moved everything over.", 0, 'wc24')],
+    isStarred: false, isArchived: false, folderId: null, relatedConversationIds: [] },
 ];
 function wgConvById(id) { return WG_CONVERSATIONS.find(c => c.id === id) || null; }
 
@@ -5312,53 +5492,24 @@ function wgComputeSuggestedFolders() {
   }));
 }
 
-/* transcript hours: hand-authored for the days that carry the story, seeded/generated for the rest */
-function wgMkSpans(text, list) {
-  return list.map(([phrase, connector, confidence, actionClusterId]) => { const i = text.indexOf(phrase); return i < 0 ? null : { rangeStart: i, rangeEnd: i + phrase.length, connector, confidence, actionClusterId }; }).filter(Boolean);
-}
+/* every day's aggregate stats (actionCount/talkTimeSeconds/connectorsTouched/hours) are derived straight from
+   WG_CLUSTERS + WG_CONVERSATIONS for that day — one source of truth, no separately-authored/random hour text,
+   since nothing renders hour.summary/fullText to the user anymore (wgRenderDayConversations reads the
+   conversations directly). Covers exactly Sep 1-25, 2026 (offset 0 = WG_T0 down to -24 = Sep 1) and nothing else. */
 function wgBuildDays() {
-  const CONNECTORS = ['calendar', 'gmail', 'notion', 'linkedin', 'substack', 'spotify', 'contacts', 'notes'];
-  const rndFor = day => mulberry32(day * 97 + 11);
   const days = [];
-  for (let off = 0; off >= -22; off--) {
-    const d = wgDateAt(off), key = wgKey(d);
-    let hours = [];
-    if (key === WG_TODAY_KEY) {
-      hours = [
-        { hour: 7, talkTimeSeconds: 210, summary: 'Owen: gym Friday at seven, you said not to let you skip it.', fullText: 'Owen called about the gym. "Gym Friday at seven. You said not to let you skip it." You agreed and asked him to text the address.', actionableSpans: [] },
-        { hour: 8, talkTimeSeconds: 180, summary: 'Dad: the school pilot moves to October, you said you would call back.', fullText: 'Dad mentioned the pilot moves to October. "I will call you this evening about the school pilot." You said you would call back.', actionableSpans: [] },
-        { hour: 9, talkTimeSeconds: 260, summary: 'Supplier call: titanium lead time is nine weeks.', fullText: 'On the call with Rylan and Tomas Reyes: nine weeks works if the alloy is locked by the 23rd.', actionableSpans: [] },
-        { hour: 11, talkTimeSeconds: 300, summary: 'Introduced to Priya Natarajan through Maya at Crosscut Coffee.', fullText: 'Coffee with Maya. She introduced Priya Natarajan, head of design at Loam, training for the LA marathon.', actionableSpans: [] },
-        { hour: 13, talkTimeSeconds: 340, summary: 'Brand deck review with Ellie, due before her Friday review.', fullText: 'Ellie needs the brand deck before her review Friday. "Before your review." Sam Okafor was in the room too.', actionableSpans: wgMkSpans('Ellie needs the brand deck before her review Friday. "Before your review." Sam Okafor was in the room too.', [['brand deck', 'gmail', .88, 'wc3']]) },
-        { hour: 15, talkTimeSeconds: 260, summary: 'You and Sage started talking about spring break plans.', fullText: 'We should figure out spring break, I really want to go somewhere with Sage. Neither of us has been anywhere new in a while.', actionableSpans: wgMkSpans('We should figure out spring break, I really want to go somewhere with Sage. Neither of us has been anywhere new in a while.', [['spring break', 'notion', .81, 'wc1']]) },
-        { hour: 16, talkTimeSeconds: 190, summary: "Calvin's birthday dinner is set for a week from Saturday.", fullText: "We're doing dinner a week from Saturday. Calvin wants Bestia. Still need to figure out a gift.", actionableSpans: wgMkSpans("We're doing dinner a week from Saturday. Calvin wants Bestia. Still need to figure out a gift.", [['dinner a week from Saturday', 'calendar', .92, 'wc2']]) },
-      ];
-    } else if (key === WG_YDAY_KEY) {
-      hours = [
-        { hour: 10, talkTimeSeconds: 220, summary: 'Design review, quiet day otherwise.', fullText: 'Short design review in the morning. Nothing else notable.', actionableSpans: [] },
-        { hour: 19, talkTimeSeconds: 240, summary: 'Owen: gym tomorrow at seven.', fullText: "Owen: tomorrow at seven, I'm in. Don't let me skip it.", actionableSpans: wgMkSpans("Owen: tomorrow at seven, I'm in. Don't let me skip it.", [['tomorrow at seven', 'calendar', .74, 'wc4']]) },
-      ];
-    } else if (key === WG_D6_KEY) {
-      hours = [
-        { hour: 9, talkTimeSeconds: 310, summary: 'Supplier call with Rylan and Tomas: alloy needs locking by the 23rd.', fullText: "Rylan and Tomas Reyes on the call. Nine weeks works if we lock the alloy by the 23rd. Tomas said the Monterrey shop could do three hundred units.", actionableSpans: wgMkSpans("Rylan and Tomas Reyes on the call. Nine weeks works if we lock the alloy by the 23rd. Tomas said the Monterrey shop could do three hundred units.", [['lock the alloy by the 23rd', 'notion', .78, 'wc5']]) },
-        { hour: 12, talkTimeSeconds: 150, summary: "Marcus Bell asked about privacy for minors in the pilot.", fullText: "Marcus Bell, the principal, asked how the pilot handles privacy for the kids.", actionableSpans: [] },
-      ];
-    } else {
-      const rnd = rndFor(off); const n = rnd() < .18 ? 0 : 1 + Math.floor(rnd() * 3);
-      const starts = [7, 9, 11, 13, 15, 17, 19, 21];
-      for (let i = 0; i < n; i++) { const h = starts[Math.floor(rnd() * starts.length)];
-        if (hours.find(x => x.hour === h)) continue;
-        const s = ['A quiet call about nothing urgent.', 'Errands, mostly silence in between.', 'Lunch, then back to it.', 'A short walk, said little out loud.'][Math.floor(rnd() * 4)];
-        hours.push({ hour: h, talkTimeSeconds: 60 + Math.floor(rnd() * 480), summary: s, fullText: s + ' Nothing Opal flagged for you.', actionableSpans: [] });
-      }
-    }
-    hours.sort((a, b) => a.hour - b.hour);
-    const talkTimeSeconds = hours.reduce((s, h) => s + h.talkTimeSeconds, 0);
+  for (let off = 0; off >= -24; off--) {
+    const key = wgKey(wgDateAt(off));
     const clusters = WG_CLUSTERS.filter(c => c.day === key);
+    const convs = WG_CONVERSATIONS.filter(c => c.day === key && !c.isArchived);
+    const hours = convs.map(c => {
+      const linked = clusters.filter(cl => c.actionClusterIds.includes(cl.id));
+      const actionableSpans = linked.flatMap(cl => cl.opalTasks.map(t => ({ rangeStart: 0, rangeEnd: 0, connector: t.connector, confidence: .8, actionClusterId: cl.id })));
+      return { hour: c.startAt.getHours(), talkTimeSeconds: Math.max(45, Math.round((c.endAt - c.startAt) / 1000)), summary: c.summary, fullText: c.summary, actionableSpans };
+    }).sort((a, b) => a.hour - b.hour);
+    const talkTimeSeconds = hours.reduce((s, h) => s + h.talkTimeSeconds, 0);
     const actionCount = clusters.length;
-    const rnd2 = rndFor(off + 500);
-    let connectorsTouched = [...new Set(hours.flatMap(h => h.actionableSpans.map(s => s.connector)).filter(c => CONNECTORS.includes(c)))];
-    if (!connectorsTouched.length && talkTimeSeconds > 0) connectorsTouched = CONNECTORS.filter(() => rnd2() < .3).slice(0, 3);
+    let connectorsTouched = [...new Set(hours.flatMap(h => h.actionableSpans.map(s => s.connector)))];
     if (key === WG_TODAY_KEY) connectorsTouched = [...new Set([...connectorsTouched, 'calendar', 'gmail'])];
     days.push({ date: key, actionCount, talkTimeSeconds, connectorsTouched, hours });
   }
@@ -5551,12 +5702,13 @@ function wgWelcomeCalHTML() {
   const prevDaysInMonth = new Date(year, month, 0).getDate();
   const cells = [];
   for (let i = 0; i < startPad; i++) cells.push({ n: prevDaysInMonth - startPad + 1 + i, faded: true });
-  for (let d = 1; d <= daysInMonth; d++) { const key = wgKey(new Date(year, month, d)); cells.push({ n: d, faded: false, today: key === WG_TODAY_KEY, key }); }
+  for (let d = 1; d <= daysInMonth; d++) { const key = wgKey(new Date(year, month, d)); cells.push({ n: d, faded: false, today: key === WG_TODAY_KEY, selected: key === wgState.dayViewKey && key !== WG_TODAY_KEY, key }); }
   let nextDay = 1; while (cells.length < 42) cells.push({ n: nextDay++, faded: true });
   const dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => `<span>${d}</span>`).join('');
-  const grid = cells.map(c => `<span class="${c.faded ? 'faded' : ''}${c.today ? ' today' : ''}"${c.key ? ` data-day="${c.key}" role="button" tabindex="0"` : ''}>${c.n}</span>`).join('');
+  const grid = cells.map(c => `<span class="${c.faded ? 'faded' : ''}${c.today ? ' today' : ''}${c.selected ? ' selected' : ''}"${c.key ? ` data-day="${c.key}" role="button" tabindex="0"` : ''}>${c.n}</span>`).join('');
   return `<div class="wg-welcome-cal-head"><button type="button" class="wg-welcome-cal-nav" data-welcomecalnav="-1" aria-label="Previous month">‹</button><span class="wg-welcome-cal-title mono">${TITLE(MONTHS[month])} ${year}</span><button type="button" class="wg-welcome-cal-nav" data-welcomecalnav="1" aria-label="Next month">›</button></div>
-    <div class="wg-welcome-cal-dow">${dow}</div><div class="wg-welcome-cal-grid">${grid}</div>`;
+    <div class="wg-welcome-cal-dow">${dow}</div><div class="wg-welcome-cal-grid">${grid}</div>
+    <p class="wg-welcome-cal-empty" id="wgWelcomeCalEmpty" hidden></p>`;
 }
 function wgRenderWelcomeCal() { const el = $('#wgWelcomeCalWrap'); if (el) el.innerHTML = wgWelcomeCalHTML(); }
 function wgWelcomeWhenText() { const d = new Date(); return `${fmtDate(d)} · ${fmtTime(d)}`; }
@@ -6405,7 +6557,7 @@ function wgNavigateDay(dir) {
 /* actions: a persistent 2:1 grid, per-task run state, prepares vs commits */
 const wgWarnSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.6l6.9 12H1.1z"/><path d="M8 6.4v3.2M8 11.6h.01" stroke-linecap="round"/></svg>`;
 function wgRunStatusFor(t) {
-  const msgs = { notion: 'WRITING THE NOTION PAGE…', pinterest: 'SEARCHING PINTEREST…', gmail: 'DRAFTING THE EMAIL…', calendar: 'HOLDING THE RESERVATION…' };
+  const msgs = { notion: 'WRITING THE NOTION PAGE…', pinterest: 'SEARCHING PINTEREST…', gmail: 'DRAFTING THE EMAIL…', calendar: 'HOLDING THE RESERVATION…', notes: 'WRITING THE NOTES…', linkedin: 'DRAFTING THE MESSAGES…' };
   return msgs[t.connector] || 'OPAL IS ON IT';
 }
 function wgDeliverableFor(t) {
@@ -6414,7 +6566,10 @@ function wgDeliverableFor(t) {
   if (t.id === 'wo4') return { type: 'text', content: 'Hi — could I hold a table for two at Bestia on Saturday the 26th, around 7:30pm? Celebrating a birthday, happy to be flexible by 30 minutes either way.', commitVerb: 'BOOK', commitLabel: 'BOOK THE TABLE' };
   if (t.id === 'wo5') return { type: 'text', content: "Ellie — brand deck attached ahead of Friday. Two directions inside; the second is the one I'd fight for. Tell me where it bends.", commitVerb: 'SEND', commitLabel: 'SEND THE EMAIL' };
   if (t.id === 'wo6') return { type: 'external', title: 'Titanium Clasp RFQ.pdf', preview: 'Alloy spec, pilot-run quantity, and a request for pricing and lead time, addressed to the Monterrey shop.' };
-  return null;
+  // generic fallback for the Sep 1-25 demo dataset's other tasks, derived from the task's own shape rather than hardcoded per id
+  if (/×\d/.test(t.deliverableTag || '')) return { type: 'images', images: [1, 2, 3, 4, 5] };
+  if (t.commitment === 'commits') return { type: 'text', content: t.preview || 'Draft ready for your review.', commitVerb: t.connector === 'gmail' ? 'SEND' : 'BOOK', commitLabel: t.connector === 'gmail' ? 'SEND THE EMAIL' : 'CONFIRM' };
+  return { type: 'external', title: (t.text || 'Result') + (t.connector === 'notion' ? ' — Notion' : ''), preview: t.preview || 'Ready to review.' };
 }
 function wgSaveTaskState(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const t = found.task;
@@ -6736,8 +6891,10 @@ function wgDayTxJumpNextFlag() {
 
 /* today: the default landing view — today's action items, talking points, conversations, and a live-updating transcript feed */
 function wgTodayOpalItems() {
+  // shows every status including 'done' — this is the permanent Sep 1-25 demo dataset, and items shouldn't
+  // disappear from view just because they were interacted with; only 'moved' drops off (it now lives in "My tasks" instead)
   const items = [];
-  wgClustersFor(wgState.dayViewKey).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved' && t.status !== 'done') items.push({ t, c }); }));
+  wgClustersFor(wgState.dayViewKey).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved') items.push({ t, c }); }));
   return items;
 }
 function wgTodayYouItems() {
@@ -6753,6 +6910,7 @@ function wgTodayOpalRowHTML(t) {
   if (t.status === 'running') right = `<span class="wg-loading-orb" aria-label="Opal is working on it"></span>`;
   else if (t.status === 'done') right = `<button type="button" class="wg-today-openbtn" data-debrief="${t.id}">Open</button><span class="wg-today-state done" aria-label="Done">${wgCheckSvg}</span>`;
   else if (t.status === 'error') right = `<button type="button" class="wg-today-state error" data-todayretry="${t.id}">Retry</button>`;
+  else if (t.status === 'blocked') right = `<button type="button" class="wg-today-state blocked" data-stuckrow="${t.id}">Stuck</button>`;
   else right = `<button type="button" class="wg-today-go" data-todaygo="${t.id}">GO</button><button type="button" class="wg-today-skip" data-todayskip="${t.id}" aria-label="Skip">✕</button>`;
   const doneAttrs = t.status === 'done' ? ` data-debrief="${t.id}" tabindex="0" role="button" aria-label="View what Opal produced for ${esc(t.text)}"` : '';
   return `<div class="wg-today-row opal${t.status === 'done' ? ' done' : ''}" data-todayopalrow="${t.id}"${doneAttrs}><span class="tag">OPAL</span><p>${esc(t.text)}</p>${right}</div>`;
@@ -6811,6 +6969,15 @@ function wgSelectDay(key) {
   wgState.dayViewKey = key;
   if (wgState.viewMode !== 'today') wgSwitchViewMode('today');
   else { wgRenderToday(); wgRenderDaySubtitle(); }
+  wgRenderWelcomeCal();
+}
+function wgSelectDayFromWelcome(key) {
+  const empty = $('#wgWelcomeCalEmpty');
+  if (!wgDayOpenable(key)) {
+    if (empty) { empty.textContent = key > WG_TODAY_KEY ? 'nothing to see here yet' : 'nothing to see here from this day'; empty.hidden = false; }
+    return;
+  }
+  wgSelectDay(key);
 }
 function wgRenderToday() {
   wgRenderDaySubtitle();
@@ -7141,7 +7308,7 @@ function wgInit() {
   $('#wgWelcomePanel').addEventListener('click', e => {
     const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
     const nav = e.target.closest('[data-welcomecalnav]'); if (nav) return wgNavigateCalMonth(+nav.dataset.welcomecalnav);
-    const day = e.target.closest('[data-day]'); if (day) return wgSelectDay(day.dataset.day);
+    const day = e.target.closest('[data-day]'); if (day) return wgSelectDayFromWelcome(day.dataset.day);
   });
   $('#wgRailBody').addEventListener('contextmenu', e => { const row = e.target.closest('[data-todo]'); if (row) { e.preventDefault(); wgOpenRailSnooze(row.dataset.todo, e.clientX, e.clientY); } });
   let wgRailPressT = 0, wgRailPressId = null;
@@ -7160,6 +7327,7 @@ function wgInit() {
     const skip = e.target.closest('[data-todayskip]'); if (skip) return wgSkipTask(skip.dataset.todayskip);
     const retry = e.target.closest('[data-todayretry]'); if (retry) return wgRetryTask(retry.dataset.todayretry);
     const debrief = e.target.closest('[data-debrief]'); if (debrief) return wgOpenDebrief(debrief.dataset.debrief);
+    const stuck = e.target.closest('[data-stuckrow]'); if (stuck) return wgOpenStuckPanel(stuck.dataset.stuckrow);
     const viewmore = e.target.closest('[data-viewmore]'); if (viewmore) return wgOpenDay(wgState.dayViewKey);
     const dayconvfilter = e.target.closest('[data-dayconvfilter]'); if (dayconvfilter) return wgSetDayConvFilter(dayconvfilter.dataset.dayconvfilter);
     if (e.target.closest('[data-convtitle]')) return;
