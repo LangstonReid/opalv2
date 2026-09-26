@@ -2300,14 +2300,21 @@ body.mode-live .live-sidebar.show{transform:none}
 .live-task-text{font:400 13px/1.45 var(--sans);color:var(--wg-ink)}
 /* stuck (blocked, still live) = rich orange; failed (error, expired) = rich red — the whole
    card, not just the status chip, per Langston's explicit "make the entire widget" ask */
-.live-task-row.row-stuck{background:#dd8f45;border-color:#b96f2c}
+.live-task-row.row-stuck{background:#dd8f45;border-color:#b96f2c;color:#2b1a08}
 .live-task-row.row-stuck .live-task-connector,.live-task-row.row-stuck .live-task-day{color:rgba(43,26,8,.62)}
 .live-task-row.row-stuck .live-task-status{background:rgba(31,20,4,.16);color:#2b1a08}
 .live-task-row.row-stuck .live-task-text{color:#2b1a08}
-.live-task-row.row-error{background:#b0452f;border-color:#8f3720}
+.live-task-row.row-error{background:#b0452f;border-color:#8f3720;color:#fff}
 .live-task-row.row-error .live-task-connector,.live-task-row.row-error .live-task-day{color:rgba(255,255,255,.68)}
 .live-task-row.row-error .live-task-status{background:rgba(0,0,0,.2);color:#fff}
 .live-task-row.row-error .live-task-text{color:#fff}
+.live-task-actions{display:flex;gap:6px;margin-top:9px}
+.live-task-retry,.live-task-info{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.1);color:inherit;transition:background .15s,transform .15s}
+.live-task-retry:hover,.live-task-info:hover{background:rgba(0,0,0,.18)}
+.live-task-retry svg,.live-task-info svg{width:13px;height:13px}
+.live-task-retry.retrying{pointer-events:none}
+.live-task-retry.retrying svg{animation:liveRetrySpin .8s linear infinite}
+@keyframes liveRetrySpin{to{transform:rotate(360deg)}}
 
 .live-todo-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);text-align:left;transition:opacity .2s var(--ease)}
 .live-todo-row.done{opacity:.52}
@@ -2317,12 +2324,17 @@ body.mode-live .live-sidebar.show{transform:none}
 .live-todo-text{flex:1;font:400 13px/1.42 var(--sans);color:var(--wg-ink)}
 .live-todo-row.done .live-todo-text{text-decoration:line-through;color:var(--wg-ink-42)}
 
-.live-activity-row{display:flex;align-items:flex-start;gap:12px;padding:10px 4px;border-bottom:1px solid var(--wg-border)}
+.live-activity-row{display:flex;align-items:flex-start;gap:12px;padding:10px 8px;margin:0 -8px;border-radius:10px;border-bottom:1px solid var(--wg-border);transition:background .15s var(--ease)}
 .live-activity-row:last-child{border-bottom:0}
-.live-activity-time{flex:none;width:58px;font:400 9.5px/1.6 var(--mono);color:var(--wg-ink-28);padding-top:1px}
-.live-activity-text{flex:1;font:400 12.5px/1.5 var(--sans);color:var(--wg-ink)}
+.live-activity-row:hover{background:#2c2c2c;border-bottom-color:transparent}
+.live-activity-time{flex:none;width:58px;font:400 9.5px/1.6 var(--mono);color:var(--wg-ink-28);padding-top:1px;transition:color .15s var(--ease)}
+.live-activity-row:hover .live-activity-time{color:rgba(237,237,237,.55)}
+.live-activity-text{flex:1;font:400 12.5px/1.5 var(--sans);color:var(--wg-ink);transition:color .15s var(--ease)}
+.live-activity-row:hover .live-activity-text{color:#ededed}
 .live-activity-eye{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);transition:background .15s,color .15s}
 .live-activity-eye:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-activity-row:hover .live-activity-eye{color:rgba(237,237,237,.7)}
+.live-activity-row:hover .live-activity-eye:hover{background:rgba(255,255,255,.15);color:#fff}
 .live-activity-eye svg{width:14px;height:14px}
 
 /* the eye icon's destination: a left-edge companion to the right sidebar — same slide-in
@@ -3054,9 +3066,9 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     <div class="live-sideview on" id="liveSideTasks" data-sideview="tasks">
       <h2 class="live-sideview-title">Tasks Opal Can Do</h2>
       <div class="live-sidefilter" id="liveTasksFilter">
-        <button type="button" class="on" data-taskfilter="recent">Recent</button>
-        <button type="button" data-taskfilter="urgent">Urgency</button>
-        <button type="button" data-taskfilter="stuck">Emergency</button>
+        <button type="button" class="on" data-taskfilter="all">All</button>
+        <button type="button" data-taskfilter="stuck">Stuck</button>
+        <button type="button" data-taskfilter="fail">Fail</button>
       </div>
       <div class="live-sidelist" id="liveTasksList"></div>
     </div>
@@ -5535,7 +5547,7 @@ const WG_CLUSTERS = [
       errorReason: 'Two receipts are missing itemized totals — Opal needs them to finish reconciling.', stuckAt: wgDueAt(wgKey(wgDateAt(-9)), 17).getTime(),
       stuckScreen: { app: 'Notion · Finance', url: 'notion.so/finance/invoices', field: 'Missing receipt total', cta: 'Save reconciliation' } }] },
   { id: 'wc12', day: wgKey(wgDateAt(-11)), title: 'Renew the passport before it expires', quote: 'expires in six months, better now than later', humanTaskId: 'wt12',
-    opalTasks: [{ id: 'wo13', text: 'Fill out the DS-82 renewal form', status: 'proposed', dependsOn: null, connector: 'notes', commitment: 'prepares', retryCount: 0,
+    opalTasks: [{ id: 'wo13', text: 'Fill out the DS-82 renewal form', status: 'running', dependsOn: null, connector: 'notes', commitment: 'prepares', retryCount: 0, startedAt: Date.now() - 40000, stage: 'Filling out the form…', runStatus: 'Filling out the form…',
       preview: 'Fills out the DS-82 renewal form with your details, ready for you to review and sign.', deliverableTag: '→ NOTES' }] },
   { id: 'wc13', day: wgKey(wgDateAt(-12)), title: 'Draft the monthly investor update', quote: 'keep it to one page like last time', humanTaskId: null,
     opalTasks: [
@@ -5561,7 +5573,7 @@ const WG_CLUSTERS = [
       preview: 'A short, direct follow-up asking Rylan for the pricing delta he mentioned on the call.', deliverableTag: '→ EMAIL DRAFT', errorReason: "Rylan's inbox bounced — the email on file may be outdated." }] },
   { id: 'wc19', day: wgKey(wgDateAt(-19)), title: 'Plan meals for the week', quote: "always end up ordering out when there's no plan", humanTaskId: 'wt16', opalTasks: [] },
   { id: 'wc20', day: wgKey(wgDateAt(-20)), title: 'Draft outreach messages for new hires', quote: 'need two more people on the team by October', humanTaskId: null,
-    opalTasks: [{ id: 'wo20', text: 'Draft three outreach messages for LinkedIn', status: 'proposed', dependsOn: null, connector: 'linkedin', commitment: 'prepares', retryCount: 0,
+    opalTasks: [{ id: 'wo20', text: 'Draft three outreach messages for LinkedIn', status: 'running', dependsOn: null, connector: 'linkedin', commitment: 'prepares', retryCount: 0, startedAt: Date.now() - 18000, stage: 'Writing the first draft…', runStatus: 'Writing the first draft…',
       preview: 'Three short outreach drafts, each tailored to a different candidate profile you flagged.', deliverableTag: '→ NOTES' }] },
   { id: 'wc21', day: wgKey(wgDateAt(-21)), title: 'Call Mom back about the weekend', quote: 'she left a voicemail about Sunday', humanTaskId: 'wt17', opalTasks: [] },
   { id: 'wc22', day: wgKey(wgDateAt(-22)), title: "Return the order that didn't fit", quote: "wrong size again, should've checked the chart", humanTaskId: 'wt18', opalTasks: [] },
@@ -7522,7 +7534,7 @@ const liveState = {
   selectedSide: (state.live && state.live.selectedSide) || 'r',
   lastScroll: {}, inited: false, insertTimer: null, _dragPct: null
 };
-const liveSideState = { open: false, view: 'tasks', taskFilter: 'recent', todoFilter: 'open-first' };
+const liveSideState = { open: false, view: 'tasks', taskFilter: 'all', todoFilter: 'open-first' };
 const LIVE_SPLITS = [0, 25, 50, 75, 100];
 const LIVE_FILLER = [
   "Let's circle back to that after lunch.", "Can you send me the link when you get a sec?",
@@ -7556,7 +7568,7 @@ function liveHourLabel(h) { return h === 0 ? '12 AM' : h < 12 ? h + ' AM' : h ==
 function liveHourBubbleLabel(h) { return h === 0 ? '12am' : h < 12 ? h + 'am' : h === 12 ? '12pm' : (h - 12) + 'pm'; }
 function liveHourBarHTML(hoursWithData) {
   let html = '';
-  for (let h = 23; h >= 0; h--) html += `<button type="button" class="live-hb${hoursWithData.has(h) ? ' has' : ''}" data-livehour="${h}" aria-label="${liveHourBubbleLabel(h).toUpperCase()}">${liveHourBubbleLabel(h)}</button>`;
+  for (let h = 0; h < 24; h++) html += `<button type="button" class="live-hb${hoursWithData.has(h) ? ' has' : ''}" data-livehour="${h}" aria-label="${liveHourBubbleLabel(h).toUpperCase()}">${liveHourBubbleLabel(h)}</button>`;
   return html;
 }
 const LIVE_COPY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>';
@@ -7744,18 +7756,25 @@ function liveOpalTaskPool() {
 function liveTaskUrgencyRank(status) { return { blocked: 0, error: 1, running: 2, proposed: 3 }[status]; }
 function liveTaskConnectorName(t) { const o = ORB_DEFS.find(x => x.id === t.connector); return (o && o.name) || t.connector || 'Task'; }
 function liveTaskStatusLabel(status) { return status === 'blocked' ? 'Stuck' : status === 'error' ? 'Failed' : status === 'running' ? 'Running' : 'Ready'; }
+const LIVE_RETRY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v6h-6"/></svg>';
+const LIVE_INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.7" r=".9" fill="currentColor" stroke="none"/></svg>';
 function liveTaskRowHTML({ t, c }) {
-  const rowCls = t.status === 'blocked' ? ' row-stuck' : t.status === 'error' ? ' row-error' : '';
+  const stuck = t.status === 'blocked', failed = t.status === 'error';
+  const rowCls = stuck ? ' row-stuck' : failed ? ' row-error' : '';
+  const actions = (stuck || failed) ? `<div class="live-task-actions">
+      <button type="button" class="live-task-retry" data-liveretryrow="${t.id}" aria-label="Retry this task">${LIVE_RETRY_SVG}</button>
+      ${failed ? `<button type="button" class="live-task-info" data-liveinforow="${t.id}" aria-label="See what happened">${LIVE_INFO_SVG}</button>` : ''}
+    </div>` : '';
   return `<div class="live-task-row${rowCls}">
     <div class="live-task-meta"><span class="live-task-connector">${esc(liveTaskConnectorName(t))}</span><span class="live-task-day">${esc(new Date(c.day + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))}</span><span class="live-task-status ${t.status}">${liveTaskStatusLabel(t.status)}</span></div>
     <p class="live-task-text">${esc(t.text)}</p>
+    ${actions}
   </div>`;
 }
 function liveRenderTasksView() {
-  let pool = liveOpalTaskPool();
-  if (liveSideState.taskFilter === 'recent') pool = [...pool].sort((a, b) => b.c.day.localeCompare(a.c.day));
-  else if (liveSideState.taskFilter === 'urgent') pool = [...pool].sort((a, b) => liveTaskUrgencyRank(a.t.status) - liveTaskUrgencyRank(b.t.status));
-  else if (liveSideState.taskFilter === 'stuck') pool = pool.filter(({ t }) => t.status === 'blocked' || t.status === 'error');
+  let pool = [...liveOpalTaskPool()].sort((a, b) => liveTaskUrgencyRank(a.t.status) - liveTaskUrgencyRank(b.t.status) || b.c.day.localeCompare(a.c.day));
+  if (liveSideState.taskFilter === 'stuck') pool = pool.filter(({ t }) => t.status === 'blocked');
+  else if (liveSideState.taskFilter === 'fail') pool = pool.filter(({ t }) => t.status === 'error');
   const list = $('#liveTasksList'); if (!list) return;
   list.innerHTML = pool.length ? pool.map(liveTaskRowHTML).join('') : `<p class="live-empty">Nothing here right now.</p>`;
 }
@@ -7857,6 +7876,23 @@ function liveRetryTaskFromPanel(taskId) {
   liveRenderTasksView(); liveRenderActivityView();
   liveShowToast('Opal is trying again');
 }
+/* wgAcceptTask (what wgRetryTask calls) only accepts from proposed/error/skipped — a
+   blocked task means Opal is waiting on human input, not something the existing "accept"
+   path was ever meant to restart. This mirrors its body but allows starting from 'blocked'
+   too, since Langston explicitly asked for a retry action on stuck rows as well. */
+function liveRetryStuckTask(taskId) {
+  const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found;
+  if (task.status !== 'blocked') return;
+  task.status = 'running'; task.runStatus = wgRunStatusFor(task); task.startedAt = Date.now(); task.stage = wgRoadmapFor(task)[0];
+  wgSaveTaskState(taskId);
+  setTimeout(() => wgResolveTask(taskId), 1500 + Math.random() * 1300);
+}
+function liveRetryRowClick(btn) {
+  const id = btn.dataset.liveretryrow;
+  const found = wgOpalTaskById(id); if (!found) return;
+  btn.classList.add('retrying'); btn.disabled = true;
+  if (found.task.status === 'blocked') liveRetryStuckTask(id); else wgRetryTask(id);
+}
 function liveSwitchSideView(view) {
   liveSideState.view = view;
   $('#liveSidebarMenu').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.liveside === view));
@@ -7899,6 +7935,10 @@ function liveInit() {
   $('#liveSidebarScrim').addEventListener('click', liveSidebarClose);
   $('#liveSidebarMenu').addEventListener('click', e => { const b = e.target.closest('[data-liveside]'); if (b) liveSwitchSideView(b.dataset.liveside); });
   $('#liveTasksFilter').addEventListener('click', e => { const b = e.target.closest('[data-taskfilter]'); if (!b) return; liveSideState.taskFilter = b.dataset.taskfilter; $('#liveTasksFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTasksView(); });
+  $('#liveTasksList').addEventListener('click', e => {
+    const retry = e.target.closest('[data-liveretryrow]'); if (retry) return liveRetryRowClick(retry);
+    const info = e.target.closest('[data-liveinforow]'); if (info) return liveOpenTaskPanel(info.dataset.liveinforow);
+  });
   $('#liveTodoFilter').addEventListener('click', e => { const b = e.target.closest('[data-todofilter]'); if (!b) return; liveSideState.todoFilter = b.dataset.todofilter; $('#liveTodoFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTodoView(); });
   $('#liveTodoList').addEventListener('click', e => { const row = e.target.closest('[data-livetodo]'); if (row) liveToggleTodo(row.dataset.livetodo); });
   $('#liveActivityList').addEventListener('click', e => { const eye = e.target.closest('[data-livetaskeye]'); if (eye) liveOpenTaskPanel(eye.dataset.livetaskeye); });
