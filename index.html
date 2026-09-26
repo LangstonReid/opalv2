@@ -2349,9 +2349,62 @@ body.mode-live .live-taskpanel.show{transform:none}
 .live-taskpanel-close:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
 .live-taskpanel-reason{font:400 13.5px/1.55 var(--sans);color:var(--wg-ink-60);background:var(--wg-surface-2);border-radius:14px;padding:16px;margin:2px 0 18px}
 
+/* the day drawer: a bottom sheet local to ONE pane (doesn't need to escape #liveRoot's own
+   stacking context the way the FAB/sidebar/task panel did, since it only needs to sit above
+   that pane's own transcript, never above the global header) — drag or tap the handle up to
+   reveal Opal's tasks / your tasks / conversations for the specific day that pane is showing */
+.live-day-drawer{position:absolute;left:8px;right:8px;bottom:6px;height:80%;background:var(--wg-surface);border-radius:22px 22px 0 0;box-shadow:0 -14px 30px rgba(0,0,0,.14),0 0 0 1px var(--wg-border);transform:translateY(calc(100% - 30px));transition:transform .4s var(--ease);z-index:4;display:flex;flex-direction:column;overflow:hidden}
+.live-day-drawer.dragging{transition:none}
+.live-day-drawer.open{transform:translateY(0)}
+.live-day-drawer-handle{flex:none;display:flex;justify-content:center;align-items:center;gap:4px;height:30px;touch-action:none;cursor:grab}
+.live-day-drawer-handle:active{cursor:grabbing}
+.live-day-drawer-handle i{width:5px;height:5px;border-radius:50%;background:var(--wg-ink-28);transition:background .15s}
+.live-day-drawer-handle:hover i{background:var(--wg-ink-60)}
+.live-day-drawer-body{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;padding:2px 18px 18px}
+
+.live-drawer-cols{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:18px;height:100%}
+.live-drawer-col{display:flex;flex-direction:column;min-height:0}
+.live-drawer-col+.live-drawer-col{border-left:1px solid var(--wg-border);padding-left:18px}
+.live-drawer-col h4{flex:none;font:500 12.5px/1.3 var(--sans);color:var(--wg-ink-60);margin-bottom:10px}
+.live-drawer-list{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px}
+.live-drawer-row{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:var(--wg-surface-2);border:1px solid var(--wg-border)}
+.live-drawer-row p{flex:1;font:400 12.5px/1.4 var(--sans);color:var(--wg-ink)}
+.live-drawer-go{flex:none;padding:6px 14px;border-radius:999px;background:var(--wg-fill);color:var(--wg-fill-ink);font:600 10px/1 var(--mono);letter-spacing:.05em;transition:filter .15s}
+.live-drawer-go:hover{filter:brightness(1.1)}
+.live-drawer-status{flex:none;font:600 8.5px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--wg-surface-3);color:var(--wg-ink-60)}
+.live-drawer-convlist{gap:10px}
+.live-drawer-convlist .wg-conv-card{cursor:pointer;transition:background .15s var(--ease),transform .15s var(--ease)}
+.live-drawer-convlist .wg-conv-card:hover{background:var(--wg-surface-2);transform:translateY(-1px)}
+
+/* the expanded conversation — deliberately always the same dark Notion-style page
+   regardless of whichever pane/theme it was opened from, per the reference shared */
+.live-convdetail{--wg-surface:#1a1a1a;--wg-surface-2:#242424;--wg-surface-3:#2d2d2d;--wg-border:rgba(255,255,255,.1);--wg-ink:#f2f1ec;--wg-ink-60:rgba(242,241,236,.62);--wg-ink-42:rgba(242,241,236,.42);
+  background:var(--wg-surface);color:var(--wg-ink);border-radius:16px;margin:-2px -18px -18px;padding:24px 22px 32px;min-height:100%}
+.live-convdetail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.live-convdetail-back{display:flex;align-items:center;gap:6px;color:var(--wg-ink-60);font:400 12px/1 var(--sans);transition:color .15s}
+.live-convdetail-back:hover{color:var(--wg-ink)}
+.live-convdetail-console{display:flex;gap:6px}
+.live-convdetail-console button{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);transition:background .15s,color .15s}
+.live-convdetail-console button:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-convdetail-console button.on{color:#e0c34a}
+.live-convdetail-console svg{width:14px;height:14px}
+.live-convdetail-title{font:600 28px/1.2 var(--sans);letter-spacing:-.01em;margin-bottom:10px}
+.live-convdetail-sum{font:400 14px/1.5 var(--sans);color:var(--wg-ink-60);margin-bottom:10px}
+.live-convdetail-people{font:400 11.5px/1.5 var(--mono);color:var(--wg-ink-42);margin-bottom:26px}
+.live-convdetail h5{font:600 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wg-ink-42);margin:24px 0 10px}
+.live-convdetail-bullets{display:flex;flex-direction:column;gap:2px}
+.live-convdetail-bullets li{position:relative;list-style:none;padding:7px 8px 7px 20px;border-radius:8px;font:400 14px/1.5 var(--sans);color:var(--wg-ink);transition:background .15s}
+.live-convdetail-bullets li::before{content:'';position:absolute;left:8px;top:16px;width:4px;height:4px;border-radius:50%;background:var(--wg-ink-42)}
+.live-convdetail-bullets li:hover{background:var(--wg-surface-2)}
+.live-convdetail-notes li{cursor:text;outline:none}
+.live-convdetail-notes li:empty::after{content:attr(data-placeholder);color:var(--wg-ink-42)}
+.live-convdetail .live-empty{color:var(--wg-ink-42);font-size:13px;padding:4px 8px}
+
+@media (max-width:900px){ .live-drawer-cols{grid-template-columns:1fr;height:auto;gap:22px} .live-drawer-col+.live-drawer-col{border-left:0;padding-left:0;border-top:1px solid var(--wg-border);padding-top:16px} }
 @media (max-width:900px){ .live-taskpanel{border-radius:0;width:100vw} }
 @media (prefers-reduced-motion:reduce){
   .live-taskpanel{transition:none}
+  .live-day-drawer{transition:none}
   .live-panes{transition:none!important}
   .live-pane{transition:none}
   .live-sent-new{opacity:1;transform:none;transition:none}
@@ -3008,6 +3061,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           <div class="live-transcript" id="liveTranscriptL"></div>
           <button type="button" class="live-scrolltop" id="liveScrollTopL" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
         </div>
+        <div class="live-day-drawer" id="liveDayDrawerL" data-drawerside="l">
+          <button type="button" class="live-day-drawer-handle" data-drawerhandle="l" aria-label="Show today's overview"><i></i><i></i><i></i></button>
+          <div class="live-day-drawer-body" id="liveDayDrawerBodyL"></div>
+        </div>
       </section>
 
       <div class="live-divider" id="liveDivider">
@@ -3035,6 +3092,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           <div class="live-transcript" id="liveTranscriptR"></div>
           <button type="button" class="live-scrolltop" id="liveScrollTopR" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
         </div>
+        <div class="live-day-drawer" id="liveDayDrawerR" data-drawerside="r">
+          <button type="button" class="live-day-drawer-handle" data-drawerhandle="r" aria-label="Show today's overview"><i></i><i></i><i></i></button>
+          <div class="live-day-drawer-body" id="liveDayDrawerBodyR"></div>
+        </div>
       </section>
     </div>
   </div>
@@ -3044,6 +3105,12 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <p class="live-share-label">Share this transcript</p>
       <div class="live-share-row"><input type="text" id="liveShareLink" readonly aria-label="Share link"></div>
       <div class="live-share-actions"><button type="button" id="liveShareClose">Close</button><button type="button" id="liveShareCopy">Copy link</button></div>
+    </div>
+  </div>
+  <div class="live-share" id="liveConvDeleteConfirm" role="alertdialog" aria-modal="true" aria-label="Confirm delete">
+    <div class="live-share-card">
+      <p class="live-share-label" id="liveConvDeleteText"></p>
+      <div class="live-share-actions"><button type="button" id="liveConvDeleteCancel">Cancel</button><button type="button" id="liveConvDeleteGo" style="background:#b0452f;color:#fff">Delete</button></div>
     </div>
   </div>
 </div>
@@ -5448,7 +5515,7 @@ function chatGo(next, rect) {
       if ($('#ntConfirm').classList.contains('show')) ntCloseConfirm();
       if ($('#ntDetail').classList.contains('show')) ntCloseDetail();
     }
-    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); liveSidebarClose(); liveCloseTaskPanel(); }
+    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); liveSidebarClose(); liveCloseTaskPanel(); liveConvDeleteConfirmClose(); liveDrawerClose('l'); liveDrawerClose('r'); }
     mode = next; $$nav(mode);
     document.body.classList.toggle('mode-chat', mode === 'chat'); document.body.classList.toggle('mode-widgets', mode === 'widgets'); document.body.classList.toggle('mode-notes', mode === 'notes'); document.body.classList.toggle('mode-live', mode === 'live');
     chatRoot.setAttribute('aria-hidden', String(mode !== 'chat')); $('#widgetsRoot').setAttribute('aria-hidden', String(mode !== 'widgets')); $('#notesRoot').setAttribute('aria-hidden', String(mode !== 'notes')); $('#liveRoot').setAttribute('aria-hidden', String(mode !== 'live'));
@@ -7054,7 +7121,10 @@ function wgResolveTask(taskId) {
     else delete wgState.railPinned[taskId];
   }
   wgRenderRail(); wgRenderWeekly();
-  if (mode === 'live') { liveRenderTasksView(); liveRenderActivityView(); }
+  if (mode === 'live') {
+    liveRenderTasksView(); liveRenderActivityView();
+    ['l', 'r'].forEach(side => { if (liveDrawerState[side].open && liveDrawerState[side].view === 'cols') liveDrawerRender(side); });
+  }
   if (autoMoved) { wgMoveToHuman(taskId); return; }
   wgRenderTodayActions();
 }
@@ -7535,6 +7605,7 @@ const liveState = {
   lastScroll: {}, inited: false, insertTimer: null, _dragPct: null
 };
 const liveSideState = { open: false, view: 'tasks', taskFilter: 'all', todoFilter: 'open-first' };
+const liveDrawerState = { l: { open: false, view: 'cols', conv: null, dragY: null }, r: { open: false, view: 'cols', conv: null, dragY: null } };
 const LIVE_SPLITS = [0, 25, 50, 75, 100];
 const LIVE_FILLER = [
   "Let's circle back to that after lunch.", "Can you send me the link when you get a sec?",
@@ -7736,6 +7807,8 @@ function liveRenderPane(side) {
   const topBtn = $(side === 'l' ? '#liveScrollTopL' : '#liveScrollTopR'); if (topBtn) topBtn.classList.remove('show');
   liveApplyVariant($(side === 'l' ? '#liveConsoleTop' : '#liveConsoleBottom'), variant);
   liveOnScroll(side);
+  liveDrawerState[side].view = 'cols'; liveDrawerState[side].conv = null;
+  if (liveDrawerState[side].open) liveDrawerRender(side);
 }
 function liveRender() {
   liveRenderPane('l'); liveRenderPane('r');
@@ -7904,12 +7977,145 @@ function liveSwitchSideView(view) {
 function liveSidebarOpen() { liveSideState.open = true; $('#liveSidebar').classList.add('show'); $('#liveSidebarScrim').classList.add('show'); liveRenderSidebar(); }
 function liveSidebarClose() { liveSideState.open = false; $('#liveSidebar').classList.remove('show'); $('#liveSidebarScrim').classList.remove('show'); }
 
+/* ---------- live: the per-day drawer (tap or drag the handle up) ---------- */
+function liveDayForSide(side) { return liveDayKey(side === 'l' ? liveState.anchorOffset - 1 : liveState.anchorOffset); }
+function liveDayOpalTasks(dayKey) { return WG_CLUSTERS.filter(c => c.day === dayKey).flatMap(c => c.opalTasks.map(t => t)); }
+function liveDayTodos(dayKey) { return WG_TODOS.filter(td => td.createdOnDay === dayKey); }
+function liveDayConvs(dayKey) { return WG_CONVERSATIONS.filter(c => c.day === dayKey && !c.isArchived); }
+function liveDrawerOpalRowHTML(t) {
+  const goable = t.status === 'proposed';
+  return `<div class="live-drawer-row"><p>${esc(t.text)}</p>${goable ? `<button type="button" class="live-drawer-go" data-drawergo="${t.id}">GO</button>` : `<span class="live-drawer-status ${t.status}">${liveTaskStatusLabel(t.status)}</span>`}</div>`;
+}
+function liveDrawerTodoRowHTML(td) {
+  return `<button type="button" class="live-todo-row${td.status === 'done' ? ' done' : ''}" data-drawertodo="${td.id}"><span class="live-todo-check">${wgCheckSvg}</span><span class="live-todo-text">${esc(td.text)}</span></button>`;
+}
+function liveDrawerColsHTML(dayKey) {
+  const opal = liveDayOpalTasks(dayKey), todos = liveDayTodos(dayKey), convs = liveDayConvs(dayKey);
+  return `<div class="live-drawer-cols">
+    <div class="live-drawer-col"><h4>Opal To-Do</h4><div class="live-drawer-list">${opal.length ? opal.map(liveDrawerOpalRowHTML).join('') : '<p class="live-empty">Nothing for Opal this day.</p>'}</div></div>
+    <div class="live-drawer-col"><h4>You To-Do</h4><div class="live-drawer-list">${todos.length ? todos.map(liveDrawerTodoRowHTML).join('') : '<p class="live-empty">Nothing for you this day.</p>'}</div></div>
+    <div class="live-drawer-col"><h4>Conversations</h4><div class="live-drawer-list live-drawer-convlist">${convs.length ? convs.map(wgConvCardHTML).join('') : '<p class="live-empty">No conversations this day.</p>'}</div></div>
+  </div>`;
+}
+function liveConvPeopleHTML(c) {
+  const names = (c.personIds || []).map(id => { const p = WG_PEOPLE.find(x => x.id === id); if (!p) return null; return p.isEstimated ? p.estimatedTitle : p.name; }).filter(Boolean);
+  return `<p class="live-convdetail-people">${names.length + 1} people &middot; You${names.length ? ', ' + names.map(esc).join(', ') : ''}</p>`;
+}
+function liveConvActionsHTML(c) {
+  const clusters = (c.actionClusterIds || []).map(id => WG_CLUSTERS.find(cl => cl.id === id)).filter(Boolean);
+  const yours = [], opals = [];
+  clusters.forEach(cl => {
+    if (cl.humanTaskId) { const td = wgTodoById(cl.humanTaskId); if (td) yours.push(td.text); }
+    (cl.opalTasks || []).forEach(t => opals.push(t.text));
+  });
+  if (!yours.length && !opals.length) return '<p class="live-empty">No action items from this conversation.</p>';
+  let html = '';
+  if (yours.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin-bottom:4px">For you</p><ul class="live-convdetail-bullets">${yours.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  if (opals.length) html += `<p style="font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42);margin:${yours.length ? '14px' : '0'} 0 4px">For Opal</p><ul class="live-convdetail-bullets">${opals.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  return html;
+}
+function liveConvPointsHTML(c) {
+  const points = [...(c.decisions || []), ...(c.talkingPoints || [])].map(d => d.text);
+  return points.length ? `<ul class="live-convdetail-bullets">${points.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '<p class="live-empty">Nothing captured.</p>';
+}
+function liveConvNotes(id) { state.liveConvNotes = state.liveConvNotes || {}; return state.liveConvNotes[id] || ['', '', '']; }
+function liveConvNotesHTML(c) {
+  return liveConvNotes(c.id).map((n, i) => `<li class="live-convdetail-noteline" contenteditable="true" spellcheck="false" data-convnote="${c.id}" data-noteidx="${i}" data-placeholder="Add a note&hellip;">${esc(n)}</li>`).join('');
+}
+function liveConvDetailHTML(c) {
+  return `<div class="live-convdetail">
+    <div class="live-convdetail-head">
+      <button type="button" class="live-convdetail-back" data-drawerback>&larr; Back</button>
+      <div class="live-convdetail-console">
+        <button type="button" class="${c.isStarred ? 'on' : ''}" data-convstar="${c.id}" aria-label="Star"><svg viewBox="0 0 24 24" fill="${c.isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6z"/></svg></button>
+        <button type="button" data-liveconvshare aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.1M8.4 13.3l7.2 4.1"/></svg></button>
+        <button type="button" data-liveconvdelete="${c.id}" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-9 0l1 12a1 1 0 001 1h6a1 1 0 001-1l1-12"/></svg></button>
+      </div>
+    </div>
+    <h1 class="live-convdetail-title">${esc(c.title)}</h1>
+    <p class="live-convdetail-sum">${esc(c.summary || 'Nothing written yet.')}</p>
+    ${liveConvPeopleHTML(c)}
+    <h5>Action Points</h5>
+    ${liveConvActionsHTML(c)}
+    <h5>Conversation Points</h5>
+    ${liveConvPointsHTML(c)}
+    <h5>Notes</h5>
+    <ul class="live-convdetail-bullets live-convdetail-notes">${liveConvNotesHTML(c)}</ul>
+  </div>`;
+}
+function liveDrawerRender(side) {
+  const st = liveDrawerState[side], dayKey = liveDayForSide(side);
+  const body = $(side === 'l' ? '#liveDayDrawerBodyL' : '#liveDayDrawerBodyR'); if (!body) return;
+  if (st.view === 'conv' && st.conv) {
+    const c = wgConvById(st.conv);
+    if (c) { body.innerHTML = liveConvDetailHTML(c); return; }
+    st.view = 'cols'; st.conv = null;
+  }
+  body.innerHTML = liveDrawerColsHTML(dayKey);
+}
+function liveDrawerOpen(side) { liveDrawerState[side].open = true; $(side === 'l' ? '#liveDayDrawerL' : '#liveDayDrawerR').classList.add('open'); liveDrawerRender(side); }
+function liveDrawerClose(side) { liveDrawerState[side].open = false; $(side === 'l' ? '#liveDayDrawerL' : '#liveDayDrawerR').classList.remove('open'); }
+function liveDrawerToggle(side) { liveDrawerState[side].open ? liveDrawerClose(side) : liveDrawerOpen(side); }
+function liveDrawerOpenConv(side, convId) { liveDrawerState[side].view = 'conv'; liveDrawerState[side].conv = convId; liveDrawerRender(side); }
+function liveDrawerBackToCols(side) { liveDrawerState[side].view = 'cols'; liveDrawerState[side].conv = null; liveDrawerRender(side); }
+function liveDrawerHandlePointerDown(side, e) {
+  const el = $(side === 'l' ? '#liveDayDrawerL' : '#liveDayDrawerR'); if (!el) return;
+  const startY = e.clientY, wasOpen = liveDrawerState[side].open;
+  const rect = el.parentElement.getBoundingClientRect();
+  let moved = false;
+  el.classList.add('dragging');
+  const move = ev => {
+    const dy = ev.clientY - startY;
+    if (Math.abs(dy) > 4) moved = true;
+    const openPx = rect.height * 0.8;
+    const closedOffset = openPx - 30;
+    let offset = wasOpen ? clamp(dy, 0, closedOffset) : clamp(closedOffset + dy, 0, closedOffset);
+    el.style.transform = `translateY(${offset}px)`;
+  };
+  const up = ev => {
+    document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up);
+    el.classList.remove('dragging'); el.style.transform = '';
+    const dy = ev.clientY - startY;
+    if (!moved) { liveDrawerToggle(side); return; }
+    if (wasOpen) { if (dy > 60) liveDrawerClose(side); else liveDrawerOpen(side); }
+    else { if (dy < -60) liveDrawerOpen(side); else liveDrawerClose(side); }
+  };
+  document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+}
+function liveConvCopyShareLink() { liveOpenShare(); }
+function liveConvDeleteConfirmOpen(id) {
+  const c = wgConvById(id); if (!c) return;
+  $('#liveConvDeleteText').textContent = `Delete "${c.title}"? This removes its summary, notes, and linked actions for good.`;
+  $('#liveConvDeleteConfirm').dataset.conv = id;
+  $('#liveConvDeleteConfirm').classList.add('show');
+}
+function liveConvDeleteConfirmClose() { $('#liveConvDeleteConfirm').classList.remove('show'); delete $('#liveConvDeleteConfirm').dataset.conv; }
+function liveConvDeleteConfirmed() {
+  const id = $('#liveConvDeleteConfirm').dataset.conv; if (!id) return;
+  const idx = WG_CONVERSATIONS.findIndex(c => c.id === id);
+  if (idx !== -1) WG_CONVERSATIONS.splice(idx, 1);
+  if (state.liveConvNotes) delete state.liveConvNotes[id];
+  save();
+  liveConvDeleteConfirmClose();
+  liveDrawerBackToCols('l'); liveDrawerBackToCols('r');
+  liveShowToast('Conversation deleted');
+}
+function liveConvSaveNote(el) {
+  const id = el.dataset.convnote, idx = +el.dataset.noteidx;
+  const notes = liveConvNotes(id).slice(); notes[idx] = el.textContent.trim();
+  state.liveConvNotes[id] = notes; save();
+}
+
 function liveInit() {
   if (liveState.inited) return; liveState.inited = true;
   $('#liveRoot').classList.add('size-' + (wgState.aaSize || 'm'));
   liveRender();
 
-  $('#livePanes').addEventListener('pointerdown', e => { if (e.target.closest('.live-divider') && !e.target.closest('.live-console')) liveDividerPointerDown(e); });
+  $('#livePanes').addEventListener('pointerdown', e => {
+    const handle = e.target.closest('[data-drawerhandle]');
+    if (handle) { e.preventDefault(); return liveDrawerHandlePointerDown(handle.dataset.drawerhandle, e); }
+    if (e.target.closest('.live-divider') && !e.target.closest('.live-console')) liveDividerPointerDown(e);
+  });
   $('#livePanes').addEventListener('click', e => {
     const copyLine = e.target.closest('[data-linecopy]');
     if (copyLine) return liveCopyLine(copyLine.closest('.live-sent-row'));
@@ -7921,6 +8127,15 @@ function liveInit() {
     if (act) { if (act.dataset.liveact === 'copy') liveCopySide(act.dataset.consoleside); if (act.dataset.liveact === 'share') liveOpenShare(); return; }
     const aa = e.target.closest('.live-aa [data-aa]');
     if (aa) return wgSetAaSize(aa.dataset.aa);
+    const drawer = e.target.closest('.live-day-drawer'); if (!drawer) return;
+    const side = drawer.dataset.drawerside;
+    const go = e.target.closest('[data-drawergo]'); if (go) { wgAcceptTask(go.dataset.drawergo); return liveDrawerRender(side); }
+    const dtodo = e.target.closest('[data-drawertodo]'); if (dtodo) { liveToggleTodo(dtodo.dataset.drawertodo); return liveDrawerRender(side); }
+    const back = e.target.closest('[data-drawerback]'); if (back) return liveDrawerBackToCols(side);
+    const share = e.target.closest('[data-liveconvshare]'); if (share) return liveConvCopyShareLink();
+    const del = e.target.closest('[data-liveconvdelete]'); if (del) return liveConvDeleteConfirmOpen(del.dataset.liveconvdelete);
+    const star = e.target.closest('[data-convstar]'); if (star) return wgToggleConvStar(star.dataset.convstar);
+    const card = e.target.closest('[data-conv]'); if (card && !e.target.closest('[data-convstar],[data-cardmenu]')) return liveDrawerOpenConv(side, card.dataset.conv);
   });
   $('#liveMobileTabs').addEventListener('click', e => { const b = e.target.closest('[data-livemobile]'); if (b) liveSetSelectedSide(b.dataset.livemobile); });
   $('#livePaneLScroll').addEventListener('scroll', () => liveOnScroll('l'), { passive: true });
@@ -7948,12 +8163,19 @@ function liveInit() {
   });
   $('#liveTaskPanelClose').addEventListener('click', liveCloseTaskPanel);
   $('#liveTaskPanelScrim').addEventListener('click', liveCloseTaskPanel);
+  $('#livePanes').addEventListener('blur', e => { const n = e.target.closest && e.target.closest('[data-convnote]'); if (n) liveConvSaveNote(n); }, true);
+  $('#liveConvDeleteCancel').addEventListener('click', liveConvDeleteConfirmClose);
+  $('#liveConvDeleteGo').addEventListener('click', liveConvDeleteConfirmed);
+  $('#liveConvDeleteConfirm').addEventListener('click', e => { if (e.target.id === 'liveConvDeleteConfirm') liveConvDeleteConfirmClose(); });
   addEventListener('keydown', e => {
     if (mode !== 'live') return;
     if (e.key !== 'Escape') return;
+    if ($('#liveConvDeleteConfirm').classList.contains('show')) return liveConvDeleteConfirmClose();
     if ($('#liveShare').classList.contains('show')) return liveCloseShare();
     if ($('#liveTaskPanel').classList.contains('show')) return liveCloseTaskPanel();
     if ($('#liveSidebar').classList.contains('show')) return liveSidebarClose();
+    if (liveDrawerState.l.open) return liveDrawerClose('l');
+    if (liveDrawerState.r.open) return liveDrawerClose('r');
   });
   addEventListener('resize', () => { if (mode === 'live') liveApplySplitVars(liveState.splitLeft); });
 }
