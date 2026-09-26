@@ -669,12 +669,20 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-welcome-l .wg-mark{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 60%,#54713a);margin-bottom:12px;box-shadow:0 0 0 4px rgba(111,143,78,.10)}
 .wg-welcome-l h2{font:400 27px/1.15 var(--sans);letter-spacing:-.01em;color:var(--wg-ink)}
 .wg-welcome-l p{margin-top:6px;font-size:12.5px;color:var(--wg-ink-60)}
-.wg-welcome-r{flex:none;width:min(360px,44%);display:flex;flex-direction:column;gap:8px}
-.wg-wpromise{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;box-shadow:var(--wg-shadow-sm);transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
-.wg-wpromise:hover{transform:translateY(-1px);box-shadow:var(--wg-shadow-md)}
-.wg-wpromise b{font-size:11.5px;font-weight:500;color:var(--wg-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wg-wpromise span{flex:none;font:400 9px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-accent-ink);background:var(--wg-yellow);padding:3px 8px;border-radius:999px}
-.wg-band{margin-top:4px;text-align:right;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;color:var(--wg-ink-42)}
+.wg-welcome-r{flex:none;width:min(360px,44%)}
+.wg-band{margin-top:10px;text-align:left;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;color:var(--wg-ink-42)}
+.wg-welcome-stats .wg-today-sec-label{margin:0 0 8px}
+.wg-welcome-stats .stat-period{display:flex;gap:4px;margin-bottom:10px}
+.wg-welcome-stats .stat-period button{flex:1;font:400 8.5px/1.6 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--wg-ink-42);padding:6px 2px;border-radius:8px;background:var(--wg-surface-3);transition:color .2s,background .2s}
+.wg-welcome-stats .stat-period button.on{color:#fff;background:var(--wg-ink)}
+.wg-welcome-stats .stat-period button:not(.on):hover{color:var(--wg-ink)}
+.wg-welcome-stats .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wg-welcome-stats .stat-tile{background:var(--wg-surface-2);border-radius:12px;padding:10px 11px}
+.wg-welcome-stats .stat-label{font:400 8.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-welcome-stats .stat-value{margin-top:4px;font:600 15px/1.15 var(--sans);color:var(--wg-ink)}
+.wg-welcome-stats .stat-delta{display:inline-block;margin-top:5px;font:400 9px/1.5 var(--mono);letter-spacing:.02em;cursor:default}
+.wg-welcome-stats .stat-delta.up{color:var(--wg-accent-ink)}
+.wg-welcome-stats .stat-delta.down{color:var(--wg-ink-42)}
 
 /* filter pills */
 .wg-filters{display:flex;gap:4px;padding:4px;width:fit-content;border-radius:999px;background:var(--wg-surface-3);margin-bottom:18px}
@@ -1035,12 +1043,13 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-dayconv-list{display:flex;flex-direction:column;gap:12px;max-width:640px}
 
 /* today: the default landing view */
-.wg-today{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;width:100%}
-.wg-today-col{display:flex;flex-direction:column;gap:26px;min-width:0}
+.wg-today{display:flex;flex-direction:column;gap:26px;width:100%}
+.wg-today-tasks{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.wg-today-taskcol{display:flex;flex-direction:column;min-width:0}
 .wg-today-sec-label{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin-bottom:14px}
-.wg-today-subhead{font:700 12.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink);margin:24px 0 14px}
-.wg-today-subhead:first-child{margin-top:0}
 .wg-today-list{display:flex;flex-direction:column;gap:9px}
+.wg-today-viewmore{align-self:flex-start;margin-top:12px;font:400 10.5px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-accent-ink);background:var(--wg-yellow-soft);padding:8px 16px;border-radius:999px;transition:background .2s,color .2s}
+.wg-today-viewmore:hover{background:var(--wg-yellow);color:var(--wg-ink)}
 .wg-today-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:12px;box-shadow:var(--wg-shadow-sm);transition:background .3s var(--ease)}
 .wg-today-row .tag{flex:none;font:400 8px/1.6 var(--mono);letter-spacing:.06em;padding:3px 8px;border-radius:999px;color:#fff;background:var(--wg-accent)}
 .wg-today-row p{flex:1;min-width:0;font-size:12.5px;line-height:1.4;color:var(--wg-ink);position:relative;transition:color .4s var(--ease)}
@@ -1064,18 +1073,6 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-today-row.you.done .wg-check{background:var(--wg-accent);border-color:var(--wg-accent);transform:scale(1.06);transition:transform .3s var(--ease),background .3s,border-color .3s}
 .wg-today-row.you.done .wg-check svg{opacity:1}
 @keyframes wgSwishLine{from{width:0}to{width:100%}}
-.wg-today-tp{padding-left:16px;position:relative;font-size:12.5px;line-height:1.5;color:var(--wg-ink)}
-.wg-today-tp::before{content:'';position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--wg-accent)}
-.wg-today-tplist{display:flex;flex-direction:column;gap:8px}
-.wg-today-live{background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:18px;padding:18px 16px;box-shadow:var(--wg-shadow-sm);position:sticky;top:0;max-height:80vh;display:flex;flex-direction:column;min-width:0}
-.wg-today-live-head{display:flex;align-items:center;gap:7px;margin-bottom:12px}
-.wg-today-live-head i{width:6px;height:6px;border-radius:50%;background:var(--wg-accent);animation:wgLivePulse 1.6s ease-in-out infinite}
-.wg-today-feed{flex:1;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:10px;padding-right:4px}
-.wg-today-feed-row{display:flex;gap:10px;align-items:baseline;padding-bottom:9px;border-bottom:1px solid var(--wg-border)}
-.wg-today-feed-row:last-child{border-bottom:0}
-.wg-today-feed-row .mono{flex:none;font-size:9px;color:var(--wg-ink-42)}
-.wg-today-feed-row p{font-size:12.5px;line-height:1.5;color:var(--wg-ink)}
-.wg-today-feed-row.new{animation:wgTodayNew .5s var(--ease)}
 @keyframes wgTodayNew{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
 .wg-today-empty{color:var(--wg-ink-42);font-size:12.5px;padding:6px 0}
 .wg-dayconv-list .wg-conv-card{width:100%}
@@ -1338,9 +1335,21 @@ body.wg-rail-collapsed #widgetsRoot{--wg-rail-gap:92px}
 .wg-rail{position:fixed;right:12px;top:74px;bottom:12px;z-index:var(--z-nav);width:clamp(200px,14.28vw,280px);background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:24px;box-shadow:var(--wg-shadow-lg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s var(--ease),background .4s}
 .wg-rail.dim{background:var(--wg-paper-dim,#e8e6dc)}
 body.wg-rail-collapsed .wg-rail{width:56px}
-.wg-rail-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px}
-.wg-rail-title{color:var(--wg-ink-42);letter-spacing:.12em;text-transform:uppercase;font-size:10px}
-body.wg-rail-collapsed .wg-rail-title{display:none}
+.wg-rail-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px;gap:8px}
+.wg-rail-viewtog{display:flex;gap:2px;background:var(--wg-surface-3);border-radius:999px;padding:3px;flex:1;min-width:0}
+.wg-rail-viewtog button{flex:1;min-width:0;border:none;background:none;padding:6px 2px;border-radius:999px;font:400 9px/1.4 var(--mono);letter-spacing:0;color:var(--wg-ink-42);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;overflow:hidden;text-overflow:clip;text-align:center}
+.wg-rail-viewtog button.on{background:var(--wg-ink);color:#fff}
+.wg-rail-viewtog button:not(.on):hover{color:var(--wg-ink)}
+body.wg-rail-collapsed .wg-rail-viewtog{display:none}
+#wgRailActionsView{display:flex;flex-direction:column;gap:22px}
+.wg-rail-feed-head{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.wg-rail-feed-head i{width:6px;height:6px;border-radius:50%;background:var(--wg-accent);animation:wgLivePulse 1.6s ease-in-out infinite}
+.wg-rail-feed{display:flex;flex-direction:column;gap:2px}
+.wg-rail-feed-row{padding:9px 0;border-bottom:1px solid var(--wg-border)}
+.wg-rail-feed-row:last-child{border-bottom:0}
+.wg-rail-feed-row .mono{display:block;font-size:9px;color:var(--wg-ink-42);margin-bottom:3px}
+.wg-rail-feed-row p{font-size:12px;line-height:1.5;color:var(--wg-ink)}
+.wg-rail-feed-row.new{animation:wgTodayNew .5s var(--ease)}
 .wg-rail-collapse{width:26px;height:26px;border-radius:50%;background:var(--wg-surface-3);color:var(--wg-ink-60);display:grid;place-items:center;transition:transform .3s var(--ease),background .2s}
 .wg-rail-collapse svg{width:13px;height:13px}
 .wg-rail-collapse:hover{background:var(--wg-surface-2)}
@@ -1375,17 +1384,6 @@ body.wg-rail-collapsed .wg-rail-body{display:none}
 .wg-rail-done-row small{display:block;margin-top:2px;font:400 8.5px/1.6 var(--mono);color:var(--wg-ink-42)}
 .wg-rail-loadmore{margin-top:6px;width:100%;text-align:center;font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-60);padding:9px;border-radius:10px;background:var(--wg-surface-2);transition:background .2s}
 .wg-rail-loadmore:hover{background:var(--wg-surface-3)}
-.wg-rail-stats .stat-period{display:flex;gap:4px;margin-bottom:10px}
-.wg-rail-stats .stat-period button{flex:1;font:400 8.5px/1.6 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--wg-ink-42);padding:6px 2px;border-radius:8px;background:var(--wg-surface-3);transition:color .2s,background .2s}
-.wg-rail-stats .stat-period button.on{color:#fff;background:var(--wg-ink)}
-.wg-rail-stats .stat-period button:not(.on):hover{color:var(--wg-ink)}
-.wg-rail-stats .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.wg-rail-stats .stat-tile{background:var(--wg-surface-2);border-radius:12px;padding:10px 11px}
-.wg-rail-stats .stat-label{font:400 8.5px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--wg-ink-42)}
-.wg-rail-stats .stat-value{margin-top:4px;font:600 15px/1.15 var(--sans);color:var(--wg-ink)}
-.wg-rail-stats .stat-delta{display:inline-block;margin-top:5px;font:400 9px/1.5 var(--mono);letter-spacing:.02em;cursor:default}
-.wg-rail-stats .stat-delta.up{color:var(--wg-accent-ink)}
-.wg-rail-stats .stat-delta.down{color:var(--wg-ink-42)}
 .wg-rail-strip{display:none;flex-direction:column;align-items:center;gap:14px;padding:10px 0}
 body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-rail-stripicon{position:relative;width:36px;height:36px;border-radius:50%;background:var(--wg-surface-2);color:var(--wg-ink-60);display:grid;place-items:center;transition:background .2s,color .2s}
@@ -1428,7 +1426,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
 .wg-toast-action{font:400 10px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-spore);text-decoration:underline;text-underline-offset:2px}
 @media (max-width:899px){
   #widgetsRoot{--wg-rail-gap:0px!important}
-  .wg-rail{right:0;top:70px;bottom:0;border-radius:24px 0 0 24px;width:min(320px,86vw)!important;transform:translateX(104%);transition:transform .35s var(--ease)}
+  .wg-rail{right:0;top:120px;bottom:0;border-radius:24px 0 0 24px;width:min(320px,86vw)!important;transform:translateX(104%);transition:transform .35s var(--ease)}
   .wg-rail.drawer-open{transform:none}
   .wg-rail-strip{display:none!important}
   .wg-rail-body{display:flex!important}
@@ -1448,7 +1446,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-body{flex-direction:column}
   .wg-conv-layout{flex-direction:column}
   .wg-conv-folders-col{flex:none;width:100%;max-width:none;position:static}
-  .wg-today{grid-template-columns:1fr}
+  .wg-today-tasks{grid-template-columns:1fr}
   .wg-welcome{flex-direction:column;align-items:stretch}
   .wg-welcome-r{width:100%}
 }
@@ -1463,7 +1461,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-spin{animation:none}
   .wg-running i,.wg-day-title-wrap .mono.live i{animation:none}
   .wg-day-content.slideoutL,.wg-day-content.slideoutR,.wg-day-content.slideinL,.wg-day-content.slideinR{animation:none}
-  .wg-conv-card,.wg-conv-page,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce,.wg-today-feed-row.new,.wg-today-live-head i,.wg-loading-orb,.wg-spin,.wg-rail-spin,.wg-today-row.you.done p::after,.wg-today-row.you.done .wg-check,.wg-week-card,.wg-week-col,.wg-week-col.bounce,.wg-week-spin{transition:none!important;animation:none!important}
+  .wg-conv-card,.wg-conv-page,.wg-star-btn,.wg-conv-star,.wg-folder-row.bounce,.wg-rail-feed-row.new,.wg-rail-feed-head i,.wg-loading-orb,.wg-spin,.wg-rail-spin,.wg-today-row.you.done p::after,.wg-today-row.you.done .wg-check,.wg-week-card,.wg-week-col,.wg-week-col.bounce,.wg-week-spin{transition:none!important;animation:none!important}
   .wg-today-row.you.done p::after{width:100%}
   .wg-conv-card:hover{transform:none}
 }
@@ -2325,31 +2323,35 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <div class="wg-rail-drawerscrim" id="wgRailDrawerScrim"></div>
   <aside class="wg-rail" id="wgRail">
     <div class="wg-rail-head">
-      <span class="wg-rail-title mono">Rail</span>
+      <div class="wg-rail-viewtog" id="wgRailViewTog">
+        <button type="button" class="on" data-railview="actions">Actions</button>
+        <button type="button" data-railview="transcript">Transcript</button>
+      </div>
       <button type="button" class="wg-rail-collapse" id="wgRailCollapse" aria-label="Collapse rail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div class="wg-rail-body" id="wgRailBody">
-      <div class="wg-rail-sec wg-rail-stuck-sec" id="wgRailStuckSec" hidden>
-        <div class="wg-rail-sec-label wg-rail-stuck-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Opal is stuck</div>
-        <div class="wg-rail-stuck" id="wgRailStuck"></div>
+      <div id="wgRailActionsView">
+        <div class="wg-rail-sec wg-rail-stuck-sec" id="wgRailStuckSec" hidden>
+          <div class="wg-rail-sec-label wg-rail-stuck-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Opal is stuck</div>
+          <div class="wg-rail-stuck" id="wgRailStuck"></div>
+        </div>
+        <div class="wg-rail-sec">
+          <div class="wg-rail-sec-label">You have to do this</div>
+          <div class="wg-rail-mustdo" id="wgRailMustDo"></div>
+        </div>
+        <div class="wg-rail-sec">
+          <div class="wg-rail-sec-label">Opal can do this right now</div>
+          <div class="wg-rail-ready" id="wgRailReady"></div>
+        </div>
+        <div class="wg-rail-sec">
+          <div class="wg-rail-sec-label">What Opal just finished</div>
+          <div class="wg-rail-done" id="wgRailDone"></div>
+          <button type="button" class="wg-rail-loadmore" id="wgRailLoadMore" hidden>Load more</button>
+        </div>
       </div>
-      <div class="wg-rail-sec">
-        <div class="wg-rail-sec-label">You have to do this</div>
-        <div class="wg-rail-mustdo" id="wgRailMustDo"></div>
-      </div>
-      <div class="wg-rail-sec">
-        <div class="wg-rail-sec-label">Opal can do this right now</div>
-        <div class="wg-rail-ready" id="wgRailReady"></div>
-      </div>
-      <div class="wg-rail-sec">
-        <div class="wg-rail-sec-label">What Opal just finished</div>
-        <div class="wg-rail-done" id="wgRailDone"></div>
-        <button type="button" class="wg-rail-loadmore" id="wgRailLoadMore" hidden>Load more</button>
-      </div>
-      <div class="wg-rail-sec wg-rail-stats">
-        <div class="wg-rail-sec-label">Opal's health</div>
-        <div class="stat-period" id="wgStatsPeriod"></div>
-        <div class="stat-grid" id="wgStatsGrid"></div>
+      <div id="wgRailTranscriptView" hidden>
+        <div class="wg-rail-feed-head"><i></i><span class="mono" style="font-size:9.5px;letter-spacing:.1em;color:var(--wg-ink-42);text-transform:uppercase">Live transcript</span></div>
+        <div class="wg-rail-feed" id="wgRailFeed"></div>
       </div>
     </div>
     <div class="wg-rail-strip" id="wgRailStrip">
@@ -4942,6 +4944,7 @@ function chatGo(next, rect) {
       if ($('#wgCitePop').classList.contains('show')) wgCloseCitePop();
       if ($('#wgStuckDesk').classList.contains('show')) wgCloseStuckDesk();
       if ($('#wgStuckPanel').classList.contains('show')) wgCloseStuckPanel();
+      wgStopRailFeed();
     }
     if (leaving === 'notes') {
       if ($('#ntConfirm').classList.contains('show')) ntCloseConfirm();
@@ -5265,12 +5268,12 @@ function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = 
 const wgState = { viewMode: 'today', currentDay: null, tab: 'actions',
   convFilter: 'all', currentFolder: null, currentConv: null, aaSize: (state.wgAaSize || 'm'), drag: null, pendingConvFromChat: false,
   calMonth: { year: WG_T0.getFullYear(), month: WG_T0.getMonth() },
-  railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null,
+  railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null, railView: 'actions',
   weekAnchor: new Date(WG_T0), weekViewFilter: 'all', weekStatusFilter: null, weekMobileDayIdx: null, weekSavedOpen: false };
 
 function wgOpenTodos() { return WG_TODOS.filter(t => t.status === 'open' && !(t.snoozedUntil && t.snoozedUntil > Date.now())); }
 function wgByDeadline(a, b) { if (a.due && b.due) return new Date(a.due) - new Date(b.due); if (a.due) return -1; if (b.due) return 1; return 0; }
-function wgRefresh() { wgRenderWelcomePanel(); wgRenderRail(); }
+function wgRefresh() { wgRenderWelcomePanel(); wgRenderRail(); if (wgState.railView === 'transcript') wgStartRailFeed(); }
 
 /* ---------- the command rail: must-do, ready-now, and a completed feed ---------- */
 let wgRailPrevReadyIds = new Set();
@@ -5360,7 +5363,7 @@ function wgRenderRailStuck() {
   $('#wgRailStripStuck').textContent = String(list.length);
 }
 function wgRenderRail() {
-  wgRenderRailStuck(); wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone(); wgRenderStats();
+  wgRenderRailStuck(); wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone();
   const h = new Date().getHours();
   $('#wgRail').classList.toggle('dim', h >= 18 || h < 6);
   document.body.classList.toggle('wg-rail-collapsed', wgState.railCollapsed);
@@ -5390,11 +5393,45 @@ function wgRailJumpToTask(clusterId, day) {
 }
 function wgRenderWelcomePanel() {
   deriveWelcome(); const w = WELCOME, h = new Date().getHours();
-  const open = PROMISES.filter(p => !state.cal[p.id]).sort((a, b) => a.due - b.due).slice(0, 3);
-  $('#wgWelcomePanel').innerHTML = `<div class="wg-welcome-l"><div class="wg-mark"></div><h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2><p>${w.promises.count} promise${w.promises.count === 1 ? '' : 's'} waiting across ${w.promises.toolCount} tool${w.promises.toolCount === 1 ? '' : 's'}.</p></div>
-    <div class="wg-welcome-r">${open.length ? open.map(p => `<div class="wg-wpromise"><b>${esc(p.act)}</b><span>${esc(duePill(p.due.toISOString()))}</span></div>`).join('') : `<div class="wg-wpromise"><b>You're clear.</b></div>`}
-    <div class="wg-band">BAND ${w.band.battery}% · ${state.listening ? 'SYNCED' : 'PAUSED'}</div></div>`;
+  $('#wgWelcomePanel').innerHTML = `<div class="wg-welcome-l"><div class="wg-mark"></div><h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2><p>${w.promises.count} promise${w.promises.count === 1 ? '' : 's'} waiting across ${w.promises.toolCount} tool${w.promises.toolCount === 1 ? '' : 's'}.</p><div class="wg-band">BAND ${w.band.battery}% · ${state.listening ? 'SYNCED' : 'PAUSED'}</div></div>
+    <div class="wg-welcome-r wg-welcome-stats">
+      <div class="wg-today-sec-label">Opal's health</div>
+      <div class="stat-period" id="wgStatsPeriod"></div>
+      <div class="stat-grid" id="wgStatsGrid"></div>
+    </div>`;
+  wgRenderStats();
 }
+function wgSetRailView(view) {
+  if (wgState.railView === view) return;
+  wgState.railView = view;
+  document.querySelectorAll('#wgRailViewTog button').forEach(b => b.classList.toggle('on', b.dataset.railview === view));
+  $('#wgRailActionsView').hidden = view !== 'actions';
+  $('#wgRailTranscriptView').hidden = view !== 'transcript';
+  if (view === 'transcript') wgStartRailFeed(); else wgStopRailFeed();
+}
+let wgRailFeedTimer = null, wgRailFeedPool = [];
+function wgBuildRailFeedPool() {
+  const sentences = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.transcriptSentences.map(s => s.text));
+  return sentences.length ? sentences : ['Quiet right now.'];
+}
+function wgAddRailFeedLine() {
+  const feed = $('#wgRailFeed'); if (!feed) return;
+  if (!wgRailFeedPool.length) wgRailFeedPool = wgBuildRailFeedPool();
+  const text = wgRailFeedPool[Math.floor(Math.random() * wgRailFeedPool.length)];
+  const row = document.createElement('div'); row.className = 'wg-rail-feed-row' + (REDUCED ? '' : ' new');
+  row.innerHTML = `<span class="mono">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span><p>${esc(text)}</p>`;
+  feed.prepend(row);
+  while (feed.children.length > 30) feed.removeChild(feed.lastChild);
+}
+function wgRailFeedTick() { if (mode === 'widgets' && wgState.railView === 'transcript' && state.listening) wgAddRailFeedLine(); }
+function wgStartRailFeed() {
+  wgRailFeedPool = wgBuildRailFeedPool();
+  const feed = $('#wgRailFeed'); if (feed) feed.innerHTML = '';
+  for (let i = 0; i < 5; i++) wgAddRailFeedLine();
+  clearInterval(wgRailFeedTimer);
+  wgRailFeedTimer = setInterval(wgRailFeedTick, REDUCED ? 9000 : 4200);
+}
+function wgStopRailFeed() { clearInterval(wgRailFeedTimer); wgRailFeedTimer = null; }
 
 /* the day grid, two renderers over one dataset */
 function wgDayOpenable(key) { const obj = wgDayByKey(key); return !!(obj && obj.hours && obj.hours.length); }
@@ -5434,7 +5471,6 @@ function wgSwitchViewMode(newMode) {
   $('#wgCalNav').hidden = newMode !== 'calendar';
   $('#wgWeekNav').hidden = newMode !== 'weekly';
   wgRenderModeContent(newMode);
-  if (newMode === 'today') wgStartTodayFeed(); else wgStopTodayFeed();
   const panes = wgViewPanes(), showEl = panes[newMode], hideEl = panes[prevMode];
   if (REDUCED) { Object.entries(panes).forEach(([k, el]) => { el.hidden = k !== newMode; }); return; }
   hideEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'ease-out' }).onfinish = () => {
@@ -6483,11 +6519,6 @@ function wgTodayOpalItems() {
   wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved' && t.status !== 'done') items.push({ t, c }); }));
   return items;
 }
-function wgTodayOpalDoneItems() {
-  const items = [];
-  wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status === 'done') items.push({ t, c }); }));
-  return items;
-}
 function wgTodayYouItems() {
   const items = [];
   wgClustersFor(WG_TODAY_KEY).forEach(c => {
@@ -6508,60 +6539,35 @@ function wgTodayOpalRowHTML(t) {
 function wgTodayYouRowHTML(todo) {
   return `<div class="wg-today-row you${todo.status === 'done' ? ' done' : ''}" data-todo="${todo.id}"><button type="button" class="wg-check" data-check="${todo.id}" aria-label="Mark ${esc(todo.text)} done">${wgCheckSvg}</button><p>${esc(todo.text)}</p></div>`;
 }
-function wgTodayActionsHTML() {
-  const opalItems = wgTodayOpalItems(), youItems = wgTodayYouItems(), opalDoneItems = wgTodayOpalDoneItems();
-  let html = `<div class="wg-today-subhead">Opal's action items</div>`;
-  html += opalItems.length ? `<div class="wg-today-list">${opalItems.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing for Opal right now.</p>`;
-  html += `<div class="wg-today-subhead">Your action items</div>`;
-  html += youItems.length ? `<div class="wg-today-list">${youItems.map(wgTodayYouRowHTML).join('')}</div>` : `<p class="wg-today-empty">Nothing for you right now.</p>`;
-  html += `<div class="wg-today-subhead">Opal's completed</div>`;
-  html += opalDoneItems.length ? `<div class="wg-today-list">${opalDoneItems.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing finished yet today.</p>`;
+function wgTodayOpalColHTML() {
+  const items = wgTodayOpalItems(), shown = items.slice(0, 5);
+  let html = `<div class="wg-today-sec-label">Opal's tasks</div>`;
+  html += shown.length ? `<div class="wg-today-list">${shown.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing for Opal right now.</p>`;
+  if (items.length > 5) html += `<button type="button" class="wg-today-viewmore" data-viewmore="today">View more →</button>`;
   return html;
 }
-function wgTodayTalkingHTML() {
-  const points = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.talkingPoints);
-  if (!points.length) return `<p class="wg-today-empty">Nothing yet.</p>`;
-  return `<div class="wg-today-tplist">${points.map(p => `<p class="wg-today-tp">${esc(p.text)}</p>`).join('')}</div>`;
+function wgTodayYouColHTML() {
+  const items = wgTodayYouItems(), shown = items.slice(0, 5);
+  let html = `<div class="wg-today-sec-label">My tasks</div>`;
+  html += shown.length ? `<div class="wg-today-list">${shown.map(wgTodayYouRowHTML).join('')}</div>` : `<p class="wg-today-empty">Nothing for you right now.</p>`;
+  if (items.length > 5) html += `<button type="button" class="wg-today-viewmore" data-viewmore="today">View more →</button>`;
+  return html;
 }
 function wgTodayConvsHTML() {
   const list = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
   return list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-today-empty">No conversations yet today.</p>`;
 }
-function wgRenderTodayActions() { const el = $('#wgTodayActionsWrap'); if (el) el.innerHTML = wgTodayActionsHTML(); }
+function wgRenderTodayActions() {
+  const l = $('#wgTodayOpalWrap'); if (l) l.innerHTML = wgTodayOpalColHTML();
+  const r = $('#wgTodayYouWrap'); if (r) r.innerHTML = wgTodayYouColHTML();
+}
 function wgRenderToday() {
-  $('#wgToday').innerHTML = `<div class="wg-today-col">
-    <div class="wg-today-sec" id="wgTodayActionsWrap">${wgTodayActionsHTML()}</div>
-    <div class="wg-today-sec"><div class="wg-today-sec-label">Key talking points</div>${wgTodayTalkingHTML()}</div>
-    <div class="wg-today-sec"><div class="wg-today-sec-label">Today's conversations</div>${wgTodayConvsHTML()}</div>
+  $('#wgToday').innerHTML = `<div class="wg-today-tasks">
+    <div class="wg-today-taskcol" id="wgTodayOpalWrap">${wgTodayOpalColHTML()}</div>
+    <div class="wg-today-taskcol" id="wgTodayYouWrap">${wgTodayYouColHTML()}</div>
   </div>
-  <div class="wg-today-live">
-    <div class="wg-today-live-head"><i></i><span class="mono" style="font-size:9.5px;letter-spacing:.1em;color:var(--wg-ink-42);text-transform:uppercase">Live transcript</span></div>
-    <div class="wg-today-feed" id="wgTodayFeed"></div>
-  </div>`;
+  <div class="wg-today-sec"><div class="wg-today-sec-label">Today's conversations</div>${wgTodayConvsHTML()}</div>`;
 }
-let wgTodayFeedTimer = null, wgTodayFeedPool = [];
-function wgBuildTodayFeedPool() {
-  const sentences = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).flatMap(c => c.transcriptSentences.map(s => s.text));
-  return sentences.length ? sentences : ['Quiet right now.'];
-}
-function wgAddTodayFeedLine() {
-  const feed = $('#wgTodayFeed'); if (!feed) return;
-  if (!wgTodayFeedPool.length) wgTodayFeedPool = wgBuildTodayFeedPool();
-  const text = wgTodayFeedPool[Math.floor(Math.random() * wgTodayFeedPool.length)];
-  const row = document.createElement('div'); row.className = 'wg-today-feed-row' + (REDUCED ? '' : ' new');
-  row.innerHTML = `<span class="mono">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span><p>${esc(text)}</p>`;
-  feed.prepend(row);
-  while (feed.children.length > 30) feed.removeChild(feed.lastChild);
-}
-function wgTodayFeedTick() { if (mode === 'widgets' && wgState.viewMode === 'today' && state.listening) wgAddTodayFeedLine(); }
-function wgStartTodayFeed() {
-  wgTodayFeedPool = wgBuildTodayFeedPool();
-  const feed = $('#wgTodayFeed'); if (feed) feed.innerHTML = '';
-  for (let i = 0; i < 5; i++) wgAddTodayFeedLine();
-  clearInterval(wgTodayFeedTimer);
-  wgTodayFeedTimer = setInterval(wgTodayFeedTick, REDUCED ? 9000 : 4200);
-}
-function wgStopTodayFeed() { clearInterval(wgTodayFeedTimer); wgTodayFeedTimer = null; }
 function wgSpanData(el) { return { conn: el.dataset.spanConn, conf: +el.dataset.spanConf, clusterId: el.dataset.spanCluster }; }
 function wgOpenPop(el) {
   const { conn, conf, clusterId } = wgSpanData(el), pop = $('#wgPop'), r = el.getBoundingClientRect();
@@ -6859,6 +6865,7 @@ function wgInit() {
 
   /* the command rail */
   $('#wgRailCollapse').addEventListener('click', wgToggleRailCollapse);
+  $('#wgRailViewTog').addEventListener('click', e => { const b = e.target.closest('[data-railview]'); if (b) wgSetRailView(b.dataset.railview); });
   $('#wgRailStrip').addEventListener('click', e => { if (e.target.closest('[data-railexpand]')) wgToggleRailCollapse(); });
   $('#wgRailFab').addEventListener('click', wgOpenRailDrawer);
   $('#wgRailDrawerScrim').addEventListener('click', wgCloseRailDrawer);
@@ -6872,8 +6879,8 @@ function wgInit() {
     const more = e.target.closest('#wgRailLoadMore'); if (more) { wgState.railCompletedShown += 20; return wgRenderRailDone(); }
     const doneRow = e.target.closest('[data-raildonerow]'); if (doneRow) return wgOpenDebrief(doneRow.dataset.raildonerow);
     const readyTitle = e.target.closest('.wg-rail-ready-title'); if (readyTitle) { const row = readyTitle.closest('[data-railrow]'); const found = row && wgOpalTaskById(row.dataset.railrow); if (found) wgRailJumpToTask(found.cluster.id, found.cluster.day); return; }
-    const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
   });
+  $('#wgWelcomePanel').addEventListener('click', e => { const statp = e.target.closest('[data-statperiod]'); if (statp) opalSetStatsPeriod(statp.dataset.statperiod); });
   $('#wgRailBody').addEventListener('contextmenu', e => { const row = e.target.closest('[data-todo]'); if (row) { e.preventDefault(); wgOpenRailSnooze(row.dataset.todo, e.clientX, e.clientY); } });
   let wgRailPressT = 0, wgRailPressId = null;
   $('#wgRailBody').addEventListener('pointerdown', e => { const row = e.target.closest('[data-todo]'); if (!row || e.pointerType === 'mouse') return; wgRailPressId = row.dataset.todo; const r = row.getBoundingClientRect(); wgRailPressT = setTimeout(() => wgOpenRailSnooze(wgRailPressId, r.left + 20, r.bottom), 500); });
@@ -6891,6 +6898,7 @@ function wgInit() {
     const skip = e.target.closest('[data-todayskip]'); if (skip) return wgSkipTask(skip.dataset.todayskip);
     const retry = e.target.closest('[data-todayretry]'); if (retry) return wgRetryTask(retry.dataset.todayretry);
     const debrief = e.target.closest('[data-debrief]'); if (debrief) return wgOpenDebrief(debrief.dataset.debrief);
+    const viewmore = e.target.closest('[data-viewmore]'); if (viewmore) return wgOpenDay(WG_TODAY_KEY);
     if (e.target.closest('[data-convtitle]')) return;
     const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
@@ -7529,7 +7537,6 @@ function noteRefresh() { ntRenderRail(); ntRenderCollRow(); ntRenderActiveView()
 
 try {
   wgRenderWelcomePanel(); wgInit(); wgRenderRail();
-  if (wgState.viewMode === 'today') wgStartTodayFeed();
   try { sessionStorage.removeItem('wgRecoveryAttempted'); } catch (e3) {}
 } catch (err) {
   console.error('Widgets failed to start, attempting a one-time recovery reload.', err);
