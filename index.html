@@ -669,20 +669,36 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-welcome-black{flex:1;min-width:0;background:var(--ground-900);border-radius:22px;padding:22px 22px 20px;display:flex;flex-direction:column;color:#fff}
 .wg-welcome-when{font:400 10px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .wg-welcome-black h2{margin-top:10px;font:400 22px/1.2 var(--sans);letter-spacing:-.01em;color:#fff;flex:1}
-.wg-welcome-qstats{display:flex;gap:22px;margin-top:16px}
-.wg-welcome-qstat{display:flex;flex-direction:column;gap:5px}
+.wg-welcome-qstats{display:flex;align-items:flex-start;gap:26px;margin-top:16px}
+.wg-welcome-qstat{display:flex;flex-direction:column;gap:5px;padding-top:2px}
 .wg-welcome-qstat .lbl{font:400 9px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .wg-welcome-qstat .val{display:flex;align-items:center;gap:6px;font:500 13px/1.3 var(--sans);color:#fff}
 .wg-welcome-qstat .dot{width:7px;height:7px;border-radius:50%;flex:none}
 .wg-welcome-qstat .dot.active{background:var(--wg-accent);box-shadow:0 0 8px rgba(111,143,78,.7)}
 .wg-welcome-qstat .dot.paused{background:var(--wg-ember);box-shadow:0 0 8px rgba(221,143,69,.6)}
+.wg-welcome-batt{display:flex;flex-direction:column;align-items:center;gap:2px}
+.wg-welcome-batt-ring{position:relative;width:58px;height:58px;flex:none}
+.wg-welcome-batt-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.wg-welcome-batt-ring .track{fill:none;stroke:rgba(255,255,255,.14);stroke-width:8}
+.wg-welcome-batt-ring .fill{fill:none;stroke:url(#wgBattGrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
+.wg-welcome-batt-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff}
+.wg-welcome-batt-icon svg{width:22px;height:22px}
+.wg-welcome-batt-pct{margin-top:7px;font:600 17px/1.1 var(--sans);color:#fff}
+.wg-welcome-batt-min{margin-top:2px;font:400 9px/1.4 var(--mono);letter-spacing:.03em;color:rgba(255,255,255,.42);white-space:nowrap}
 .wg-welcome-cal{flex:1.05;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:22px;padding:16px 14px}
+.wg-welcome-cal-head{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.wg-welcome-cal-title{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-60);min-width:76px;text-align:center}
+.wg-welcome-cal-nav{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);font-size:13px;transition:color .15s,background .15s}
+.wg-welcome-cal-nav:hover{color:var(--wg-ink);background:var(--wg-surface-3)}
 .wg-welcome-cal-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
 .wg-welcome-cal-dow span{text-align:center;font:400 9px/1.6 var(--mono);letter-spacing:.04em;color:var(--wg-ink-42)}
 .wg-welcome-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
 .wg-welcome-cal-grid span{display:flex;align-items:center;justify-content:center;height:24px;font:400 12px/1 var(--sans);color:var(--wg-ink)}
 .wg-welcome-cal-grid span.faded{color:var(--wg-ink-28)}
-.wg-welcome-cal-grid span.today{color:#fff;font-weight:600;background:#c0503f;border-radius:50%;width:24px;margin:0 auto}
+.wg-welcome-cal-grid span[data-day]{cursor:pointer;border-radius:50%;width:24px;margin:0 auto;transition:background .15s}
+.wg-welcome-cal-grid span[data-day]:hover{background:var(--wg-surface-3)}
+.wg-welcome-cal-grid span.today{color:#fff;font-weight:600;background:#c0503f}
+.wg-welcome-cal-grid span.today:hover{background:#c0503f}
 .wg-welcome-r{flex:none;width:min(300px,32%)}
 .wg-band{margin-top:10px;text-align:left;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;color:var(--wg-ink-42)}
 .wg-welcome-stats .wg-today-sec-label{margin:0 0 8px}
@@ -1055,6 +1071,9 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 
 /* day-scoped conversations list */
 .wg-dayconv-list{display:flex;flex-direction:column;gap:12px;max-width:640px}
+.wg-dayconv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%}
+.wg-dayconv-grid .wg-conv-card{width:100%}
+.wg-day-subtitle{font:400 16px/1.3 var(--sans);color:var(--wg-ink-60);margin:-10px 0 20px}
 
 /* today: the default landing view */
 .wg-today{display:flex;flex-direction:column;gap:26px;width:100%}
@@ -1164,6 +1183,8 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-card.wg-ghost{opacity:0;pointer-events:none}
 .wg-conv-card.dropping{transform:scale(.1);opacity:0}
 .wg-conv-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.wg-conv-when{font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42)}
+.wg-conv-top-actions{display:flex;gap:4px;flex:none}
 .wg-conv-tag{font:400 8.5px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wg-accent-ink);background:rgba(111,143,78,.12);padding:3px 9px;border-radius:999px}
 .wg-conv-star{flex:none;width:24px;height:24px;color:var(--wg-ink-28);transition:color .2s,transform .15s}
 .wg-conv-star svg{width:14px;height:14px}
@@ -1173,9 +1194,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-conv-card-title{font:500 15px/1.3 var(--sans);color:var(--wg-ink);outline:none;border-radius:6px}
 .wg-conv-card-title:focus{background:var(--wg-surface-2);box-shadow:0 0 0 2px var(--wg-border-2)}
 .wg-conv-card-sum{font-size:11.5px;line-height:1.45;color:var(--wg-ink-60)}
-.wg-conv-card-ex{font-size:11.5px;line-height:1.5;color:var(--wg-ink-42);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .wg-conv-bottom{margin-top:4px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.wg-conv-date{font:400 9px/1.6 var(--mono);letter-spacing:.06em;color:var(--wg-ink-42)}
 .wg-conv-todo-pill{font:400 8.5px/1.6 var(--mono);letter-spacing:.08em;color:var(--wg-ember);border:1px solid var(--wg-ember);padding:2px 8px;border-radius:999px}
 .wg-conv-new{display:flex;align-items:center;justify-content:center;min-height:132px;border:1.5px dashed var(--wg-border-2);border-radius:18px;background:transparent;transition:background .2s,border-color .2s;padding:6px}
 .wg-conv-new:hover{border-color:var(--wg-ink-28);background:var(--wg-surface-2)}
@@ -1461,6 +1480,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-conv-layout{flex-direction:column}
   .wg-conv-folders-col{flex:none;width:100%;max-width:none;position:static}
   .wg-today-tasks{grid-template-columns:1fr}
+  .wg-dayconv-grid{grid-template-columns:1fr}
   .wg-welcome{flex-direction:column;align-items:stretch}
   .wg-welcome-event{flex-direction:column}
   .wg-welcome-r{width:100%}
@@ -2391,7 +2411,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div class="wg-welcome" id="wgWelcomePanel"></div>
       <div class="wg-filters-row">
         <div class="wg-filters" id="wgFilters">
-          <button type="button" data-wgmode="today" class="on">Today</button>
+          <button type="button" data-wgmode="today" class="on">Day</button>
           <button type="button" data-wgmode="calendar">Calendar</button>
           <button type="button" data-wgmode="conversations">Conversations</button>
           <button type="button" data-wgmode="weekly">Weekly</button>
@@ -2414,6 +2434,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
           <button type="button" data-convfilter="unsorted">Unsorted</button>
         </div>
       </div>
+      <p class="wg-day-subtitle" id="wgDaySubtitle"></p>
       <div class="wg-body">
         <div class="wg-today" id="wgToday"></div>
         <div class="wg-grid" id="wgGrid" hidden></div>
@@ -5283,7 +5304,7 @@ const wgCheckSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" s
 const wgLockSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>`;
 function wgBadge(id) { const o = ORB_DEFS.find(x => x.id === id); const color = WG_BADGE_COLOR[id] || (o && o.brand) || '#7a9a5a'; const icon = o ? markSvg(o.logo, '#fff') : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/></svg>`; return `<b style="--c:${color}" title="${esc((o && o.name) || id)}">${icon}</b>`; }
 
-const wgState = { viewMode: 'today', currentDay: null, tab: 'actions',
+const wgState = { viewMode: 'today', currentDay: null, tab: 'actions', dayViewKey: WG_TODAY_KEY, dayConvFilter: 'all',
   convFilter: 'all', currentFolder: null, currentConv: null, aaSize: (state.wgAaSize || 'm'), drag: null, pendingConvFromChat: false,
   calMonth: { year: WG_T0.getFullYear(), month: WG_T0.getMonth() },
   railCollapsed: !!state.wgRailCollapsed, railDrawerOpen: false, railCompletedShown: 20, railPinned: {}, railSnoozeTarget: null, railView: 'actions',
@@ -5410,19 +5431,39 @@ function wgRailJumpToTask(clusterId, day) {
   setTimeout(() => wgJumpToAction(clusterId, null), REDUCED ? 0 : 80);
 }
 function wgWelcomeCalHTML() {
-  const now = WG_T0, year = now.getFullYear(), month = now.getMonth(), todayDate = now.getDate();
+  const { year, month } = wgState.calMonth;
   const startPad = new Date(year, month, 1).getDay(); // Sunday-first, matches the S M T W T F S header
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const prevDaysInMonth = new Date(year, month, 0).getDate();
   const cells = [];
   for (let i = 0; i < startPad; i++) cells.push({ n: prevDaysInMonth - startPad + 1 + i, faded: true });
-  for (let d = 1; d <= daysInMonth; d++) cells.push({ n: d, faded: false, today: d === todayDate });
+  for (let d = 1; d <= daysInMonth; d++) { const key = wgKey(new Date(year, month, d)); cells.push({ n: d, faded: false, today: key === WG_TODAY_KEY, key }); }
   let nextDay = 1; while (cells.length < 42) cells.push({ n: nextDay++, faded: true });
   const dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => `<span>${d}</span>`).join('');
-  const grid = cells.map(c => `<span class="${c.faded ? 'faded' : ''}${c.today ? ' today' : ''}">${c.n}</span>`).join('');
-  return `<div class="wg-welcome-cal-dow">${dow}</div><div class="wg-welcome-cal-grid">${grid}</div>`;
+  const grid = cells.map(c => `<span class="${c.faded ? 'faded' : ''}${c.today ? ' today' : ''}"${c.key ? ` data-day="${c.key}" role="button" tabindex="0"` : ''}>${c.n}</span>`).join('');
+  return `<div class="wg-welcome-cal-head"><button type="button" class="wg-welcome-cal-nav" data-welcomecalnav="-1" aria-label="Previous month">‹</button><span class="wg-welcome-cal-title mono">${TITLE(MONTHS[month])} ${year}</span><button type="button" class="wg-welcome-cal-nav" data-welcomecalnav="1" aria-label="Next month">›</button></div>
+    <div class="wg-welcome-cal-dow">${dow}</div><div class="wg-welcome-cal-grid">${grid}</div>`;
 }
+function wgRenderWelcomeCal() { const el = $('#wgWelcomeCalWrap'); if (el) el.innerHTML = wgWelcomeCalHTML(); }
 function wgWelcomeWhenText() { const d = new Date(); return `${fmtDate(d)} · ${fmtTime(d)}`; }
+const WG_BRACELET_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M4 12c0 2.2 1 4.1 2.6 5.4M20 12c0 2.2-1 4.1-2.6 5.4"/><circle cx="12" cy="4" r="1.3" fill="currentColor" stroke="none"/></svg>`;
+const WG_BATT_FULL_MIN = 18 * 60; // an always-listening bracelet's assumed full-charge runtime, for the "minutes left" estimate
+function wgBattMinutesLeft(pct) { return Math.round(pct / 100 * WG_BATT_FULL_MIN); }
+function wgWelcomeBattHTML(pct) {
+  const r = 42, c = 2 * Math.PI * r, off = c * (1 - clamp(pct, 0, 100) / 100);
+  return `<div class="wg-welcome-batt">
+    <div class="wg-welcome-batt-ring">
+      <svg viewBox="0 0 100 100">
+        <defs><linearGradient id="wgBattGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c0503f"/><stop offset="50%" stop-color="var(--wg-ember)"/><stop offset="100%" stop-color="var(--wg-accent)"/></linearGradient></defs>
+        <circle class="track" cx="50" cy="50" r="${r}"/>
+        <circle class="fill" cx="50" cy="50" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
+      </svg>
+      <span class="wg-welcome-batt-icon">${WG_BRACELET_SVG}</span>
+    </div>
+    <b class="wg-welcome-batt-pct">${pct}%</b>
+    <span class="wg-welcome-batt-min">${fmtMin(wgBattMinutesLeft(pct))} left</span>
+  </div>`;
+}
 function wgRenderWelcomePanel() {
   deriveWelcome(); const w = WELCOME, h = new Date().getHours();
   const listening = state.listening;
@@ -5432,10 +5473,10 @@ function wgRenderWelcomePanel() {
         <h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2>
         <div class="wg-welcome-qstats">
           <div class="wg-welcome-qstat"><span class="lbl">Band</span><span class="val"><i class="dot ${listening ? 'active' : 'paused'}"></i>${listening ? 'Active' : 'Paused'}</span></div>
-          <div class="wg-welcome-qstat"><span class="lbl">Battery</span><span class="val">${w.band.battery}%</span></div>
+          ${wgWelcomeBattHTML(w.band.battery)}
         </div>
       </div>
-      <div class="wg-welcome-cal">${wgWelcomeCalHTML()}</div>
+      <div class="wg-welcome-cal" id="wgWelcomeCalWrap">${wgWelcomeCalHTML()}</div>
     </div>
     <div class="wg-welcome-r wg-welcome-stats">
       <div class="wg-today-sec-label">Opal's health</div>
@@ -5495,7 +5536,9 @@ function wgRenderCalendarInto(grid) {
 }
 function wgNavigateCalMonth(dir) {
   let { year, month } = wgState.calMonth; month += dir; if (month < 0) { month = 11; year--; } else if (month > 11) { month = 0; year++; }
-  wgState.calMonth = { year, month }; wgRenderCalendarInto($('#wgGrid'));
+  wgState.calMonth = { year, month };
+  wgRenderCalendarInto($('#wgGrid'));
+  wgRenderWelcomeCal();
 }
 function wgViewPanes() { return { today: $('#wgToday'), calendar: $('#wgGrid'), conversations: $('#wgConvLayout'), weekly: $('#wgWeekly') }; }
 function wgRenderModeContent(mode) {
@@ -5514,6 +5557,7 @@ function wgSwitchViewMode(newMode) {
   $('#wgCalNav').hidden = newMode !== 'calendar';
   $('#wgWeekNav').hidden = newMode !== 'weekly';
   wgRenderModeContent(newMode);
+  wgRenderDaySubtitle();
   const panes = wgViewPanes(), showEl = panes[newMode], hideEl = panes[prevMode];
   if (REDUCED) { Object.entries(panes).forEach(([k, el]) => { el.hidden = k !== newMode; }); return; }
   hideEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'ease-out' }).onfinish = () => {
@@ -5756,24 +5800,27 @@ function wgAddWeekTask(dayKey) {
 }
 
 /* ---------- widgets: conversations rendering ---------- */
-function wgFmtDateMono(day) { const d = new Date(day + 'T00:00:00'); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
 function wgFmtMeta(c) {
   const d = new Date(c.day + 'T00:00:00'), t = dt => dt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} · ${t(c.startAt)}–${t(c.endAt)}`;
 }
-function wgConvExcerpt(c) { return c.transcriptSentences.slice(0, 3).map(s => s.text).join(' '); }
+function wgConvStartLabel(c) {
+  const d = new Date(c.day + 'T00:00:00'), t = dt => dt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} · ${t(c.startAt)}`;
+}
 function wgConvCardHTML(c) {
   const hasTodo = c.actionClusterIds.length > 0;
   return `<div class="wg-conv-card" data-conv="${c.id}">
-    <div class="wg-conv-top"><span class="wg-conv-tag">${esc(c.tag.toUpperCase())}</span>
-      <div style="display:flex;gap:4px">
+    <div class="wg-conv-top">
+      <span class="wg-conv-when mono">${esc(wgConvStartLabel(c))}</span>
+      <div class="wg-conv-top-actions">
         <button type="button" class="wg-conv-star${c.isStarred ? ' on' : ''}" data-convstar="${c.id}" aria-label="${c.isStarred ? 'Unstar' : 'Star'} this conversation">${NT_STAR}</button>
         <button type="button" class="wg-menu-btn sm" data-cardmenu="${c.id}" aria-label="More options">&#8230;</button>
-      </div></div>
+      </div>
+    </div>
     <h3 class="wg-conv-card-title" data-convtitle="${c.id}" contenteditable="true" spellcheck="false">${esc(c.title)}</h3>
     <p class="wg-conv-card-sum">${esc(c.summary || 'Nothing written yet.')}</p>
-    <p class="wg-conv-card-ex">${esc(wgConvExcerpt(c))}</p>
-    <div class="wg-conv-bottom"><span class="wg-conv-date mono">${wgFmtDateMono(c.day)}</span>${hasTodo ? `<span class="wg-conv-todo-pill">TO-DO</span>` : ''}</div>
+    <div class="wg-conv-bottom"><span class="wg-conv-tag">${esc(c.tag.toUpperCase())}</span>${hasTodo ? `<span class="wg-conv-todo-pill">TO-DO</span>` : ''}</div>
   </div>`;
 }
 function wgConvNewCardHTML() {
@@ -6559,12 +6606,12 @@ function wgDayTxJumpNextFlag() {
 /* today: the default landing view — today's action items, talking points, conversations, and a live-updating transcript feed */
 function wgTodayOpalItems() {
   const items = [];
-  wgClustersFor(WG_TODAY_KEY).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved' && t.status !== 'done') items.push({ t, c }); }));
+  wgClustersFor(wgState.dayViewKey).forEach(c => c.opalTasks.forEach(t => { if (t.status !== 'moved' && t.status !== 'done') items.push({ t, c }); }));
   return items;
 }
 function wgTodayYouItems() {
   const items = [];
-  wgClustersFor(WG_TODAY_KEY).forEach(c => {
+  wgClustersFor(wgState.dayViewKey).forEach(c => {
     if (c.humanTaskId) { const h = wgTodoById(c.humanTaskId); if (h) items.push(h); }
     (c.movedToHuman || []).forEach(tid => { const h = wgTodoById(tid); if (h) items.push(h); });
   });
@@ -6596,20 +6643,51 @@ function wgTodayYouColHTML() {
   if (items.length > 5) html += `<button type="button" class="wg-today-viewmore" data-viewmore="today">View more →</button>`;
   return html;
 }
+function wgDayConvFilterList() {
+  const all = WG_CONVERSATIONS.filter(c => c.day === wgState.dayViewKey && !c.isArchived);
+  const f = wgState.dayConvFilter;
+  const filtered = f === 'actions' ? all.filter(c => c.actionClusterIds.length)
+    : f === 'people' ? all.filter(c => c.personIds.length)
+    : f === 'solo' ? all.filter(c => !c.personIds.length)
+    : all;
+  return filtered.sort((a, b) => b.startAt - a.startAt);
+}
 function wgTodayConvsHTML() {
-  const list = WG_CONVERSATIONS.filter(c => c.day === WG_TODAY_KEY && !c.isArchived).sort((a, b) => b.startAt - a.startAt);
-  return list.length ? `<div class="wg-dayconv-list">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-today-empty">No conversations yet today.</p>`;
+  const f = wgState.dayConvFilter;
+  const filters = `<div class="wg-conv-filters wg-day-convfilters" id="wgDayConvFilters">
+    <button type="button" data-dayconvfilter="all" class="${f === 'all' ? 'on' : ''}">All</button>
+    <button type="button" data-dayconvfilter="actions" class="${f === 'actions' ? 'on' : ''}">With actions</button>
+    <button type="button" data-dayconvfilter="people" class="${f === 'people' ? 'on' : ''}">With people</button>
+    <button type="button" data-dayconvfilter="solo" class="${f === 'solo' ? 'on' : ''}">Solo</button>
+  </div>`;
+  const list = wgDayConvFilterList();
+  const body = list.length ? `<div class="wg-dayconv-grid">${list.map(wgConvCardHTML).join('')}</div>` : `<p class="wg-today-empty">Nothing here.</p>`;
+  return filters + body;
 }
 function wgRenderTodayActions() {
   const l = $('#wgTodayOpalWrap'); if (l) l.innerHTML = wgTodayOpalColHTML();
   const r = $('#wgTodayYouWrap'); if (r) r.innerHTML = wgTodayYouColHTML();
 }
+function wgRenderTodayConvs() { const el = $('#wgTodayConvWrap'); if (el) el.innerHTML = wgTodayConvsHTML(); }
+function wgSetDayConvFilter(f) { wgState.dayConvFilter = f; wgRenderTodayConvs(); }
+function wgRenderDaySubtitle() {
+  const el = $('#wgDaySubtitle'); if (!el) return;
+  el.hidden = wgState.viewMode !== 'today';
+  el.textContent = wgDayLabel(wgState.dayViewKey) + (wgState.dayViewKey === WG_TODAY_KEY ? ' · Today' : '');
+}
+function wgSelectDay(key) {
+  if (!wgDayOpenable(key)) { wgShowToast('Nothing here for you to see.'); return; }
+  wgState.dayViewKey = key;
+  if (wgState.viewMode !== 'today') wgSwitchViewMode('today');
+  else { wgRenderToday(); wgRenderDaySubtitle(); }
+}
 function wgRenderToday() {
+  wgRenderDaySubtitle();
   $('#wgToday').innerHTML = `<div class="wg-today-tasks">
     <div class="wg-today-taskcol" id="wgTodayOpalWrap">${wgTodayOpalColHTML()}</div>
     <div class="wg-today-taskcol" id="wgTodayYouWrap">${wgTodayYouColHTML()}</div>
   </div>
-  <div class="wg-today-sec"><div class="wg-today-sec-label">Today's conversations</div>${wgTodayConvsHTML()}</div>`;
+  <div class="wg-today-sec"><div class="wg-today-sec-label">Conversations</div><div id="wgTodayConvWrap">${wgTodayConvsHTML()}</div></div>`;
 }
 function wgSpanData(el) { return { conn: el.dataset.spanConn, conf: +el.dataset.spanConf, clusterId: el.dataset.spanCluster }; }
 function wgOpenPop(el) {
@@ -6716,8 +6794,8 @@ function wgInit() {
   if (wgInited) return; wgInited = true;
   wgRenderGrid();
   $('#wgFilters').addEventListener('click', e => { const b = e.target.closest('[data-wgmode]'); if (b) wgSwitchViewMode(b.dataset.wgmode); });
-  $('#wgGrid').addEventListener('click', e => { const el = e.target.closest('[data-day]'); if (!el) return; if (wgDayOpenable(el.dataset.day)) wgOpenDay(el.dataset.day, el); else wgShowToast('Nothing here for you to see.'); });
-  $('#wgGrid').addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const el = e.target.closest('[data-day]'); if (!el) return; e.preventDefault(); if (wgDayOpenable(el.dataset.day)) wgOpenDay(el.dataset.day, el); else wgShowToast('Nothing here for you to see.'); });
+  $('#wgGrid').addEventListener('click', e => { const el = e.target.closest('[data-day]'); if (!el) return; wgSelectDay(el.dataset.day); });
+  $('#wgGrid').addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const el = e.target.closest('[data-day]'); if (!el) return; e.preventDefault(); wgSelectDay(el.dataset.day); });
   $('#wgAllDays').addEventListener('click', () => wgCloseDay());
   $('#wgDayPrev').addEventListener('click', () => wgNavigateDay(-1));
   $('#wgDayNext').addEventListener('click', () => wgNavigateDay(1));
@@ -6923,7 +7001,11 @@ function wgInit() {
     const doneRow = e.target.closest('[data-raildonerow]'); if (doneRow) return wgOpenDebrief(doneRow.dataset.raildonerow);
     const readyTitle = e.target.closest('.wg-rail-ready-title'); if (readyTitle) { const row = readyTitle.closest('[data-railrow]'); const found = row && wgOpalTaskById(row.dataset.railrow); if (found) wgRailJumpToTask(found.cluster.id, found.cluster.day); return; }
   });
-  $('#wgWelcomePanel').addEventListener('click', e => { const statp = e.target.closest('[data-statperiod]'); if (statp) opalSetStatsPeriod(statp.dataset.statperiod); });
+  $('#wgWelcomePanel').addEventListener('click', e => {
+    const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
+    const nav = e.target.closest('[data-welcomecalnav]'); if (nav) return wgNavigateCalMonth(+nav.dataset.welcomecalnav);
+    const day = e.target.closest('[data-day]'); if (day) return wgSelectDay(day.dataset.day);
+  });
   $('#wgRailBody').addEventListener('contextmenu', e => { const row = e.target.closest('[data-todo]'); if (row) { e.preventDefault(); wgOpenRailSnooze(row.dataset.todo, e.clientX, e.clientY); } });
   let wgRailPressT = 0, wgRailPressId = null;
   $('#wgRailBody').addEventListener('pointerdown', e => { const row = e.target.closest('[data-todo]'); if (!row || e.pointerType === 'mouse') return; wgRailPressId = row.dataset.todo; const r = row.getBoundingClientRect(); wgRailPressT = setTimeout(() => wgOpenRailSnooze(wgRailPressId, r.left + 20, r.bottom), 500); });
@@ -6941,11 +7023,12 @@ function wgInit() {
     const skip = e.target.closest('[data-todayskip]'); if (skip) return wgSkipTask(skip.dataset.todayskip);
     const retry = e.target.closest('[data-todayretry]'); if (retry) return wgRetryTask(retry.dataset.todayretry);
     const debrief = e.target.closest('[data-debrief]'); if (debrief) return wgOpenDebrief(debrief.dataset.debrief);
-    const viewmore = e.target.closest('[data-viewmore]'); if (viewmore) return wgOpenDay(WG_TODAY_KEY);
+    const viewmore = e.target.closest('[data-viewmore]'); if (viewmore) return wgOpenDay(wgState.dayViewKey);
+    const dayconvfilter = e.target.closest('[data-dayconvfilter]'); if (dayconvfilter) return wgSetDayConvFilter(dayconvfilter.dataset.dayconvfilter);
     if (e.target.closest('[data-convtitle]')) return;
     const cstar = e.target.closest('[data-convstar]'); if (cstar) { e.stopPropagation(); return wgToggleConvStar(cstar.dataset.convstar); }
     const cmenu = e.target.closest('[data-cardmenu]'); if (cmenu) { e.stopPropagation(); return wgOpenCardMenu(cmenu.dataset.cardmenu, cmenu); }
-    const conv = e.target.closest('[data-conv]'); if (conv) { const todayConvIds = WG_CONVERSATIONS.filter(x => x.day === WG_TODAY_KEY && !x.isArchived).sort((a, b) => b.startAt - a.startAt).map(x => x.id); return wgConvOpen(conv.dataset.conv, conv, { type: 'day', label: 'Today', listContext: todayConvIds }); }
+    const conv = e.target.closest('[data-conv]'); if (conv) { const dayConvIds = wgDayConvFilterList().map(x => x.id); return wgConvOpen(conv.dataset.conv, conv, { type: 'day', label: wgDayLabel(wgState.dayViewKey), listContext: dayConvIds }); }
   });
   $('#wgToday').addEventListener('blur', e => {
     const el = e.target.closest && e.target.closest('[data-convtitle]'); if (!el) return;
