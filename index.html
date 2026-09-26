@@ -696,7 +696,7 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 @media (prefers-reduced-motion:reduce){.wg-rec-wave-track{animation:none}}
 /* the battery dial: a semicircle of radial bars whose section background sweeps red-to-green with pct,
    filled bars always black, unfilled bars + text flip bone/black by whichever gives better contrast (WCAG-style) */
-.wg-battdial{margin-top:auto;padding:16px 20px 14px;background:var(--battbg,#4f7a3a);border-radius:0 0 22px 22px;position:relative;color:var(--bone);transition:background .15s linear}
+.wg-battdial{margin:auto -20px 0;padding:16px 20px 14px;background:var(--battbg,#4f7a3a);border-radius:0 0 22px 22px;position:relative;color:var(--bone);transition:background .15s linear}
 .wg-battdial.dark-text{color:#1f241d}
 .wg-battdial-min{font:400 9.5px/1.5 var(--mono);letter-spacing:.04em;opacity:.85}
 .wg-battdial-svgwrap{margin-top:2px;touch-action:none;cursor:ns-resize}
@@ -6983,7 +6983,7 @@ function wgTodayYouRowHTML(todo) {
 }
 function wgTodayOpalColHTML() {
   const items = wgTodayOpalItems(), shown = items.slice(0, 5);
-  let html = `<div class="wg-today-sec-label">Opal's tasks</div>`;
+  let html = `<div class="wg-today-sec-label">Opal's Tasks Today</div>`;
   html += shown.length ? `<div class="wg-today-list">${shown.map(({ t }) => wgTodayOpalRowHTML(t)).join('')}</div>` : `<p class="wg-today-empty">Nothing for Opal right now.</p>`;
   if (items.length > 5) html += `<button type="button" class="wg-today-viewmore" data-viewmore="today">View more →</button>`;
   return html;
@@ -7048,7 +7048,7 @@ function wgRenderToday() {
     <div class="wg-today-taskcol" id="wgTodayOpalWrap">${wgTodayOpalColHTML()}</div>
     <div class="wg-today-taskcol" id="wgTodayYouWrap">${wgTodayYouColHTML()}</div>
   </div>
-  <div class="wg-today-sec"><div class="wg-today-sec-label">Conversations</div><div id="wgTodayConvWrap">${wgTodayConvsHTML()}</div></div>`;
+  <div class="wg-today-sec"><div class="wg-today-sec-label">Today's Conversations</div><div id="wgTodayConvWrap">${wgTodayConvsHTML()}</div></div>`;
 }
 function wgSpanData(el) { return { conn: el.dataset.spanConn, conf: +el.dataset.spanConf, clusterId: el.dataset.spanCluster }; }
 function wgOpenPop(el) {
