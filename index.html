@@ -25,7 +25,7 @@
 
   /* z-index tiers — one scale, every stacking element maps to exactly one tier */
   --z-base:0; --z-elevated:10; --z-nav:100; --z-dropdown:200; --z-tooltip:300;
-  --z-toast:900; --z-modal:1000; --z-confirm:1100;
+  --z-toast:900; --z-modal:1000; --z-confirm:1100; --z-boot:1200;
 
   /* real, measured height of the fixed top chrome (logo/date row + pills nav) —
      content padding-top is always calc(--nav-height + --space-2), never a guess */
@@ -2168,9 +2168,85 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important}
 }
+
+/* ===== Boot splash — "entering the garden" (2026-09-25) =====
+   Full-bleed theatrical splash shown once per real page load; the centered
+   pill morphs in place into a minimal loading bar, then the whole thing
+   fades to reveal the app. Purely decorative — not gated on real asset load. */
+#bootSplash{position:fixed;inset:0;z-index:var(--z-boot);overflow:hidden;background:#070a06;opacity:1;transition:opacity .55s var(--ease)}
+#bootSplash.phase-out{opacity:0;pointer-events:none}
+#bootSplash img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+#bootSplash::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 40%,rgba(2,4,1,.55) 100%)}
+.boot-pill{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(1);display:inline-flex;align-items:center;gap:var(--space-3);padding:14px 24px;border-radius:999px;background:rgba(10,15,8,.55);backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturate));border:1px solid rgba(255,255,255,.1);box-shadow:var(--glass-shadow);color:var(--bone);font-family:var(--sans);font-size:19px;white-space:nowrap;transition:opacity .4s var(--ease),transform .4s var(--ease);z-index:1}
+.boot-pill i{width:10px;height:10px;border-radius:50%;background:#BCCC5E;box-shadow:0 0 14px rgba(188,204,94,.85);flex:none}
+#bootSplash.phase-bar .boot-pill{opacity:0;transform:translate(-50%,-50%) scale(.9);pointer-events:none}
+.boot-bar{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(6px);width:min(640px,82vw);opacity:0;pointer-events:none;transition:opacity .4s var(--ease) .05s,transform .4s var(--ease) .05s;z-index:1}
+#bootSplash.phase-bar .boot-bar{opacity:1;transform:translate(-50%,-50%)}
+.boot-bar-track{position:relative;height:1px;background:rgba(255,255,255,.3)}
+.boot-bar-end{position:absolute;top:-5px;width:1px;height:11px;background:rgba(255,255,255,.45)}
+.boot-bar-end.l{left:0}
+.boot-bar-end.r{right:0}
+.boot-bar-tick{position:absolute;top:-6px;left:0%;width:2px;height:13px;background:var(--bone);transform:translateX(-50%) rotate(18deg)}
+.boot-bar-label{position:absolute;bottom:100%;left:0%;transform:translateX(-50%);margin-bottom:var(--space-4);text-align:center;color:var(--bone);font-family:var(--mono)}
+.boot-bar-label b{display:block;font-size:30px;font-weight:500;letter-spacing:-.01em}
+.boot-bar-label small{display:block;font-size:10px;letter-spacing:.16em;opacity:.6;margin-top:2px}
+.boot-cancel{position:absolute;left:var(--space-6);bottom:var(--space-6);display:inline-flex;align-items:center;gap:var(--space-2);background:none;border:none;padding:0;color:rgba(236,235,228,.65);font-family:var(--mono);font-size:11px;letter-spacing:.14em;cursor:pointer;opacity:0;transition:opacity .4s var(--ease) .05s,color .15s;z-index:1}
+#bootSplash.phase-bar .boot-cancel{opacity:1;pointer-events:auto}
+.boot-cancel:hover{color:var(--bone)}
+.boot-cancel svg{width:12px;height:12px}
+@media (prefers-reduced-motion:reduce){#bootSplash,#bootSplash *{transition:none!important}}
 </style>
 </head>
 <body class="mode-widgets">
+
+<div id="bootSplash" role="presentation" aria-hidden="true">
+  <img src="assets/boot/entering-garden.webp" alt="">
+  <div class="boot-pill" id="bootPill"><i></i><span>entering the garden</span></div>
+  <div class="boot-bar" id="bootBar">
+    <div class="boot-bar-label" id="bootBarLabel"><b id="bootPct">0%</b><small>loading</small></div>
+    <div class="boot-bar-track">
+      <span class="boot-bar-end l"></span>
+      <span class="boot-bar-end r"></span>
+      <span class="boot-bar-tick" id="bootTick"></span>
+    </div>
+  </div>
+  <button type="button" class="boot-cancel" id="bootCancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>CANCEL</button>
+</div>
+<script>
+(function(){
+  const el = document.getElementById('bootSplash');
+  if (!el) return;
+  const tick = document.getElementById('bootTick');
+  const label = document.getElementById('bootBarLabel');
+  const pctEl = document.getElementById('bootPct');
+  const cancelBtn = document.getElementById('bootCancel');
+  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let done = false;
+  function finish(){
+    if (done) return; done = true;
+    el.classList.add('phase-out');
+    setTimeout(() => el.remove(), 600);
+  }
+  cancelBtn.addEventListener('click', finish);
+  if (REDUCED) { setTimeout(finish, 500); return; }
+  setTimeout(() => {
+    el.classList.add('phase-bar');
+    const start = performance.now();
+    const DURATION = 1100; // stays under the 1.2s cap from 0% to 100%
+    function frame(now){
+      const t = Math.min(1, (now - start) / DURATION);
+      const pct = Math.round(t * 100);
+      const pos = 4 + t * 92; // keep tick/label off the very edges
+      tick.style.left = pos + '%';
+      label.style.left = pos + '%';
+      pctEl.textContent = pct + '%';
+      if (t < 1) requestAnimationFrame(frame);
+      else setTimeout(finish, 300);
+    }
+    requestAnimationFrame(frame);
+  }, 650);
+})();
+</script>
 
 <section id="welcome" class="pre" aria-label="Today at a glance">
   <h1 class="w-greet" id="wGreet"></h1>
