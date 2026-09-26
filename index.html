@@ -677,34 +677,32 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
   background-size:220% 220%;animation:wgDrift 22s ease-in-out infinite alternate}
 @keyframes wgDrift{from{background-position:0% 0%}to{background-position:100% 60%}}
 .wg-welcome-event{flex:1.5;min-width:0;display:flex;gap:16px}
-.wg-welcome-black{flex:1;min-width:0;background:var(--ground-900);border-radius:22px;padding:22px 22px 20px;display:flex;flex-direction:column;color:#fff}
+.wg-welcome-black{flex:.82;min-width:0;background:var(--ground-900);border-radius:22px;padding:20px 20px 0;display:flex;flex-direction:column;color:#fff;overflow:hidden}
+.wg-welcome-top{padding-bottom:18px}
 .wg-welcome-when{font:400 10px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.wg-welcome-black h2{margin-top:10px;font:400 22px/1.2 var(--sans);letter-spacing:-.01em;color:#fff;flex:1}
-.wg-welcome-qstats{display:flex;align-items:flex-start;gap:26px;margin-top:16px}
-.wg-welcome-qstat{display:flex;flex-direction:column;gap:5px;padding-top:2px}
-.wg-welcome-qstat .lbl{font:400 9px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.42)}
-.wg-welcome-qstat .val{display:flex;align-items:center;gap:6px;font:500 13px/1.3 var(--sans);color:#fff}
-.wg-welcome-qstat .dot{width:7px;height:7px;border-radius:50%;flex:none}
-.wg-welcome-qstat .dot.active{background:var(--wg-accent);box-shadow:0 0 8px rgba(111,143,78,.7)}
-.wg-welcome-qstat .dot.paused{background:var(--wg-ember);box-shadow:0 0 8px rgba(221,143,69,.6)}
-.wg-welcome-batt{display:flex;flex-direction:column;align-items:center;gap:2px}
-.wg-welcome-batt-ring{position:relative;width:64px;height:64px;flex:none}
-.wg-welcome-batt-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.wg-welcome-batt-ring .track{fill:none;stroke:rgba(255,255,255,.14);stroke-width:8}
-.wg-welcome-batt-ring .fill{fill:none;stroke:url(#wgBattGrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
-.wg-welcome-batt-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff}
-.wg-welcome-batt-icon svg{width:36px;height:36px;overflow:visible}
-.wg-welcome-batt-icon path{fill:none;stroke:url(#wgLoopGrad);stroke-width:1.8;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(111,143,78,.65));animation:wgLoopMorph 6s ease-in-out infinite alternate,wgLoopSpin 14s linear infinite}
-@keyframes wgLoopMorph{
-  0%{d:path("M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z")}
-  50%{d:path("M22,5 C30,7 35,14 33,22 C31,30 24,35 16,33 C8,31 4,23 7,15 C10,7 17,4 22,5 Z")}
-  100%{d:path("M18,4 C27,3 34,9 35,18 C36,27 29,34 20,35 C11,36 4,29 5,20 C6,11 12,5 18,4 Z")}
-}
-@keyframes wgLoopSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.wg-welcome-batt-icon path{animation:none;d:path("M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z")}}
-.wg-welcome-batt-pct{margin-top:7px;font:600 17px/1.1 var(--sans);color:#fff}
-.wg-welcome-batt-min{margin-top:2px;font:400 9px/1.4 var(--mono);letter-spacing:.03em;color:rgba(255,255,255,.42);white-space:nowrap}
-.wg-welcome-cal{flex:1.05;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:22px;padding:16px 14px}
+.wg-welcome-black h2{margin-top:10px;font:400 21px/1.2 var(--sans);letter-spacing:-.01em;color:#fff}
+/* the live recording pill: press to pause/resume, a scrolling voice-memo waveform, a playhead pin */
+.wg-rec-pill{margin-top:16px;width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);transition:background .2s}
+.wg-rec-pill:hover{background:rgba(255,255,255,.12)}
+.wg-rec-btn{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);display:grid;place-items:center;color:#fff}
+.wg-rec-btn svg{width:12px;height:12px}
+.wg-rec-wave{flex:1;min-width:0;height:20px;overflow:hidden}
+.wg-rec-wave-track{display:flex;align-items:center;gap:3px;height:100%;width:max-content;animation:wgWaveScroll 3.2s linear infinite}
+.wg-rec-wave.paused .wg-rec-wave-track{animation-play-state:paused}
+.wg-rec-wave-track i{flex:none;width:2px;border-radius:2px;background:var(--spore);height:var(--h);display:block}
+@keyframes wgWaveScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.wg-rec-pin{flex:none;position:relative;width:2px;height:22px;background:#c0503f;border-radius:2px}
+.wg-rec-pin::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#c0503f}
+@media (prefers-reduced-motion:reduce){.wg-rec-wave-track{animation:none}}
+/* the battery dial: a semicircle of radial bars whose section background sweeps red-to-green with pct,
+   filled bars always black, unfilled bars + text flip bone/black by whichever gives better contrast (WCAG-style) */
+.wg-battdial{margin-top:auto;padding:16px 20px 14px;background:var(--battbg,#4f7a3a);border-radius:0 0 22px 22px;position:relative;color:var(--bone);transition:background .15s linear}
+.wg-battdial.dark-text{color:#1f241d}
+.wg-battdial-min{font:400 9.5px/1.5 var(--mono);letter-spacing:.04em;opacity:.85}
+.wg-battdial-svgwrap{margin-top:2px;touch-action:none;cursor:ns-resize}
+.wg-battdial-svg{width:100%;height:auto;display:block}
+.wg-battdial-pct{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);font:600 26px/1 var(--sans);pointer-events:none}
+.wg-welcome-cal{flex:1.3;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:22px;padding:16px 14px}
 .wg-welcome-cal-head{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
 .wg-welcome-cal-title{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-60);min-width:76px;text-align:center}
 .wg-welcome-cal-nav{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);font-size:13px;transition:color .15s,background .15s}
@@ -5712,43 +5710,108 @@ function wgWelcomeCalHTML() {
 }
 function wgRenderWelcomeCal() { const el = $('#wgWelcomeCalWrap'); if (el) el.innerHTML = wgWelcomeCalHTML(); }
 function wgWelcomeWhenText() { const d = new Date(); return `${fmtDate(d)} · ${fmtTime(d)}`; }
-const WG_OPAL_LOOP_SVG = `<svg viewBox="0 0 40 40"><defs><linearGradient id="wgLoopGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4de"/><stop offset="100%" stop-color="var(--wg-accent)"/></linearGradient></defs><path d="M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z"/></svg>`;
 const WG_BATT_FULL_MIN = 18 * 60; // an always-listening bracelet's assumed full-charge runtime, for the "minutes left" estimate
 function wgBattMinutesLeft(pct) { return Math.round(pct / 100 * WG_BATT_FULL_MIN); }
-function wgWelcomeBattHTML(pct) {
-  const r = 42, c = 2 * Math.PI * r, off = c * (1 - clamp(pct, 0, 100) / 100);
-  return `<div class="wg-welcome-batt">
-    <div class="wg-welcome-batt-ring">
-      <svg viewBox="0 0 100 100">
-        <defs><linearGradient id="wgBattGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c0503f"/><stop offset="50%" stop-color="var(--wg-ember)"/><stop offset="100%" stop-color="var(--wg-accent)"/></linearGradient></defs>
-        <circle class="track" cx="50" cy="50" r="${r}"/>
-        <circle class="fill" cx="50" cy="50" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
-      </svg>
-      <span class="wg-welcome-batt-icon">${WG_OPAL_LOOP_SVG}</span>
-    </div>
-    <b class="wg-welcome-batt-pct">${pct}%</b>
-    <span class="wg-welcome-batt-min">${fmtMin(wgBattMinutesLeft(pct))} left</span>
-  </div>`;
+/* red-to-green health ramp in HSL (sweeps through amber, not a muddy RGB lerp), plus a real WCAG-style
+   contrast check to pick bone vs black text/graphics — "logical and standard design rules", not a guess */
+function wgBattHue(pct) { return 6 + (118 - 6) * clamp(pct, 0, 100) / 100; }
+const WG_BATT_SAT = 45, WG_BATT_LIGHT = 34; // tuned so both ends of the ramp (deep red, deep green) stay dark enough for bone text,
+// and only the brighter amber/yellow midpoint — the genuinely low-contrast zone — flips to black, matching the reference's own yellow-bg/black-text pairing
+function wgHslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [Math.round(255 * f(0)), Math.round(255 * f(8)), Math.round(255 * f(4))];
+}
+function wgRelLuminance([r, g, b]) {
+  const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+function wgContrast(l1, l2) { const a = Math.max(l1, l2), b = Math.min(l1, l2); return (a + 0.05) / (b + 0.05); }
+function wgBattIsDarkText(pct) {
+  const bgLum = wgRelLuminance(wgHslToRgb(wgBattHue(pct), WG_BATT_SAT, WG_BATT_LIGHT));
+  return wgContrast(bgLum, 0) > wgContrast(bgLum, 1); // whichever of black/white actually contrasts better, wins
+}
+function wgBattDialSVG(pct, isDark) {
+  const N = 44, cx = 110, cy = 106, innerR = 64, outerR = 90;
+  const filled = Math.round(N * clamp(pct, 0, 100) / 100);
+  const unfilledColor = isDark ? '#1f241d' : 'var(--bone)';
+  let bars = '';
+  for (let i = 0; i < N; i++) {
+    const theta = 180 - (180 * i / (N - 1)), rad = theta * Math.PI / 180;
+    const dx = Math.cos(rad), dy = -Math.sin(rad);
+    const x1 = cx + innerR * dx, y1 = cy + innerR * dy, x2 = cx + outerR * dx, y2 = cy + outerR * dy;
+    const on = i < filled;
+    bars += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${on ? '#000' : unfilledColor}" stroke-opacity="${on ? 1 : .4}" stroke-width="4.5" stroke-linecap="round"/>`;
+  }
+  return `<svg viewBox="0 0 220 118" class="wg-battdial-svg">${bars}</svg>`;
+}
+function wgRenderBattDial(pct) {
+  pct = clamp(Math.round(pct), 0, 100);
+  const el = $('#wgBattDial'); if (!el) return;
+  const isDark = wgBattIsDarkText(pct);
+  el.style.setProperty('--battbg', `hsl(${wgBattHue(pct).toFixed(0)} ${WG_BATT_SAT}% ${WG_BATT_LIGHT}%)`);
+  el.classList.toggle('dark-text', isDark);
+  const wrap = $('#wgBattDialSvgWrap'); if (wrap) wrap.innerHTML = wgBattDialSVG(pct, isDark);
+  const pctEl = $('#wgBattDialPct'); if (pctEl) pctEl.textContent = pct + '%';
+  const minEl = $('#wgBattDialMin'); if (minEl) minEl.textContent = fmtMin(wgBattMinutesLeft(pct)) + ' left';
+}
+function wgBattAngleToPct(clientX, clientY, rect) {
+  const cx = rect.left + rect.width * (110 / 220), cy = rect.top + rect.height * (106 / 118);
+  const dx = clientX - cx, dy = clientY - cy;
+  let deg = dy >= 0 ? (dx < 0 ? 180 : 0) : Math.atan2(-dy, dx) * 180 / Math.PI;
+  deg = clamp(deg, 0, 180);
+  return clamp(Math.round(100 * (180 - deg) / 180), 0, 100);
+}
+function wgSetDemoBattery(pct) {
+  WELCOME.band.battery = pct; // demo-only: live-drives both this dial and the header's small dial, never persisted
+  wgRenderBattDial(pct);
+  renderHeaderBatt();
+}
+function wgBattDialPointerDown(e) {
+  const wrap = $('#wgBattDialSvgWrap'); if (!wrap) return;
+  e.preventDefault();
+  const rect = wrap.getBoundingClientRect();
+  const move = ev => wgSetDemoBattery(wgBattAngleToPct(ev.clientX, ev.clientY, rect));
+  const up = () => { document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); };
+  document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+  move(e);
+}
+const WG_PAUSE_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.3"/><rect x="14" y="5" width="4" height="14" rx="1.3"/></svg>`;
+const WG_PLAY_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z"/></svg>`;
+function wgRecPillHTML(listening) {
+  const half = Array.from({ length: 22 }, () => (18 + Math.round(Math.random() * 72)) + '%');
+  const bars = half.concat(half).map(h => `<i style="--h:${h}"></i>`).join('');
+  return `<button type="button" class="wg-rec-pill" id="wgRecPill" aria-pressed="${listening}" aria-label="${listening ? 'Listening. Press to pause.' : 'Paused. Press to resume listening.'}">
+    <span class="wg-rec-btn">${listening ? WG_PAUSE_SVG : WG_PLAY_SVG}</span>
+    <span class="wg-rec-wave${listening ? '' : ' paused'}"><span class="wg-rec-wave-track">${bars}</span></span>
+    <span class="wg-rec-pin"></span>
+  </button>`;
 }
 function wgRenderWelcomePanel() {
-  deriveWelcome(); const w = WELCOME, h = new Date().getHours();
-  const listening = state.listening;
+  deriveWelcome(); const w = WELCOME, h = new Date().getHours(), listening = state.listening, pct = clamp(w.band.battery, 0, 100);
   $('#wgWelcomePanel').innerHTML = `<div class="wg-welcome-event">
-      <div class="wg-welcome-black">
-        <p class="wg-welcome-when" id="wgWelcomeWhen">${esc(wgWelcomeWhenText())}</p>
-        <h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2>
-        <div class="wg-welcome-qstats">
-          <div class="wg-welcome-qstat"><span class="lbl">Band</span><span class="val"><i class="dot ${listening ? 'active' : 'paused'}"></i>${listening ? 'Active' : 'Paused'}</span></div>
-          ${wgWelcomeBattHTML(w.band.battery)}
+      <div class="wg-welcome-black" id="wgWelcomeBlack">
+        <div class="wg-welcome-top">
+          <p class="wg-welcome-when" id="wgWelcomeWhen">${esc(wgWelcomeWhenText())}</p>
+          <h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2>
+          ${wgRecPillHTML(listening)}
+        </div>
+        <div class="wg-battdial" id="wgBattDial">
+          <span class="wg-battdial-min" id="wgBattDialMin">${esc(fmtMin(wgBattMinutesLeft(pct)))} left</span>
+          <div class="wg-battdial-svgwrap" id="wgBattDialSvgWrap"></div>
+          <b class="wg-battdial-pct" id="wgBattDialPct">${pct}%</b>
         </div>
       </div>
       <div class="wg-welcome-cal" id="wgWelcomeCalWrap">${wgWelcomeCalHTML()}</div>
     </div>
     <div class="wg-welcome-r wg-welcome-stats">
-      <div class="wg-today-sec-label">Opal's health</div>
+      <div class="wg-today-sec-label">Opal Stats</div>
       <div class="stat-period" id="wgStatsPeriod"></div>
       <div class="stat-grid" id="wgStatsGrid"></div>
     </div>`;
+  wgRenderBattDial(pct);
   wgRenderStats();
 }
 function wgSetRailView(view) {
@@ -7309,7 +7372,9 @@ function wgInit() {
     const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
     const nav = e.target.closest('[data-welcomecalnav]'); if (nav) return wgNavigateCalMonth(+nav.dataset.welcomecalnav);
     const day = e.target.closest('[data-day]'); if (day) return wgSelectDayFromWelcome(day.dataset.day);
+    const rec = e.target.closest('#wgRecPill'); if (rec) return toggleListening();
   });
+  $('#wgWelcomePanel').addEventListener('pointerdown', e => { if (e.target.closest('#wgBattDialSvgWrap')) wgBattDialPointerDown(e); });
   $('#wgRailBody').addEventListener('contextmenu', e => { const row = e.target.closest('[data-todo]'); if (row) { e.preventDefault(); wgOpenRailSnooze(row.dataset.todo, e.clientX, e.clientY); } });
   let wgRailPressT = 0, wgRailPressId = null;
   $('#wgRailBody').addEventListener('pointerdown', e => { const row = e.target.closest('[data-todo]'); if (!row || e.pointerType === 'mouse') return; wgRailPressId = row.dataset.todo; const r = row.getBoundingClientRect(); wgRailPressT = setTimeout(() => wgOpenRailSnooze(wgRailPressId, r.left + 20, r.bottom), 500); });
