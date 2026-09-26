@@ -661,15 +661,29 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 @keyframes wgIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 
 /* welcome panel: a bright curved-bottom card, same welcome data */
-.wg-welcome{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:28px 32px 22px;margin-bottom:22px;
+.wg-welcome{position:relative;display:flex;align-items:stretch;justify-content:space-between;gap:24px;padding:28px 32px 22px;margin-bottom:22px;
   background:linear-gradient(155deg,#fbf7ea,#fff 55%);border:1px solid var(--wg-border);border-radius:8px 8px 36px 36px;box-shadow:var(--wg-shadow-md);
   background-size:220% 220%;animation:wgDrift 22s ease-in-out infinite alternate}
 @keyframes wgDrift{from{background-position:0% 0%}to{background-position:100% 60%}}
-.wg-welcome-l{flex:1;min-width:0}
-.wg-welcome-l .wg-mark{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#eef4de,var(--wg-accent) 60%,#54713a);margin-bottom:12px;box-shadow:0 0 0 4px rgba(111,143,78,.10)}
-.wg-welcome-l h2{font:400 27px/1.15 var(--sans);letter-spacing:-.01em;color:var(--wg-ink)}
-.wg-welcome-l p{margin-top:6px;font-size:12.5px;color:var(--wg-ink-60)}
-.wg-welcome-r{flex:none;width:min(360px,44%)}
+.wg-welcome-event{flex:1.5;min-width:0;display:flex;gap:16px}
+.wg-welcome-black{flex:1;min-width:0;background:var(--ground-900);border-radius:22px;padding:22px 22px 20px;display:flex;flex-direction:column;color:#fff}
+.wg-welcome-when{font:400 10px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.wg-welcome-black h2{margin-top:10px;font:400 22px/1.2 var(--sans);letter-spacing:-.01em;color:#fff;flex:1}
+.wg-welcome-qstats{display:flex;gap:22px;margin-top:16px}
+.wg-welcome-qstat{display:flex;flex-direction:column;gap:5px}
+.wg-welcome-qstat .lbl{font:400 9px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.wg-welcome-qstat .val{display:flex;align-items:center;gap:6px;font:500 13px/1.3 var(--sans);color:#fff}
+.wg-welcome-qstat .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.wg-welcome-qstat .dot.active{background:var(--wg-accent);box-shadow:0 0 8px rgba(111,143,78,.7)}
+.wg-welcome-qstat .dot.paused{background:var(--wg-ember);box-shadow:0 0 8px rgba(221,143,69,.6)}
+.wg-welcome-cal{flex:1.05;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:22px;padding:16px 14px}
+.wg-welcome-cal-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
+.wg-welcome-cal-dow span{text-align:center;font:400 9px/1.6 var(--mono);letter-spacing:.04em;color:var(--wg-ink-42)}
+.wg-welcome-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
+.wg-welcome-cal-grid span{display:flex;align-items:center;justify-content:center;height:24px;font:400 12px/1 var(--sans);color:var(--wg-ink)}
+.wg-welcome-cal-grid span.faded{color:var(--wg-ink-28)}
+.wg-welcome-cal-grid span.today{color:#fff;font-weight:600;background:#c0503f;border-radius:50%;width:24px;margin:0 auto}
+.wg-welcome-r{flex:none;width:min(300px,32%)}
 .wg-band{margin-top:10px;text-align:left;font:400 9.5px/1.6 var(--mono);letter-spacing:.1em;color:var(--wg-ink-42)}
 .wg-welcome-stats .wg-today-sec-label{margin:0 0 8px}
 .wg-welcome-stats .stat-period{display:flex;gap:4px;margin-bottom:10px}
@@ -1448,6 +1462,7 @@ body.wg-rail-collapsed .wg-rail-strip{display:flex}
   .wg-conv-folders-col{flex:none;width:100%;max-width:none;position:static}
   .wg-today-tasks{grid-template-columns:1fr}
   .wg-welcome{flex-direction:column;align-items:stretch}
+  .wg-welcome-event{flex-direction:column}
   .wg-welcome-r{width:100%}
 }
 @media (prefers-reduced-motion:reduce){
@@ -3409,11 +3424,14 @@ function chipText() {
 function toggleListening() {
   if (state.listening) { listenAcc += Date.now() - listenSince; } else { listenSince = Date.now(); }
   state.listening = !state.listening; save(); chipText(); bandLine();
+  if ($('#wgWelcomePanel').innerHTML) wgRenderWelcomePanel();
   if (annot.orb && annot.orb.center) hlabel.innerHTML = labelFor(annot.orb);
   const b = $('[data-act="toggle-listen"]'); if (b) b.textContent = state.listening ? 'Pause' : 'Resume';
 }
 $('#chip').addEventListener('click', toggleListening);
-tickClock(); chipText(); setTimeout(greeting, 0); setTimeout(updateHud, 0); setInterval(() => { tickClock(); chipText(); }, 20000); addEventListener('resize', chipText);
+tickClock(); chipText(); setTimeout(greeting, 0); setTimeout(updateHud, 0);
+setInterval(() => { tickClock(); chipText(); const when = $('#wgWelcomeWhen'); if (when) when.textContent = wgWelcomeWhenText(); }, 20000);
+addEventListener('resize', chipText);
 
 /* ---------- sheet ---------- */
 const sheetWrap = $('#sheetWrap'), sheet = $('#sheet'), sheetBody = $('#sheetBody'), sheetFoot = $('#sheetFoot'), sheetCap = $('#sheetCap'), sheetTitle = $('#sheetTitle'), skinCv = $('#skin'), undoEl = $('#undo');
@@ -5391,9 +5409,34 @@ function wgRailJumpToTask(clusterId, day) {
   wgOpenDay(day);
   setTimeout(() => wgJumpToAction(clusterId, null), REDUCED ? 0 : 80);
 }
+function wgWelcomeCalHTML() {
+  const now = WG_T0, year = now.getFullYear(), month = now.getMonth(), todayDate = now.getDate();
+  const startPad = new Date(year, month, 1).getDay(); // Sunday-first, matches the S M T W T F S header
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevDaysInMonth = new Date(year, month, 0).getDate();
+  const cells = [];
+  for (let i = 0; i < startPad; i++) cells.push({ n: prevDaysInMonth - startPad + 1 + i, faded: true });
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ n: d, faded: false, today: d === todayDate });
+  let nextDay = 1; while (cells.length < 42) cells.push({ n: nextDay++, faded: true });
+  const dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => `<span>${d}</span>`).join('');
+  const grid = cells.map(c => `<span class="${c.faded ? 'faded' : ''}${c.today ? ' today' : ''}">${c.n}</span>`).join('');
+  return `<div class="wg-welcome-cal-dow">${dow}</div><div class="wg-welcome-cal-grid">${grid}</div>`;
+}
+function wgWelcomeWhenText() { const d = new Date(); return `${fmtDate(d)} · ${fmtTime(d)}`; }
 function wgRenderWelcomePanel() {
   deriveWelcome(); const w = WELCOME, h = new Date().getHours();
-  $('#wgWelcomePanel').innerHTML = `<div class="wg-welcome-l"><div class="wg-mark"></div><h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2><p>${w.promises.count} promise${w.promises.count === 1 ? '' : 's'} waiting across ${w.promises.toolCount} tool${w.promises.toolCount === 1 ? '' : 's'}.</p><div class="wg-band">BAND ${w.band.battery}% · ${state.listening ? 'SYNCED' : 'PAUSED'}</div></div>
+  const listening = state.listening;
+  $('#wgWelcomePanel').innerHTML = `<div class="wg-welcome-event">
+      <div class="wg-welcome-black">
+        <p class="wg-welcome-when" id="wgWelcomeWhen">${esc(wgWelcomeWhenText())}</p>
+        <h2>Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${esc(w.firstName)}.</h2>
+        <div class="wg-welcome-qstats">
+          <div class="wg-welcome-qstat"><span class="lbl">Band</span><span class="val"><i class="dot ${listening ? 'active' : 'paused'}"></i>${listening ? 'Active' : 'Paused'}</span></div>
+          <div class="wg-welcome-qstat"><span class="lbl">Battery</span><span class="val">${w.band.battery}%</span></div>
+        </div>
+      </div>
+      <div class="wg-welcome-cal">${wgWelcomeCalHTML()}</div>
+    </div>
     <div class="wg-welcome-r wg-welcome-stats">
       <div class="wg-today-sec-label">Opal's health</div>
       <div class="stat-period" id="wgStatsPeriod"></div>
