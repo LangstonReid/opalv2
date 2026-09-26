@@ -1049,6 +1049,23 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
   .wg-stuckdesk-foot{flex-direction:column;align-items:stretch}
   .wg-stuckdesk-finish{width:100%;text-align:center}
 }
+.wg-stuckdesk-head p.live{color:var(--wg-accent-ink)}
+.wg-stuckdesk-head p.live i{background:var(--wg-accent)}
+.wg-taskdesk-working{display:flex;gap:7px;margin-top:4px}
+.wg-taskdesk-working i{width:9px;height:9px;border-radius:50%;background:var(--wg-accent);animation:wgWorkingBounce 1.2s ease-in-out infinite}
+.wg-taskdesk-working i:nth-child(2){animation-delay:.15s}
+.wg-taskdesk-working i:nth-child(3){animation-delay:.3s}
+@keyframes wgWorkingBounce{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
+.wg-taskdesk-roadmap{margin-top:22px;padding-top:18px;border-top:1px solid var(--wg-border);display:flex;flex-direction:column}
+.wg-taskdesk-step{position:relative;padding:0 0 18px 26px;font:400 12.5px/1.5 var(--sans);color:var(--wg-ink-42)}
+.wg-taskdesk-step:last-child{padding-bottom:0}
+.wg-taskdesk-step::before{content:'';position:absolute;left:5px;top:16px;bottom:0;width:1px;background:var(--wg-border-2)}
+.wg-taskdesk-step:last-child::before{display:none}
+.wg-taskdesk-step i{position:absolute;left:0;top:3px;width:11px;height:11px;border-radius:50%;background:var(--wg-surface);border:2px solid var(--wg-border-2)}
+.wg-taskdesk-step.done{color:var(--wg-ink-60)}
+.wg-taskdesk-step.done i{background:var(--wg-accent);border-color:var(--wg-accent)}
+.wg-taskdesk-step.current{color:var(--wg-ink);font-weight:500}
+.wg-taskdesk-step.current i{border-color:var(--wg-accent);box-shadow:0 0 0 4px rgba(111,143,78,.16);animation:wgOrbPulse 1.6s ease-in-out infinite}
 
 /* toast for a task finishing while you're elsewhere */
 .wg-toast{position:fixed;right:22px;bottom:22px;z-index:var(--z-toast);display:flex;align-items:center;gap:8px;color:#fff;font:400 11px/1.6 var(--mono);letter-spacing:.04em;padding:11px 16px;border-radius:999px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
@@ -1370,7 +1387,8 @@ body.wg-rail-collapsed #widgetsRoot{--wg-rail-gap:92px}
 body.wg-rail-collapsed .wg-rail{width:56px}
 .wg-rail-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px;gap:8px}
 .wg-rail-viewtog{display:flex;gap:2px;background:var(--wg-surface-3);border-radius:999px;padding:3px;flex:1;min-width:0}
-.wg-rail-viewtog button{flex:1;min-width:0;border:none;background:none;padding:6px 2px;border-radius:999px;font:400 9px/1.4 var(--mono);letter-spacing:0;color:var(--wg-ink-42);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;overflow:hidden;text-overflow:clip;text-align:center}
+.wg-rail-viewtog button{flex:1;min-width:0;border:none;background:none;padding:8px 2px;border-radius:999px;color:var(--wg-ink-42);cursor:pointer;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center}
+.wg-rail-viewtog button svg{width:15px;height:15px}
 .wg-rail-viewtog button.on{background:var(--wg-ink);color:#fff}
 .wg-rail-viewtog button:not(.on):hover{color:var(--wg-ink)}
 body.wg-rail-collapsed .wg-rail-viewtog{display:none}
@@ -1383,6 +1401,24 @@ body.wg-rail-collapsed .wg-rail-viewtog{display:none}
 .wg-rail-feed-row .mono{display:block;font-size:9px;color:var(--wg-ink-42);margin-bottom:3px}
 .wg-rail-feed-row p{font-size:12px;line-height:1.5;color:var(--wg-ink)}
 .wg-rail-feed-row.new{animation:wgTodayNew .5s var(--ease)}
+.wg-status-list{display:flex;flex-direction:column;gap:12px}
+.wg-status-card{background:var(--wg-surface-2);border-radius:14px;padding:13px 14px}
+.wg-status-top{display:flex;align-items:center;gap:8px}
+.wg-status-top b{width:22px;height:22px;flex:none;border-radius:7px;display:grid;place-items:center;background:var(--c,var(--wg-accent))}
+.wg-status-top b svg{width:11px;height:11px}
+.wg-status-top b svg path{fill:#fff}
+.wg-status-meta{display:flex;flex-direction:column;line-height:1.3}
+.wg-status-meta b{font:500 11.5px/1.3 var(--sans);color:var(--wg-ink)}
+.wg-status-meta span{font:400 8.5px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-status-card h4{margin-top:10px;font:500 12.5px/1.4 var(--sans);color:var(--wg-ink)}
+.wg-status-stage{display:flex;align-items:center;gap:6px;margin-top:8px;font:400 10.5px/1.5 var(--mono);letter-spacing:.03em;color:var(--wg-accent-ink)}
+.wg-status-stage i{width:6px;height:6px;border-radius:50%;background:var(--wg-accent);flex:none;animation:wgOrbPulse 1.6s ease-in-out infinite}
+.wg-status-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.wg-status-eta{display:flex;flex-direction:column;line-height:1.3}
+.wg-status-eta b{font:600 12.5px/1.3 var(--sans);color:var(--wg-ink)}
+.wg-status-eta span{font:400 8px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wg-ink-42)}
+.wg-status-openbtn{font:400 10px/1.6 var(--mono);letter-spacing:.04em;color:var(--wg-accent-ink);background:var(--wg-yellow-soft);padding:6px 12px;border-radius:999px;transition:background .2s,color .2s}
+.wg-status-openbtn:hover{background:var(--wg-yellow);color:var(--wg-ink)}
 .wg-rail-collapse{width:26px;height:26px;border-radius:50%;background:var(--wg-surface-3);color:var(--wg-ink-60);display:grid;place-items:center;transition:transform .3s var(--ease),background .2s}
 .wg-rail-collapse svg{width:13px;height:13px}
 .wg-rail-collapse:hover{background:var(--wg-surface-2)}
@@ -2359,8 +2395,9 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <aside class="wg-rail" id="wgRail">
     <div class="wg-rail-head">
       <div class="wg-rail-viewtog" id="wgRailViewTog">
-        <button type="button" class="on" data-railview="actions">Actions</button>
-        <button type="button" data-railview="transcript">Transcript</button>
+        <button type="button" class="on" data-railview="actions" aria-label="Actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+        <button type="button" data-railview="transcript" aria-label="Transcript"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4"/></svg></button>
+        <button type="button" data-railview="status" aria-label="Status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-9-9"/></svg></button>
       </div>
       <button type="button" class="wg-rail-collapse" id="wgRailCollapse" aria-label="Collapse rail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
@@ -2387,6 +2424,10 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div id="wgRailTranscriptView" hidden>
         <div class="wg-rail-feed-head"><i></i><span class="mono" style="font-size:9.5px;letter-spacing:.1em;color:var(--wg-ink-42);text-transform:uppercase">Live transcript</span></div>
         <div class="wg-rail-feed" id="wgRailFeed"></div>
+      </div>
+      <div id="wgRailStatusView" hidden>
+        <div class="wg-rail-sec-label">Opal is working on</div>
+        <div class="wg-status-list" id="wgRailStatus"></div>
       </div>
     </div>
     <div class="wg-rail-strip" id="wgRailStrip">
@@ -5332,6 +5373,25 @@ function wgRailCompletedList() {
   return WG_CLUSTERS.flatMap(c => c.opalTasks.filter(t => t.status === 'done').map(t => ({ t, c })))
     .sort((a, b) => (b.t.completedAt || 0) - (a.t.completedAt || 0));
 }
+function wgRailRunningList() {
+  return WG_CLUSTERS.flatMap(c => c.opalTasks.filter(t => t.status === 'running').map(t => ({ t, c })))
+    .sort((a, b) => (a.t.startedAt || 0) - (b.t.startedAt || 0));
+}
+function wgStatusStartText(t) { return t.startedAt ? new Date(t.startedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : ''; }
+function wgStatusEtaText(t) { const sim = WG_TASK_SIM[t.id]; const min = (sim && sim.etaMin) || 4; return `~${min} min`; }
+function wgRailStatusRowHTML({ t, c }) {
+  return `<div class="wg-status-card" data-statustask="${t.id}">
+    <div class="wg-status-top">${wgBadge(t.connector)}<div class="wg-status-meta"><b>${esc(wgStatusStartText(t))}</b><span>started</span></div></div>
+    <h4>${esc(t.text)}</h4>
+    <div class="wg-status-stage"><i></i>${esc(t.stage || wgRunStatusFor(t))}</div>
+    <div class="wg-status-bottom"><div class="wg-status-eta"><b>${esc(wgStatusEtaText(t))}</b><span>ETA</span></div><button type="button" class="wg-status-openbtn" data-livetask="${t.id}">Open live view →</button></div>
+  </div>`;
+}
+function wgRenderRailStatus() {
+  const el = $('#wgRailStatus'); if (!el) return;
+  const list = wgRailRunningList();
+  el.innerHTML = list.length ? list.map(wgRailStatusRowHTML).join('') : `<p class="wg-rail-empty">Nothing running right now.</p>`;
+}
 function wgRailGroupLabel(ts) {
   const d = new Date(ts), dKey = wgKey(d);
   if (dKey === WG_TODAY_KEY) return 'TODAY';
@@ -5402,7 +5462,7 @@ function wgRenderRailStuck() {
   $('#wgRailStripStuck').textContent = String(list.length);
 }
 function wgRenderRail() {
-  wgRenderRailStuck(); wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone();
+  wgRenderRailStuck(); wgRenderRailMustDo(); wgRenderRailReady(); wgRenderRailDone(); wgRenderRailStatus();
   const h = new Date().getHours();
   $('#wgRail').classList.toggle('dim', h >= 18 || h < 6);
   document.body.classList.toggle('wg-rail-collapsed', wgState.railCollapsed);
@@ -5491,7 +5551,9 @@ function wgSetRailView(view) {
   document.querySelectorAll('#wgRailViewTog button').forEach(b => b.classList.toggle('on', b.dataset.railview === view));
   $('#wgRailActionsView').hidden = view !== 'actions';
   $('#wgRailTranscriptView').hidden = view !== 'transcript';
+  $('#wgRailStatusView').hidden = view !== 'status';
   if (view === 'transcript') wgStartRailFeed(); else wgStopRailFeed();
+  if (view === 'status') wgRenderRailStatus();
 }
 let wgRailFeedTimer = null, wgRailFeedPool = [];
 function wgBuildRailFeedPool() {
@@ -6324,7 +6386,7 @@ function wgAcceptTask(taskId) {
   const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found;
   if (task.status !== 'proposed' && task.status !== 'error' && task.status !== 'skipped') return;
   if (task.dependsOn && !wgTodoDone(task.dependsOn)) return;
-  task.status = 'running'; task.runStatus = wgRunStatusFor(task); wgSaveTaskState(taskId);
+  task.status = 'running'; task.runStatus = wgRunStatusFor(task); task.startedAt = Date.now(); task.stage = wgRoadmapFor(task)[0]; wgSaveTaskState(taskId);
   wgRenderActions(wgState.currentDay); wgRenderPeople(wgState.currentDay); wgUpdateRunningBadge(); wgRenderRail(); wgRenderTodayActions(); wgRenderWeekly();
   setTimeout(() => wgResolveTask(taskId), 1500 + Math.random() * 1300);
 }
@@ -6518,31 +6580,46 @@ function wgCloseStuckPanel() { const p = $('#wgStuckPanel'); if (p) p.classList.
 /* the desktop mini view: large enough to actually read and act in, a live look at exactly where
    Opal stopped — the field it couldn't fill glows, the button it couldn't press stays greyed out,
    and finishing it here hands the task straight back into the normal done/review flow */
-function wgOpenStuckDesk(taskId) {
-  const found = wgOpalTaskById(taskId); if (!found || found.task.status !== 'blocked') return; const { task } = found;
+function wgRoadmapFor(task) {
+  const sim = WG_TASK_SIM[task.id];
+  if (sim && sim.steps) return sim.steps.slice();
+  return [wgRunStatusFor(task), 'Reviewing the result'];
+}
+function wgOpenStuckDesk(taskId) { wgOpenTaskDesk(taskId, 'stuck'); }
+function wgOpenTaskDesk(taskId, mode) {
+  const found = wgOpalTaskById(taskId); if (!found) return; const { task } = found;
+  if (mode === 'stuck' && task.status !== 'blocked') return;
+  if (mode === 'running' && task.status !== 'running') return;
   wgCloseStuckPanel();
   const s = task.stuckScreen || {};
+  const roadmap = wgRoadmapFor(task), curStep = mode === 'stuck' ? roadmap.length - 1 : 0;
+  const roadmapHTML = `<div class="wg-taskdesk-roadmap">${roadmap.map((step, i) => `<div class="wg-taskdesk-step${i < curStep ? ' done' : i === curStep ? ' current' : ''}"><i></i><span>${esc(step)}</span></div>`).join('')}</div>`;
+  const screenBody = mode === 'stuck'
+    ? `<div class="wg-stuckdesk-field"><label>${esc(s.field || 'Missing info')}</label><div class="wg-stuckdesk-input"></div></div><span class="wg-stuckdesk-cta">${esc(s.cta || 'Continue')}</span>`
+    : `<div class="wg-taskdesk-working"><i></i><i></i><i></i></div>`;
   $('#wgStuckDeskCard').innerHTML = `<div class="wg-stuckdesk-head">
-      <div><h3>Take over for Opal</h3><p><i></i>${esc(task.errorReason || 'Stuck — needs your input')}</p></div>
+      <div><h3>${mode === 'stuck' ? 'Take over for Opal' : 'Watching Opal work'}</h3><p class="${mode === 'running' ? 'live' : ''}"><i></i>${esc(mode === 'stuck' ? (task.errorReason || 'Stuck — needs your input') : (task.stage || wgRunStatusFor(task)))}</p></div>
       <button type="button" class="wg-stuckdesk-close" id="wgStuckDeskClose" aria-label="Close">&times;</button>
     </div>
     <div class="wg-stuckdesk-win">
-      <div class="wg-stuckdesk-chrome"><div class="wg-stuckdesk-dots"><i></i><i></i><i></i></div><div class="wg-stuckdesk-addr">${esc(s.url || '')}</div></div>
+      <div class="wg-stuckdesk-chrome"><div class="wg-stuckdesk-dots"><i></i><i></i><i></i></div><div class="wg-stuckdesk-addr">${esc(s.url || task.connector || '')}</div></div>
       <div class="wg-stuckdesk-screen">
-        <div class="wg-stuckdesk-app">${esc(s.app || '')}</div>
-        <div class="wg-stuckdesk-h1">${esc(s.cta || 'Finish this step')}</div>
-        <div class="wg-stuckdesk-field"><label>${esc(s.field || 'Missing info')}</label><div class="wg-stuckdesk-input"></div></div>
-        <span class="wg-stuckdesk-cta">${esc(s.cta || 'Continue')}</span>
+        <div class="wg-stuckdesk-app">${esc(s.app || task.connector || '')}</div>
+        <div class="wg-stuckdesk-h1">${esc(s.cta || (mode === 'stuck' ? 'Finish this step' : 'Working on it…'))}</div>
+        ${screenBody}
         <svg class="wg-stuckdesk-cursor" style="left:38%;top:62%" viewBox="0 0 24 24" fill="#fff" stroke="#1f241d" stroke-width="1.2"><path d="M5 3l14 6.5-6 1.7L11 18z"/></svg>
       </div>
     </div>
+    ${roadmapHTML}
     <div class="wg-stuckdesk-foot">
-      <p>Opal got this far on its own and stopped rather than guess. Finish the step yourself, then hand it back.</p>
-      <button type="button" class="wg-stuckdesk-finish" data-stuckfinish="${task.id}">I'll finish this →</button>
+      <p>${mode === 'stuck' ? 'Opal got this far on its own and stopped rather than guess. Finish the step yourself, then hand it back.' : 'Opal is working through this on its own. Step in any time to finish it yourself, right now.'}</p>
+      <button type="button" class="wg-stuckdesk-finish" data-taskdeskfinish="${task.id}" data-taskdeskmode="${mode}">${mode === 'stuck' ? "I'll finish this →" : 'Take over →'}</button>
     </div>`;
+  $('#wgStuckDesk').classList.toggle('mode-running', mode === 'running');
   $('#wgStuckDesk').classList.add('show');
 }
 function wgCloseStuckDesk() { $('#wgStuckDesk').classList.remove('show'); }
+function wgTakeOverRunningTask(taskId) { wgResolveTask(taskId); }
 
 /* day-scoped conversations: the same cards the standalone Conversations grid uses, stacked, filtered to this day */
 function wgRenderDayConversations(dateKey) {
@@ -6842,7 +6919,12 @@ function wgInit() {
   });
   $('#wgStuckDesk').addEventListener('click', e => {
     if (e.target.id === 'wgStuckDesk' || e.target.closest('#wgStuckDeskClose')) return wgCloseStuckDesk();
-    const finish = e.target.closest('[data-stuckfinish]'); if (finish) { wgFinishBlockedTask(finish.dataset.stuckfinish); wgCloseStuckDesk(); return; }
+    const finish = e.target.closest('[data-taskdeskfinish]');
+    if (finish) {
+      if (finish.dataset.taskdeskmode === 'running') wgTakeOverRunningTask(finish.dataset.taskdeskfinish);
+      else wgFinishBlockedTask(finish.dataset.taskdeskfinish);
+      wgCloseStuckDesk(); return;
+    }
   });
   $('#wgDebriefPanel').addEventListener('click', e => {
     if (e.target.closest('#wgDebriefClose') || e.target.closest('#wgDebriefClose2')) return wgCloseDebrief();
@@ -7000,6 +7082,7 @@ function wgInit() {
     const more = e.target.closest('#wgRailLoadMore'); if (more) { wgState.railCompletedShown += 20; return wgRenderRailDone(); }
     const doneRow = e.target.closest('[data-raildonerow]'); if (doneRow) return wgOpenDebrief(doneRow.dataset.raildonerow);
     const readyTitle = e.target.closest('.wg-rail-ready-title'); if (readyTitle) { const row = readyTitle.closest('[data-railrow]'); const found = row && wgOpalTaskById(row.dataset.railrow); if (found) wgRailJumpToTask(found.cluster.id, found.cluster.day); return; }
+    const live = e.target.closest('[data-livetask]'); if (live) return wgOpenTaskDesk(live.dataset.livetask, 'running');
   });
   $('#wgWelcomePanel').addEventListener('click', e => {
     const statp = e.target.closest('[data-statperiod]'); if (statp) return opalSetStatsPeriod(statp.dataset.statperiod);
