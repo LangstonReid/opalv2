@@ -2258,16 +2258,16 @@ body.sheet-open.mode-live #liveRoot{filter:blur(14px) brightness(.97)}
    Both are siblings of #liveRoot (see the HTML comment there for why), so they
    redeclare the same --wg-* tokens locally and gate their own visibility on
    body.mode-live instead of inheriting #liveRoot's opacity/pointer-events. */
-.live-fab,.live-sidebar{
+.live-fab,.live-sidebar,.live-taskpanel{
   --wg-surface:#ffffff; --wg-surface-2:#f7f7f2; --wg-surface-3:#eeeee6;
   --wg-border:rgba(31,36,29,.09); --wg-border-2:rgba(31,36,29,.16);
   --wg-ink:#1f241d; --wg-ink-60:rgba(31,36,29,.62); --wg-ink-42:rgba(31,36,29,.44); --wg-ink-28:rgba(31,36,29,.26);
-  --wg-accent-ink:#3c4c2a; --wg-fill:var(--wg-ink); --wg-fill-ink:#fff;
+  --wg-accent:#6f8f4e; --wg-accent-ink:#3c4c2a; --wg-ember:#dd8f45; --wg-fill:var(--wg-ink); --wg-fill-ink:#fff;
   --wg-shadow-lg:0 20px 44px rgba(31,36,29,.14),0 4px 14px rgba(31,36,29,.08);
   opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
-body.mode-live .live-fab,body.mode-live .live-sidebar{opacity:1;pointer-events:auto}
-body.mode-live .live-sidebar{pointer-events:none}
-body.mode-live .live-sidebar.show{pointer-events:auto}
+body.mode-live .live-fab,body.mode-live .live-sidebar,body.mode-live .live-taskpanel{opacity:1;pointer-events:auto}
+body.mode-live .live-sidebar,body.mode-live .live-taskpanel{pointer-events:none}
+body.mode-live .live-sidebar.show,body.mode-live .live-taskpanel.show{pointer-events:auto}
 .live-fab{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:var(--z-modal);width:46px;height:46px;border-radius:50%;background:var(--wg-surface);border:1px solid var(--wg-border);box-shadow:var(--wg-shadow-lg);display:grid;place-items:center;color:var(--wg-ink-60);transition:opacity .2s var(--ease),transform .2s var(--ease),background .15s,color .15s}
 .live-fab:hover{color:var(--wg-ink);transform:translateY(-50%) scale(1.07)}
 .live-fab svg{width:19px;height:19px}
@@ -2284,21 +2284,30 @@ body.mode-live .live-sidebar.show{transform:none}
 .live-sidebar-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 20px 20px}
 .live-sideview{display:none;flex:1;min-height:0;flex-direction:column}
 .live-sideview.on{display:flex}
+.live-sideview-title{flex:none;font:500 13.5px/1.3 var(--sans);letter-spacing:-.005em;color:var(--wg-ink-60);margin:0 0 12px}
 .live-sidefilter{flex:none;display:flex;gap:4px;padding:3px;width:fit-content;border-radius:999px;background:var(--wg-surface-3);margin-bottom:14px}
 .live-sidefilter button{font:400 9.5px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--wg-ink-42);padding:8px 12px;border-radius:999px;transition:background .2s,color .2s}
 .live-sidefilter button.on{background:var(--wg-ink);color:#fff}
 .live-sidelist{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
 
-.live-task-row{padding:12px 13px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border)}
-.live-task-row.stuck{border-color:rgba(221,143,69,.4)}
+.live-task-row{padding:12px 13px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);transition:background .15s,border-color .15s}
 .live-task-meta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap}
 .live-task-connector{font:600 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-42)}
 .live-task-day{font:400 9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-28)}
 .live-task-status{font:600 8px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:999px;margin-left:auto}
-.live-task-status.blocked,.live-task-status.error{background:rgba(221,143,69,.16);color:#a5661f}
 .live-task-status.running{background:rgba(111,143,78,.16);color:var(--wg-accent-ink)}
 .live-task-status.proposed{background:var(--wg-surface-3);color:var(--wg-ink-60)}
 .live-task-text{font:400 13px/1.45 var(--sans);color:var(--wg-ink)}
+/* stuck (blocked, still live) = rich orange; failed (error, expired) = rich red — the whole
+   card, not just the status chip, per Langston's explicit "make the entire widget" ask */
+.live-task-row.row-stuck{background:#dd8f45;border-color:#b96f2c}
+.live-task-row.row-stuck .live-task-connector,.live-task-row.row-stuck .live-task-day{color:rgba(43,26,8,.62)}
+.live-task-row.row-stuck .live-task-status{background:rgba(31,20,4,.16);color:#2b1a08}
+.live-task-row.row-stuck .live-task-text{color:#2b1a08}
+.live-task-row.row-error{background:#b0452f;border-color:#8f3720}
+.live-task-row.row-error .live-task-connector,.live-task-row.row-error .live-task-day{color:rgba(255,255,255,.68)}
+.live-task-row.row-error .live-task-status{background:rgba(0,0,0,.2);color:#fff}
+.live-task-row.row-error .live-task-text{color:#fff}
 
 .live-todo-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);text-align:left;transition:opacity .2s var(--ease)}
 .live-todo-row.done{opacity:.52}
@@ -2316,7 +2325,21 @@ body.mode-live .live-sidebar.show{transform:none}
 .live-activity-eye:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
 .live-activity-eye svg{width:14px;height:14px}
 
+/* the eye icon's destination: a left-edge companion to the right sidebar — same slide-in
+   idiom, mirrored, showing the real stuck-desk mock-browser UI (reusing .wg-stuckdesk-*
+   verbatim, those rules are global, not scoped to #widgetsRoot) for a task that's still
+   actively blocked, or a plain summary+retry card for one that has since failed/expired */
+.live-taskpanel-scrim{position:fixed;inset:0;z-index:var(--z-modal);background:rgba(31,36,29,.3);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+body.mode-live .live-taskpanel-scrim.show{opacity:1;pointer-events:auto}
+.live-taskpanel{position:fixed;left:0;top:0;bottom:0;z-index:var(--z-modal);width:min(460px,90vw);background:var(--wg-surface);border-right:1px solid var(--wg-border);border-radius:0 24px 24px 0;box-shadow:var(--wg-shadow-lg);overflow-y:auto;scrollbar-width:thin;padding:26px 24px;transform:translateX(-104%);transition:opacity .2s var(--ease),transform .38s var(--ease);color:var(--wg-ink)}
+body.mode-live .live-taskpanel.show{transform:none}
+.live-taskpanel-close{position:absolute;top:16px;right:18px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--wg-ink-42);font-size:19px;line-height:1;transition:background .15s,color .15s;z-index:2}
+.live-taskpanel-close:hover{background:var(--wg-surface-3);color:var(--wg-ink)}
+.live-taskpanel-reason{font:400 13.5px/1.55 var(--sans);color:var(--wg-ink-60);background:var(--wg-surface-2);border-radius:14px;padding:16px;margin:2px 0 18px}
+
+@media (max-width:900px){ .live-taskpanel{border-radius:0;width:100vw} }
 @media (prefers-reduced-motion:reduce){
+  .live-taskpanel{transition:none}
   .live-panes{transition:none!important}
   .live-pane{transition:none}
   .live-sent-new{opacity:1;transform:none;transition:none}
@@ -3029,6 +3052,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   </div>
   <div class="live-sidebar-body">
     <div class="live-sideview on" id="liveSideTasks" data-sideview="tasks">
+      <h2 class="live-sideview-title">Tasks Opal Can Do</h2>
       <div class="live-sidefilter" id="liveTasksFilter">
         <button type="button" class="on" data-taskfilter="recent">Recent</button>
         <button type="button" data-taskfilter="urgent">Urgency</button>
@@ -3037,6 +3061,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div class="live-sidelist" id="liveTasksList"></div>
     </div>
     <div class="live-sideview" id="liveSideTodo" data-sideview="todo">
+      <h2 class="live-sideview-title">Your To-Do List</h2>
       <div class="live-sidefilter" id="liveTodoFilter">
         <button type="button" class="on" data-todofilter="open-first">To-do first</button>
         <button type="button" data-todofilter="done-first">Done first</button>
@@ -3044,9 +3069,16 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       <div class="live-sidelist" id="liveTodoList"></div>
     </div>
     <div class="live-sideview" id="liveSideActivity" data-sideview="activity">
+      <h2 class="live-sideview-title">Recent Activity</h2>
       <div class="live-sidelist" id="liveActivityList"></div>
     </div>
   </div>
+</aside>
+
+<div class="live-taskpanel-scrim" id="liveTaskPanelScrim"></div>
+<aside class="live-taskpanel" id="liveTaskPanel" role="dialog" aria-modal="true" aria-label="Task detail">
+  <button type="button" class="live-taskpanel-close" id="liveTaskPanelClose" aria-label="Close">&times;</button>
+  <div id="liveTaskPanelInner"></div>
 </aside>
 
 <div id="scrim"></div>
@@ -5404,7 +5436,7 @@ function chatGo(next, rect) {
       if ($('#ntConfirm').classList.contains('show')) ntCloseConfirm();
       if ($('#ntDetail').classList.contains('show')) ntCloseDetail();
     }
-    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); liveSidebarClose(); }
+    if (leaving === 'live') { liveStopInsertTimer(); liveCloseShare(); liveSidebarClose(); liveCloseTaskPanel(); }
     mode = next; $$nav(mode);
     document.body.classList.toggle('mode-chat', mode === 'chat'); document.body.classList.toggle('mode-widgets', mode === 'widgets'); document.body.classList.toggle('mode-notes', mode === 'notes'); document.body.classList.toggle('mode-live', mode === 'live');
     chatRoot.setAttribute('aria-hidden', String(mode !== 'chat')); $('#widgetsRoot').setAttribute('aria-hidden', String(mode !== 'widgets')); $('#notesRoot').setAttribute('aria-hidden', String(mode !== 'notes')); $('#liveRoot').setAttribute('aria-hidden', String(mode !== 'live'));
@@ -7010,6 +7042,7 @@ function wgResolveTask(taskId) {
     else delete wgState.railPinned[taskId];
   }
   wgRenderRail(); wgRenderWeekly();
+  if (mode === 'live') { liveRenderTasksView(); liveRenderActivityView(); }
   if (autoMoved) { wgMoveToHuman(taskId); return; }
   wgRenderTodayActions();
 }
@@ -7712,8 +7745,8 @@ function liveTaskUrgencyRank(status) { return { blocked: 0, error: 1, running: 2
 function liveTaskConnectorName(t) { const o = ORB_DEFS.find(x => x.id === t.connector); return (o && o.name) || t.connector || 'Task'; }
 function liveTaskStatusLabel(status) { return status === 'blocked' ? 'Stuck' : status === 'error' ? 'Failed' : status === 'running' ? 'Running' : 'Ready'; }
 function liveTaskRowHTML({ t, c }) {
-  const stuck = t.status === 'blocked' || t.status === 'error';
-  return `<div class="live-task-row${stuck ? ' stuck' : ''}">
+  const rowCls = t.status === 'blocked' ? ' row-stuck' : t.status === 'error' ? ' row-error' : '';
+  return `<div class="live-task-row${rowCls}">
     <div class="live-task-meta"><span class="live-task-connector">${esc(liveTaskConnectorName(t))}</span><span class="live-task-day">${esc(new Date(c.day + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))}</span><span class="live-task-status ${t.status}">${liveTaskStatusLabel(t.status)}</span></div>
     <p class="live-task-text">${esc(t.text)}</p>
   </div>`;
@@ -7750,15 +7783,15 @@ function liveDerivedTime(dayKey, seedId) {
 function liveActivityLog() {
   const rows = [];
   WG_CLUSTERS.forEach(c => (c.opalTasks || []).forEach(t => {
-    if (t.status === 'done') rows.push({ text: `Opal completed "${t.text}."`, time: t.completedAt ? new Date(t.completedAt) : liveDerivedTime(c.day, t.id), eye: false });
-    else if (t.status === 'blocked' || t.status === 'error') rows.push({ text: `Opal ran into trouble with "${t.text}" and needs your help.`, time: liveDerivedTime(c.day, t.id), eye: true });
+    if (t.status === 'done') rows.push({ text: `Opal completed "${t.text}."`, time: t.completedAt ? new Date(t.completedAt) : liveDerivedTime(c.day, t.id), taskId: null });
+    else if (t.status === 'blocked' || t.status === 'error') rows.push({ text: `Opal ran into trouble with "${t.text}" and needs your help.`, time: liveDerivedTime(c.day, t.id), taskId: t.id });
   }));
-  WG_TODOS.forEach(td => { if (td.status === 'done') rows.push({ text: `You checked off "${td.text}."`, time: liveDerivedTime(td.createdOnDay || WG_TODAY_KEY, td.id), eye: false }); });
+  WG_TODOS.forEach(td => { if (td.status === 'done') rows.push({ text: `You checked off "${td.text}."`, time: liveDerivedTime(td.createdOnDay || WG_TODAY_KEY, td.id), taskId: null }); });
   return rows.sort((a, b) => b.time - a.time);
 }
 function liveActivityRowHTML(r) {
   const timeStr = r.time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  const eyeBtn = r.eye ? `<button type="button" class="live-activity-eye" data-eyedemo aria-label="View details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>` : '';
+  const eyeBtn = r.taskId ? `<button type="button" class="live-activity-eye" data-livetaskeye="${r.taskId}" aria-label="View what happened"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>` : '';
   return `<div class="live-activity-row"><span class="live-activity-time">${esc(timeStr)}</span><p class="live-activity-text">${esc(r.text)}</p>${eyeBtn}</div>`;
 }
 function liveRenderActivityView() {
@@ -7767,6 +7800,63 @@ function liveRenderActivityView() {
   list.innerHTML = rows.length ? rows.map(liveActivityRowHTML).join('') : `<p class="live-empty">Nothing yet.</p>`;
 }
 function liveRenderSidebar() { liveRenderTasksView(); liveRenderTodoView(); liveRenderActivityView(); }
+
+/* the eye icon's target: still-blocked = the real stuck-desk mock-browser view (verbatim
+   .wg-stuckdesk-* markup, those classes are global, not #widgetsRoot-scoped); anything
+   else (failed/expired) = a plain summary with a real retry button */
+function liveCloseTaskPanel() { $('#liveTaskPanel').classList.remove('show'); $('#liveTaskPanelScrim').classList.remove('show'); }
+function liveOpenTaskPanel(taskId) {
+  const found = wgOpalTaskById(taskId); if (!found) return;
+  const { task } = found;
+  const stuck = task.status === 'blocked';
+  const s = task.stuckScreen || {};
+  let inner;
+  if (stuck) {
+    const roadmap = wgRoadmapFor(task), curStep = roadmap.length - 1;
+    const roadmapHTML = `<div class="wg-taskdesk-roadmap">${roadmap.map((step, i) => `<div class="wg-taskdesk-step${i < curStep ? ' done' : i === curStep ? ' current' : ''}"><i></i><span>${esc(step)}</span></div>`).join('')}</div>`;
+    inner = `<div class="wg-stuckdesk-head">
+        <div><h3>Take over for Opal</h3><p><i></i>${esc(task.errorReason || 'Stuck — needs your input')}</p></div>
+      </div>
+      <div class="wg-stuckdesk-win">
+        <div class="wg-stuckdesk-chrome"><div class="wg-stuckdesk-dots"><i></i><i></i><i></i></div><div class="wg-stuckdesk-addr">${esc(s.url || task.connector || '')}</div></div>
+        <div class="wg-stuckdesk-screen">
+          <div class="wg-stuckdesk-app">${esc(s.app || task.connector || '')}</div>
+          <div class="wg-stuckdesk-h1">${esc(s.cta || 'Finish this step')}</div>
+          <div class="wg-stuckdesk-field"><label>${esc(s.field || 'Missing info')}</label><div class="wg-stuckdesk-input"></div></div><span class="wg-stuckdesk-cta">${esc(s.cta || 'Continue')}</span>
+          <svg class="wg-stuckdesk-cursor" style="left:38%;top:62%" viewBox="0 0 24 24" fill="#fff" stroke="#1f241d" stroke-width="1.2"><path d="M5 3l14 6.5-6 1.7L11 18z"/></svg>
+        </div>
+      </div>
+      ${roadmapHTML}
+      <div class="wg-stuckdesk-foot">
+        <p>Opal got this far on its own and stopped rather than guess. Finish the step yourself, then hand it back.</p>
+        <button type="button" class="wg-stuckdesk-finish" data-livefinish="${task.id}">I&rsquo;ll finish this &rarr;</button>
+      </div>`;
+  } else {
+    inner = `<div class="wg-stuckdesk-head">
+        <div><h3>This didn&rsquo;t go through</h3></div>
+      </div>
+      <p class="live-taskpanel-reason">${esc(task.errorReason || 'Opal ran into trouble and stopped before finishing.')}</p>
+      <div class="wg-stuckdesk-foot">
+        <p>This attempt has expired. Opal can give it another try right now.</p>
+        <button type="button" class="wg-stuckdesk-finish" data-liveretry="${task.id}">Try again &rarr;</button>
+      </div>`;
+  }
+  $('#liveTaskPanelInner').innerHTML = inner;
+  $('#liveTaskPanel').classList.add('show');
+  $('#liveTaskPanelScrim').classList.add('show');
+}
+function liveFinishBlockedFromPanel(taskId) {
+  wgFinishBlockedTask(taskId);
+  liveCloseTaskPanel();
+  liveRenderTasksView(); liveRenderActivityView();
+  liveShowToast('You finished it');
+}
+function liveRetryTaskFromPanel(taskId) {
+  wgRetryTask(taskId);
+  liveCloseTaskPanel();
+  liveRenderTasksView(); liveRenderActivityView();
+  liveShowToast('Opal is trying again');
+}
 function liveSwitchSideView(view) {
   liveSideState.view = view;
   $('#liveSidebarMenu').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.liveside === view));
@@ -7811,10 +7901,18 @@ function liveInit() {
   $('#liveTasksFilter').addEventListener('click', e => { const b = e.target.closest('[data-taskfilter]'); if (!b) return; liveSideState.taskFilter = b.dataset.taskfilter; $('#liveTasksFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTasksView(); });
   $('#liveTodoFilter').addEventListener('click', e => { const b = e.target.closest('[data-todofilter]'); if (!b) return; liveSideState.todoFilter = b.dataset.todofilter; $('#liveTodoFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTodoView(); });
   $('#liveTodoList').addEventListener('click', e => { const row = e.target.closest('[data-livetodo]'); if (row) liveToggleTodo(row.dataset.livetodo); });
+  $('#liveActivityList').addEventListener('click', e => { const eye = e.target.closest('[data-livetaskeye]'); if (eye) liveOpenTaskPanel(eye.dataset.livetaskeye); });
+  $('#liveTaskPanelInner').addEventListener('click', e => {
+    const finish = e.target.closest('[data-livefinish]'); if (finish) return liveFinishBlockedFromPanel(finish.dataset.livefinish);
+    const retry = e.target.closest('[data-liveretry]'); if (retry) return liveRetryTaskFromPanel(retry.dataset.liveretry);
+  });
+  $('#liveTaskPanelClose').addEventListener('click', liveCloseTaskPanel);
+  $('#liveTaskPanelScrim').addEventListener('click', liveCloseTaskPanel);
   addEventListener('keydown', e => {
     if (mode !== 'live') return;
     if (e.key !== 'Escape') return;
     if ($('#liveShare').classList.contains('show')) return liveCloseShare();
+    if ($('#liveTaskPanel').classList.contains('show')) return liveCloseTaskPanel();
     if ($('#liveSidebar').classList.contains('show')) return liveSidebarClose();
   });
   addEventListener('resize', () => { if (mode === 'live') liveApplySplitVars(liveState.splitLeft); });
