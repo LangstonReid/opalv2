@@ -29,7 +29,7 @@
 
   /* real, measured height of the fixed top chrome (logo/date row + pills nav) —
      content padding-top is always calc(--nav-height + --space-2), never a guess */
-  --nav-height:105px;
+  --nav-height:82px;
 
   /* glass material system — floating, glance-only UI only; never a reading surface */
   --glass-blur:20px; --glass-blur-heavy:32px; --glass-saturate:140%;
@@ -118,11 +118,11 @@ body.paused .chip{color:var(--bone-35)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 #toast i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--spore);margin-right:10px;vertical-align:1px}
 .legend .hud{color:var(--bone-60)}
-.pills{position:absolute;left:50%;top:62px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:var(--z-nav)}
-.pills button{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-35);padding:7px 14px;border-radius:999px;transition:color .4s var(--ease),background .4s var(--ease)}
+.pills{flex:none;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.pills button{position:relative;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone-35);padding:5px 9px;border-radius:999px;transition:color .4s var(--ease),background .4s var(--ease)}
 .pills button:hover{color:var(--bone);background:var(--bone-08)}
 .pills button.on{color:var(--bone)}
-.pills button.on::after{content:'';position:absolute;left:14px;right:14px;bottom:2px;height:2px;border-radius:1px;background:var(--spore)}
+.pills button.on::after{content:'';position:absolute;left:9px;right:9px;bottom:1px;height:1.5px;border-radius:1px;background:var(--spore)}
 
 /* ---------- coordinate readout + crown: the camera's own instruments ---------- */
 .coord{position:absolute;top:74px;right:32px;text-align:right;color:var(--bone);opacity:0;transform:translateY(-4px);transition:opacity .5s var(--ease),transform .5s var(--ease);white-space:nowrap;padding:7px 12px;border-radius:12px}
@@ -2316,13 +2316,29 @@ body.mode-live .live-sidebar.show{transform:none}
 .live-task-retry.retrying svg{animation:liveRetrySpin .8s linear infinite}
 @keyframes liveRetrySpin{to{transform:rotate(360deg)}}
 
-.live-todo-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);text-align:left;transition:opacity .2s var(--ease)}
+.live-todo-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--wg-surface-2);border:1px solid var(--wg-border);text-align:left;transition:opacity .3s var(--ease) .35s}
 .live-todo-row.done{opacity:.52}
 .live-todo-check{flex:none;width:21px;height:21px;border-radius:7px;border:1.5px solid var(--wg-border-2);display:grid;place-items:center;color:transparent;transition:background .15s,border-color .15s,color .15s}
 .live-todo-row.done .live-todo-check{background:var(--wg-fill);border-color:var(--wg-fill);color:var(--wg-fill-ink)}
 .live-todo-check svg{width:12px;height:12px}
 .live-todo-text{flex:1;font:400 13px/1.42 var(--sans);color:var(--wg-ink)}
-.live-todo-row.done .live-todo-text{text-decoration:line-through;color:var(--wg-ink-42)}
+.live-todo-row.done .live-todo-text{color:var(--wg-ink-42);transition:color .3s var(--ease) .35s}
+/* the check-off animation: a line drawing left-to-right, THEN the row settles into its
+   dimmed "done" state (the row's own opacity transition above is delayed to match) */
+.live-todo-strike{position:relative}
+.live-todo-strike::after{content:'';position:absolute;left:0;top:50%;width:0;height:1px;background:currentColor;transition:width .4s var(--ease)}
+.live-todo-row.done .live-todo-strike::after{width:100%}
+
+.live-sideview-subtitle{flex:none;font:400 10.5px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--wg-ink-42);margin:-8px 0 14px}
+.live-todo-group+.live-todo-group{margin-top:16px}
+.live-todo-group-head{display:flex;align-items:center;gap:7px;width:100%;padding:2px 0 8px;text-align:left;color:var(--wg-ink-60);transition:color .15s}
+.live-todo-group-head:hover{color:var(--wg-ink)}
+.live-todo-group-chevron{width:13px;height:13px;flex:none;transition:transform .2s var(--ease)}
+.live-todo-group.open .live-todo-group-chevron{transform:rotate(90deg)}
+.live-todo-group-title{flex:1;font:500 12.5px/1.3 var(--sans);color:inherit}
+.live-todo-group-count{flex:none;font:400 9.5px/1 var(--mono);color:var(--wg-ink-42)}
+.live-todo-group-items{display:flex;flex-direction:column;gap:8px;overflow:hidden;max-height:2000px;transition:max-height .3s var(--ease),opacity .2s var(--ease)}
+.live-todo-group:not(.open) .live-todo-group-items{max-height:0;opacity:0}
 
 .live-activity-row{display:flex;align-items:flex-start;gap:12px;padding:10px 8px;margin:0 -8px;border-radius:10px;border-bottom:1px solid var(--wg-border);transition:background .15s var(--ease)}
 .live-activity-row:last-child{border-bottom:0}
@@ -2357,6 +2373,10 @@ body.mode-live .live-taskpanel.show{transform:none}
    light on the right) regardless of whatever variant the pane itself is currently in
    (today/dark/default) — a deliberate, fixed "almost identical reverse" pairing */
 .live-day-drawer{position:absolute;left:8px;right:8px;bottom:6px;height:80%;background:var(--wg-surface);border-radius:22px 22px 0 0;box-shadow:0 -14px 30px rgba(0,0,0,.14),0 0 0 1px var(--wg-border);transform:translateY(calc(100% - 30px));transition:transform .4s var(--ease);z-index:4;overflow:hidden}
+/* belt-and-suspenders: while closed, nothing but the handle itself can receive a pointer
+   event at all — a scroll gesture or hour-bubble tap can never reach the drawer's content,
+   no matter how it happens to overlap in the DOM */
+.live-day-drawer:not(.open) .live-day-drawer-body{pointer-events:none}
 .live-day-drawer[data-drawerside="l"]{
   --wg-surface:#2c2c2c; --wg-surface-2:#343434; --wg-surface-3:#3e3e3e;
   --wg-border:rgba(255,255,255,.1); --wg-border-2:rgba(255,255,255,.2);
@@ -2448,6 +2468,10 @@ body.mode-live .live-taskpanel.show{transform:none}
 @media (prefers-reduced-motion:reduce){
   .live-taskpanel{transition:none}
   .live-day-drawer{transition:none}
+  .live-todo-strike::after{transition:none}
+  .live-todo-row{transition:none}
+  .live-todo-group-items{transition:none}
+  .live-todo-group-chevron{transition:none}
   .live-panes{transition:none!important}
   .live-pane{transition:none}
   .live-sent-new{opacity:1;transform:none;transition:none}
@@ -2591,13 +2615,13 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
 @media (max-width:640px){
   .display{font-size:28px}
   .hdr{top:20px;left:16px;max-width:calc(100% - 32px)}
-  .chip{top:11px;right:12px;left:auto;bottom:auto;padding:7px 11px 7px 9px}
+  .hdr-right{top:10px;right:12px;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:calc(100% - 24px)}
+  .chip{padding:7px 11px 7px 9px}
   .spaced{display:none}
   .legend .hud{display:none}
   #toast{top:auto;bottom:150px}
   .legend{display:none}
   .ruler{left:16px;right:16px}
-  .pills{top:70px;bottom:auto}
   #sheetWrap{left:16px;right:16px;top:auto;bottom:0;transform:none;width:auto;max-height:88vh}
   #sheet{max-height:88vh;border-radius:24px 24px 0 0;border-bottom:0}
   .sheet-head{padding:18px 20px 12px}
@@ -2742,6 +2766,12 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
       </svg>
       <b id="battDialPct"></b>
     </div>
+    <nav class="pills" aria-label="Sections">
+      <button data-nav="widgets" class="on">Overview</button>
+      <button data-nav="chat">Chat</button>
+      <button data-nav="notes">Notes</button>
+      <button data-nav="live">Live</button>
+    </nav>
   </div>
   <div class="legend mono" aria-hidden="true">
     <span><i style="background:var(--ember)"></i>Needs you</span>
@@ -2771,12 +2801,6 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     </div>
   </div>
   <div id="toast" class="mono" role="status" aria-live="polite"></div>
-  <nav class="pills" aria-label="Sections">
-    <button data-nav="widgets" class="on">Overview</button>
-    <button data-nav="chat">Chat</button>
-    <button data-nav="notes">Notes</button>
-    <button data-nav="live">Live</button>
-  </nav>
 </div>
 
 <div id="widgetsRoot" aria-hidden="false">
@@ -3184,10 +3208,7 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
     </div>
     <div class="live-sideview" id="liveSideTodo" data-sideview="todo">
       <h2 class="live-sideview-title">Your To-Do List</h2>
-      <div class="live-sidefilter" id="liveTodoFilter">
-        <button type="button" class="on" data-todofilter="open-first">To-do first</button>
-        <button type="button" data-todofilter="done-first">Done first</button>
-      </div>
+      <p class="live-sideview-subtitle" id="liveTodoSubtitle"></p>
       <div class="live-sidelist" id="liveTodoList"></div>
     </div>
     <div class="live-sideview" id="liveSideActivity" data-sideview="activity">
@@ -7647,7 +7668,7 @@ const liveState = {
   selectedSide: (state.live && state.live.selectedSide) || 'r',
   lastScroll: {}, inited: false, insertTimer: null, _dragPct: null
 };
-const liveSideState = { open: false, view: 'tasks', taskFilter: 'all', todoFilter: 'open-first' };
+const liveSideState = { open: false, view: 'tasks', taskFilter: 'all' };
 const liveDrawerState = { l: { open: false, view: 'cols', conv: null, dragY: null }, r: { open: false, view: 'cols', conv: null, dragY: null } };
 const LIVE_SPLITS = [0, 25, 50, 75, 100];
 const LIVE_FILLER = [
@@ -7896,19 +7917,65 @@ function liveRenderTasksView() {
 }
 function liveTodoRowHTML(td) {
   const isDone = td.status === 'done';
-  return `<button type="button" class="live-todo-row${isDone ? ' done' : ''}" data-livetodo="${td.id}"><span class="live-todo-check">${wgCheckSvg}</span><span class="live-todo-text">${esc(td.text)}</span></button>`;
+  return `<button type="button" class="live-todo-row${isDone ? ' done' : ''}" data-livetodo="${td.id}"><span class="live-todo-check">${wgCheckSvg}</span><span class="live-todo-text"><span class="live-todo-strike">${esc(td.text)}</span></span></button>`;
+}
+/* grouped by the real topic a task came from — the cluster it's linked to (each cluster
+   has exactly one human task in this data model, so most groups hold one item; a task
+   with no linked cluster falls into a plain "Other" bucket rather than being dropped */
+function liveTodoGroups() {
+  const groups = {}, order = [];
+  WG_TODOS.forEach(td => {
+    const cluster = WG_CLUSTERS.find(cl => cl.humanTaskId === td.id);
+    const key = cluster ? cluster.id : '__other__', title = cluster ? cluster.title : 'Other';
+    if (!groups[key]) { groups[key] = { key, title, items: [] }; order.push(key); }
+    groups[key].items.push(td);
+  });
+  return order.map(k => groups[k]);
+}
+const liveTodoGroupState = {};
+function liveTodoGroupHTML(g) {
+  const open = liveTodoGroupState[g.key] !== false;
+  const doneCount = g.items.filter(td => td.status === 'done').length;
+  return `<div class="live-todo-group${open ? ' open' : ''}">
+    <button type="button" class="live-todo-group-head" data-todogroup="${g.key}">
+      <svg class="live-todo-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      <span class="live-todo-group-title">${esc(g.title)}</span>
+      <span class="live-todo-group-count">${doneCount}/${g.items.length}</span>
+    </button>
+    <div class="live-todo-group-items">${g.items.map(liveTodoRowHTML).join('')}</div>
+  </div>`;
+}
+function liveUpdateTodoSubtitle() {
+  const el = $('#liveTodoSubtitle'); if (!el) return;
+  const done = WG_TODOS.filter(td => td.status === 'done').length;
+  el.textContent = `${done} of ${WG_TODOS.length} tasks complete`;
 }
 function liveRenderTodoView() {
   const list = $('#liveTodoList'); if (!list) return;
-  const sorted = [...WG_TODOS].sort((a, b) => liveSideState.todoFilter === 'open-first' ? (a.status === 'done') - (b.status === 'done') : (b.status === 'done') - (a.status === 'done'));
-  list.innerHTML = sorted.length ? sorted.map(liveTodoRowHTML).join('') : `<p class="live-empty">Nothing here right now.</p>`;
+  const groups = liveTodoGroups();
+  list.innerHTML = groups.length ? groups.map(liveTodoGroupHTML).join('') : `<p class="live-empty">Nothing here right now.</p>`;
+  liveUpdateTodoSubtitle();
 }
-function liveToggleTodo(id) {
+function liveToggleTodoGroup(key) {
+  liveTodoGroupState[key] = liveTodoGroupState[key] === false;
+  const group = $(`#liveTodoList [data-todogroup="${key}"]`)?.closest('.live-todo-group');
+  if (group) group.classList.toggle('open', liveTodoGroupState[key] !== false);
+}
+function liveToggleTodoRowAnimated(rowEl, id) {
+  const td = wgTodoById(id); if (!td) return;
+  const willBeDone = td.status !== 'done';
+  rowEl.classList.toggle('done', willBeDone);
+  liveToggleTodo(id, true);
+  liveUpdateTodoSubtitle();
+  const group = rowEl.closest('.live-todo-group');
+  if (group) { const key = group.querySelector('[data-todogroup]').dataset.todogroup; const g = liveTodoGroups().find(x => x.key === key); if (g) group.querySelector('.live-todo-group-count').textContent = `${g.items.filter(t => t.status === 'done').length}/${g.items.length}`; }
+}
+function liveToggleTodo(id, skipRender) {
   const td = wgTodoById(id); if (!td) return;
   if (td.status === 'done') { td.status = 'open'; delete wgS().done[id]; }
   else { td.status = 'done'; wgS().done[id] = true; }
   save();
-  liveRenderTodoView();
+  if (!skipRender) liveRenderTodoView();
 }
 function liveDerivedTime(dayKey, seedId) {
   const hour = 7 + Math.floor(mulberry32(liveHash(dayKey + ':' + seedId + ':h'))() * 15);
@@ -8257,8 +8324,10 @@ function liveInit() {
     const retry = e.target.closest('[data-liveretryrow]'); if (retry) return liveRetryRowClick(retry);
     const info = e.target.closest('[data-liveinforow]'); if (info) return liveOpenTaskPanel(info.dataset.liveinforow);
   });
-  $('#liveTodoFilter').addEventListener('click', e => { const b = e.target.closest('[data-todofilter]'); if (!b) return; liveSideState.todoFilter = b.dataset.todofilter; $('#liveTodoFilter').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); liveRenderTodoView(); });
-  $('#liveTodoList').addEventListener('click', e => { const row = e.target.closest('[data-livetodo]'); if (row) liveToggleTodo(row.dataset.livetodo); });
+  $('#liveTodoList').addEventListener('click', e => {
+    const group = e.target.closest('[data-todogroup]'); if (group) return liveToggleTodoGroup(group.dataset.todogroup);
+    const row = e.target.closest('[data-livetodo]'); if (row) return liveToggleTodoRowAnimated(row, row.dataset.livetodo);
+  });
   $('#liveActivityList').addEventListener('click', e => { const eye = e.target.closest('[data-livetaskeye]'); if (eye) liveOpenTaskPanel(eye.dataset.livetaskeye); });
   $('#liveTaskPanelInner').addEventListener('click', e => {
     const finish = e.target.closest('[data-livefinish]'); if (finish) return liveFinishBlockedFromPanel(finish.dataset.livefinish);
