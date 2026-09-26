@@ -96,6 +96,14 @@ body.sheet-open #chrome{opacity:.35}
 .chip .cdot{position:absolute;top:2px;left:2px;width:4px;height:4px;border-radius:50%;background:var(--spore);box-shadow:0 0 6px rgba(217,224,33,.6);transition:transform .6s var(--ease),background .5s var(--ease),box-shadow .5s var(--ease)}
 body.paused .chip .cdot{transform:translateX(12px);background:transparent;box-shadow:inset 0 0 0 1px var(--bone-35)}
 body.paused .chip{color:var(--bone-35)}
+.chip-live{display:flex;align-items:center;gap:10px}
+.chip-meter{display:flex;align-items:center;gap:2px;height:14px}
+.chip-meter i{width:2.5px;border-radius:2px;background:var(--spore);height:4px;transition:height .18s ease-out}
+.batt-dial{position:relative;width:34px;height:34px;border-radius:50%;background:rgba(11,18,12,.55);border:1px solid var(--bone-10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:grid;place-items:center;flex:none}
+.batt-dial svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.batt-dial .track{fill:none;stroke:rgba(236,235,228,.18);stroke-width:2.6}
+.batt-dial .fill{fill:none;stroke:url(#hdrBattGrad);stroke-width:2.6;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
+.batt-dial b{position:relative;font:600 9px/1 var(--mono);color:var(--bone-60)}
 .legend{position:absolute;left:32px;bottom:52px;display:flex;gap:22px}
 .legend i{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:8px;vertical-align:1px}
 .ruler{position:absolute;left:32px;right:96px;bottom:22px;height:14px;border-bottom:1px solid var(--bone-25);background:repeating-linear-gradient(to right,var(--bone-25) 0 1px,transparent 1px 40px) left bottom/100% 5px no-repeat;opacity:.9}
@@ -633,6 +641,9 @@ body.mode-widgets #chrome::before,body.mode-widgets #chrome::after,body.mode-not
 body.mode-widgets .chip,body.mode-notes .chip{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-widgets .chip .track,body.mode-notes .chip .track{border-color:rgba(31,36,29,.26)}
 body.mode-widgets.paused .chip{color:rgba(31,36,29,.34)}
+body.mode-widgets .batt-dial,body.mode-notes .batt-dial{background:rgba(255,255,255,.7);border-color:rgba(31,36,29,.10)}
+body.mode-widgets .batt-dial b,body.mode-notes .batt-dial b{color:rgba(31,36,29,.6)}
+body.mode-widgets .batt-dial .track,body.mode-notes .batt-dial .track{stroke:rgba(31,36,29,.14)}
 body.mode-widgets #toast{background:var(--glass-light-tint);border-color:var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight);color:var(--wg-ink,#1f241d)}
 @media (prefers-reduced-transparency:reduce){body.mode-widgets #toast{background:rgba(255,255,255,.94)}}
 body.mode-widgets .pills{background:rgba(255,255,255,.72);border-color:rgba(31,36,29,.10);backdrop-filter:blur(12px)}
@@ -677,12 +688,20 @@ body.mode-widgets .pills button.on::after{background:var(--wg-accent,#6f8f4e)}
 .wg-welcome-qstat .dot.active{background:var(--wg-accent);box-shadow:0 0 8px rgba(111,143,78,.7)}
 .wg-welcome-qstat .dot.paused{background:var(--wg-ember);box-shadow:0 0 8px rgba(221,143,69,.6)}
 .wg-welcome-batt{display:flex;flex-direction:column;align-items:center;gap:2px}
-.wg-welcome-batt-ring{position:relative;width:58px;height:58px;flex:none}
+.wg-welcome-batt-ring{position:relative;width:64px;height:64px;flex:none}
 .wg-welcome-batt-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .wg-welcome-batt-ring .track{fill:none;stroke:rgba(255,255,255,.14);stroke-width:8}
 .wg-welcome-batt-ring .fill{fill:none;stroke:url(#wgBattGrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
 .wg-welcome-batt-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff}
-.wg-welcome-batt-icon svg{width:22px;height:22px}
+.wg-welcome-batt-icon svg{width:36px;height:36px;overflow:visible}
+.wg-welcome-batt-icon path{fill:none;stroke:url(#wgLoopGrad);stroke-width:1.8;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(111,143,78,.65));animation:wgLoopMorph 6s ease-in-out infinite alternate,wgLoopSpin 14s linear infinite}
+@keyframes wgLoopMorph{
+  0%{d:path("M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z")}
+  50%{d:path("M22,5 C30,7 35,14 33,22 C31,30 24,35 16,33 C8,31 4,23 7,15 C10,7 17,4 22,5 Z")}
+  100%{d:path("M18,4 C27,3 34,9 35,18 C36,27 29,34 20,35 C11,36 4,29 5,20 C6,11 12,5 18,4 Z")}
+}
+@keyframes wgLoopSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.wg-welcome-batt-icon path{animation:none;d:path("M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z")}}
 .wg-welcome-batt-pct{margin-top:7px;font:600 17px/1.1 var(--sans);color:#fff}
 .wg-welcome-batt-min{margin-top:2px;font:400 9px/1.4 var(--mono);letter-spacing:.03em;color:rgba(255,255,255,.42);white-space:nowrap}
 .wg-welcome-cal{flex:1.05;min-width:0;background:var(--wg-surface);border:1px solid var(--wg-border);border-radius:22px;padding:16px 14px}
@@ -1553,6 +1572,9 @@ body.mode-chat #chrome::before,body.mode-chat #chrome::after{opacity:0}
 body.mode-chat .legend,body.mode-chat .ruler,body.mode-widgets .legend,body.mode-widgets .ruler,body.mode-notes .legend,body.mode-notes .ruler{opacity:0;pointer-events:none}
 body.mode-chat .chip{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10);color:rgba(31,36,29,.6);backdrop-filter:blur(12px)}
 body.mode-chat .chip .track{border-color:rgba(31,36,29,.28)}
+body.mode-chat .batt-dial{background:rgba(255,255,255,.55);border-color:rgba(31,36,29,.10)}
+body.mode-chat .batt-dial b{color:rgba(31,36,29,.6)}
+body.mode-chat .batt-dial .track{stroke:rgba(31,36,29,.16)}
 body.mode-chat.paused .chip{color:rgba(31,36,29,.34)}
 body.mode-chat #toast{background:var(--glass-light-tint);border-color:var(--glass-light-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-light-highlight);color:var(--ink,#1f241d)}
 @media (prefers-reduced-transparency:reduce){body.mode-chat #toast{background:rgba(255,255,255,.94)}}
@@ -2352,8 +2374,20 @@ body.sheet-open #scrim{opacity:1;pointer-events:auto}
   <div class="hdr-right" id="hdrRight">
     <button class="chip" id="chip" aria-pressed="true" aria-label="Listening. Press to pause.">
       <span class="track"><span class="cdot"></span></span>
-      <span id="chipText">Listening · 14h 22m today</span>
+      <span id="chipLabel">Listening</span>
+      <span class="chip-live" id="chipLive">
+        <span class="chip-meter" id="chipMeter"><i></i><i></i><i></i><i></i><i></i></span>
+        <span id="chipTime">14h 22m today</span>
+      </span>
     </button>
+    <div class="batt-dial" id="battDial" title="Opal band battery">
+      <svg viewBox="0 0 36 36">
+        <defs><linearGradient id="hdrBattGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c0503f"/><stop offset="50%" stop-color="var(--ember)"/><stop offset="100%" stop-color="var(--moss-300)"/></linearGradient></defs>
+        <circle class="track" cx="18" cy="18" r="14"/>
+        <circle class="fill" id="battDialFill" cx="18" cy="18" r="14"/>
+      </svg>
+      <b id="battDialPct"></b>
+    </div>
   </div>
   <div class="legend mono" aria-hidden="true">
     <span><i style="background:var(--ember)"></i>Needs you</span>
@@ -3478,8 +3512,28 @@ addEventListener('resize', openSlots); setInterval(bandLine, 60000);
 try { state.lastOpened = new Date().toISOString(); save(); } catch (e) {}
 let listenBase = 862, listenSince = Date.now(), listenAcc = 0;
 function listenMinutes() { return listenBase + Math.floor((listenAcc + (state.listening ? Date.now() - listenSince : 0)) / 60000); }
+let chipMeterTimer = null;
+function chipMeterTick() {
+  $('#chipMeter').querySelectorAll('i').forEach(bar => { bar.style.height = (3 + Math.random() * 11).toFixed(1) + 'px'; });
+}
+function chipStartMeter() {
+  clearInterval(chipMeterTimer);
+  if (REDUCED) { $('#chipMeter').querySelectorAll('i').forEach(bar => bar.style.height = '8px'); return; }
+  chipMeterTick();
+  chipMeterTimer = setInterval(chipMeterTick, 220);
+}
+function chipStopMeter() { clearInterval(chipMeterTimer); chipMeterTimer = null; $('#chipMeter').querySelectorAll('i').forEach(bar => bar.style.height = '4px'); }
+function renderHeaderBatt() {
+  const pct = clamp(WELCOME.band.battery, 0, 100), r = 14, c = 2 * Math.PI * r, off = c * (1 - pct / 100);
+  const fill = $('#battDialFill'); fill.style.strokeDasharray = c.toFixed(1); fill.style.strokeDashoffset = off.toFixed(1);
+  $('#battDialPct').textContent = pct;
+}
 function chipText() {
-  const m = listenMinutes(); $('#chipText').textContent = state.listening ? (NARROW() ? `${Math.floor(m / 60)}h ${pad(m % 60)}m` : `Listening · ${Math.floor(m / 60)}h ${pad(m % 60)}m today`) : 'Paused';
+  const m = listenMinutes();
+  $('#chipLabel').textContent = state.listening ? 'Listening' : 'Paused';
+  $('#chipLive').hidden = !state.listening;
+  if (state.listening) { $('#chipTime').textContent = NARROW() ? `${Math.floor(m / 60)}h ${pad(m % 60)}m` : `${Math.floor(m / 60)}h ${pad(m % 60)}m today`; chipStartMeter(); }
+  else chipStopMeter();
   $('#chip').setAttribute('aria-pressed', String(state.listening)); $('#chip').setAttribute('aria-label', state.listening ? 'Listening. Press to pause.' : 'Paused. Press to resume listening.');
   document.body.classList.toggle('paused', !state.listening); $('#spaced').textContent = state.listening ? 'O p e n' : 'C l o s e d';
 }
@@ -3491,7 +3545,7 @@ function toggleListening() {
   const b = $('[data-act="toggle-listen"]'); if (b) b.textContent = state.listening ? 'Pause' : 'Resume';
 }
 $('#chip').addEventListener('click', toggleListening);
-tickClock(); chipText(); setTimeout(greeting, 0); setTimeout(updateHud, 0);
+tickClock(); chipText(); renderHeaderBatt(); setTimeout(greeting, 0); setTimeout(updateHud, 0);
 setInterval(() => { tickClock(); chipText(); const when = $('#wgWelcomeWhen'); if (when) when.textContent = wgWelcomeWhenText(); }, 20000);
 addEventListener('resize', chipText);
 
@@ -4806,7 +4860,7 @@ function chatOpenFrom(el, key) {
 function chatRenderListen() {
   const wave = $('#cWave'); if (!wave.children.length) wave.innerHTML = Array.from({ length: 26 }, (_, i) => `<i style="--h:${28 + Math.round(Math.sin(i * 1.3) * 20 + Math.random() * 24)}%;animation-delay:${-((i * 70) % 1200)}ms"></i>`).join('');
   $('#cListenBtn').textContent = state.listening ? 'Pause' : 'Resume';
-  $('#cListenText').textContent = state.listening ? $('#chipText').textContent.replace(/^Listening/, 'Listening') || 'Listening' : 'Paused';
+  $('#cListenText').textContent = state.listening ? `Listening · ${$('#chipTime').textContent}` : 'Paused';
 }
 function chatRenderNext() {
   const el = $('#cNext'), next = calNextEvent();
@@ -5506,7 +5560,7 @@ function wgWelcomeCalHTML() {
 }
 function wgRenderWelcomeCal() { const el = $('#wgWelcomeCalWrap'); if (el) el.innerHTML = wgWelcomeCalHTML(); }
 function wgWelcomeWhenText() { const d = new Date(); return `${fmtDate(d)} · ${fmtTime(d)}`; }
-const WG_BRACELET_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M4 12c0 2.2 1 4.1 2.6 5.4M20 12c0 2.2-1 4.1-2.6 5.4"/><circle cx="12" cy="4" r="1.3" fill="currentColor" stroke="none"/></svg>`;
+const WG_OPAL_LOOP_SVG = `<svg viewBox="0 0 40 40"><defs><linearGradient id="wgLoopGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4de"/><stop offset="100%" stop-color="var(--wg-accent)"/></linearGradient></defs><path d="M20,6 C28,6 34,12 34,20 C34,28 28,34 20,34 C12,34 6,28 6,20 C6,12 12,6 20,6 Z"/></svg>`;
 const WG_BATT_FULL_MIN = 18 * 60; // an always-listening bracelet's assumed full-charge runtime, for the "minutes left" estimate
 function wgBattMinutesLeft(pct) { return Math.round(pct / 100 * WG_BATT_FULL_MIN); }
 function wgWelcomeBattHTML(pct) {
@@ -5518,7 +5572,7 @@ function wgWelcomeBattHTML(pct) {
         <circle class="track" cx="50" cy="50" r="${r}"/>
         <circle class="fill" cx="50" cy="50" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
       </svg>
-      <span class="wg-welcome-batt-icon">${WG_BRACELET_SVG}</span>
+      <span class="wg-welcome-batt-icon">${WG_OPAL_LOOP_SVG}</span>
     </div>
     <b class="wg-welcome-batt-pct">${pct}%</b>
     <span class="wg-welcome-batt-min">${fmtMin(wgBattMinutesLeft(pct))} left</span>
